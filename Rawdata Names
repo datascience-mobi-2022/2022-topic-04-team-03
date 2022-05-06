@@ -1,0 +1,22 @@
+Platform:
+GPL570	[HG-U133_Plus_2] Affymetrix Human Genome U133 Plus 2.0 Array
+
+Samples:
+GSM456643	human embryo at 1 cell stage, biological rep 1
+GSM456644	human embryo at 1 cell stage, biological rep 2
+GSM456645	human embryo at 1 cell stage, biological rep 3
+GSM456646	human embryo at 2 cell stage, biological rep 1
+GSM456647	human embryo at 2 cell stage, biological rep 2
+GSM456648	human embryo at 2 cell stage, biological rep 3
+GSM456649	human embryo at 4 cell stage, biological rep 1
+GSM456650	human embryo at 4 cell stage, biological rep 2
+GSM456651	human embryo at 4 cell stage, biological rep 3
+GSM456652	human embryo at 8 cell stage, biological rep 1
+GSM456653	human embryo at 8 cell stage, biological rep 2
+GSM456654	human embryo at 8 cell stage, biological rep 3
+GSM456655	human embryo at morula stage, biological rep 1
+GSM456656	human embryo at morula stage, biological rep 2
+GSM456657	human embryo at morula stage, biological rep 3
+GSM456658	human blastocyst, biological rep 1
+GSM456659	human blastocyst, biological rep 2
+GSM456660	human blastocyst, biological rep 3
