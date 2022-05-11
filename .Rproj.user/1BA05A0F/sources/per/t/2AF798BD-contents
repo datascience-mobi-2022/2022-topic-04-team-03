@@ -1,0 +1,184 @@
+#Microarray analysis of Time course expression data from early Human embryo
+#Database: GEO, dataset: GSE18290
+#https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18290
+#Microarray chip: [HG-U133_Plus_2] Affymetrix Human Genome U133 Plus 2.0 Array
+#AlewtinaTowara
+
+
+#1) Load libraries
+
+library(affy)
+library(vsn)
+library(AnnotationDbi)
+library(hgu133plus2hsenstcdf)
+library(hgu133plus2hsenstprobe)
+library(limma)
+library(pheatmap)
+#library(dplyr)
+library(tidyverse)
+#library(RColorBrewer)
+#library(gplots) #for heatmap
+#library(tidyverse) # data manipulation
+#library(cluster) # clustering algorithms
+#library(factoextra)
+#library(gridExtra)
+
+# 2) Read in .CEL files
+
+setwd("~/Desktop/DataAnalysis/rawData/GSE18290_RAW")
+
+data.human=ReadAffy()
+data.human@cdfName <- "HGU133Plus2_Hs_ENST"
+
+setwd("/Users/alewtinatowara/Desktop/DataAnalysis/sessions/rda")
+save.image(file="rawdata_human_18290.rda")
+
+
+
+
+# 3) Quality control
+# 3.1) Single chip control
+
+# GSM456643
+image(data.human[,1], col=rainbow(100, start=0, end=0.75)[100:1]) #-> one little spot
+image(data.human[,2], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456644
+image(data.human[,4], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,3], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456645
+image(data.human[,5], col=rainbow(100, start=0, end=0.75)[100:1]) #-> a little smudge on the bottom edge
+image(data.human[,6], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456646
+image(data.human[,7], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,8], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456647
+image(data.human[,9], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,10], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456648
+image(data.human[,11], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,12], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456649
+image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1]) #->very bright?
+image(data.human[,14], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456650
+image(data.human[,15], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,16], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456651
+image(data.human[,17], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456652
+image(data.human[,19], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,20], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456653
+image(data.human[,21], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,22], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456654
+image(data.human[,23], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,24], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456655
+image(data.human[,25], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,26], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456656
+image(data.human[,27], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,28], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456657
+image(data.human[,29], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,30], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456658
+image(data.human[,31], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,32], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456659
+image(data.human[,33], col=rainbow(100, start=0, end=0.75)[100:1]) #-> little dots and little line at the bottom edge
+image(data.human[,34], col=rainbow(100, start=0, end=0.75)[100:1])
+
+# GSM456660
+image(data.human[,35], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,36], col=rainbow(100, start=0, end=0.75)[100:1])
+
+
+
+# 3.2) Normalization
+
+human.vsnrma <- vsnrma(data.human)
+
+setwd("/Users/alewtinatowara/Desktop/DataAnalysis/sessions/rda")
+save.image(file="normalized_human_data_18290.rda")
+
+
+# 3.3) meanSdPlot
+
+meanSdPlot(human.vsnrma)
+
+setwd("/Users/alewtinatowara/Desktop/DataAnalysis/sessions/rda")
+dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+
+
+# 3.4) Boxplot
+
+# Before normalization:
+par(las=2)
+mmi=c(1,0.7,1.0477939,0.5366749)
+par(mai=mmi)
+boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization")
+
+dev.copy2eps(file="boxplot_rawdata_18290.eps")
+
+# After Normalization:
+boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization")
+dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
+dev.off() # what does this function do?
+
+
+
+# 3.5) Density plot
+
+# Before Normalization:
+hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
+dev.copy2pdf(file="Histogram_rawdata_39897.pdf", width = 10, height = 7)
+
+# After Normalization:
+
+eset=exprs(human.vsnrma)
+
+plot(density(eset[,1]), type="n", xlab="log Intensity", ylim=c(0,1), main="Density function of log Intensity of human embryogenesis normalized")
+for (i in 1:ncol(eset)) {
+  lines(density(eset[,i]), col=rainbow(35)[i])
+}
+
+dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
+
+
+
+# 3.6) RNA Degradation Plot
+
+par(mfrow = c(2,1))
+rnadeg.raw = AffyRNAdeg(data.human)
+
+plotAffyRNAdeg(rnadeg.raw, col=rainbow(35))
+title(sub="human embroyogenesis rawdata")
+
+plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
+title(sub="human embryogenesis rawdata - shifted")
+
+dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
+dev.off()
+
+
+# 3.7) Scatter Plot
+
