@@ -164,6 +164,7 @@ for(i in 1:9){
   dev.off()
 }
 
+
 ### 8. Data analysis
 
 ## Create dataframe
