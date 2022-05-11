@@ -15,16 +15,16 @@ library(tidyverse) # data manipulation
 library(cluster) # clustering algorithms
 library(factoextra)
 library(gridExtra)
-library("Rcpp")
-library("tidyverse")
-library("affy")
-library("vsn")
-library("AnnotationDbi")
-library("ggplot2")
-library("readr")
-library("hgu133plus2hsenstcdf")
-library("hgu133plus2hsenstprobe")
-library("hexbin")
+library(Rcpp)
+library(tidyverse)
+library(affy)
+library(vsn)
+library(AnnotationDbi)
+library(ggplot2)
+library(readr)
+library(hgu133plus2hsenstcdf)
+library(hgu133plus2hsenstprobe)
+library(hexbin)
 
 
 # 2) Read in .CEL files
@@ -77,7 +77,7 @@ image(data.human[,11], col=rainbow(100, start=0, end=0.75)[100:1])
 image(data.human[,12], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456655
-image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1]) #->very bright?
+image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1]) 
 
 # GSM456656
 image(data.human[,14], col=rainbow(100, start=0, end=0.75)[100:1])
@@ -175,115 +175,14 @@ for(i in 1:9){
   dev.off()
 }
 
-### 8. Data analysis
-
-## Create dataframe
-
-df.norm <- as.data.frame(exprs(human.vsnrma))
-
-#Remove .cel from rows
-rownames(df.norm) <- gsub("\\..*$" ,"", rownames(df.norm)) # Strip file endings
-
-#Import IL Gene table from ex 2
-table.il <- DataFrame(read.csv("../../Tables/exercise_2_table_ILgenes.csv", row.names = 3))
-#rownames(table.il) <- table.il$transID
-
-
-## Filter microarray data for IL genes
-
-df.norm.filt <- df.norm[rownames(df.norm)%in%rownames(table.il),]
-
-# Translocate
-df.norm.filt.t <- t(df.norm.filt)
-
-# Regive lost column name
-colnames(df.norm.filt.t) <- table.il[rownames(df.norm.filt), "trans_name"]
-
-
-## Order column names
-df.norm.filt.t <- df.norm.filt.t[, order(colnames(df.norm.filt.t))]
-
-
-## Create column for facetting
-
-map.align <- tibble(Transcript = colnames(df.norm.filt.t), align =(1:dim(df.norm.filt.t)[2] %/% 100)) # A column with separators: 0, 1, 2
-df.norm.filt.longer <- gather(as_tibble(df.norm.filt.t), key="Transcript", value = "Expression") # Merging all transcripts into a single column with a separate key column
-df.norm.merge <- merge(df.norm.filt.longer, map.align, on="Transcript") # Merging our data frame with the map.align column. We lose chip donor but its ok,
-
-## Plot
-
-fig1 <- ggplot(filter(df.norm.merge, align==0 | align==1)) +
-  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
-  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
-    strip.text = element_blank() # Delete facetting text
-  ) + 
-  expand_limits(x=100) +
-  labs(x = "Transcript",
-       title = "Distribution of interleukin expression in breast cancer",
-       subtitle = "GEO dataset: GSE27830")
-
-print(fig1)
-
-
-fig2 <- ggplot(filter(df.norm.merge, align==2 | align==3)) +
-  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
-  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
-    strip.text = element_blank() # Delete facetting text
-  ) + 
-  expand_limits(x=100) +
-  labs(x = "Transcript",
-       title = "Distribution of interleukin expression in breast cancer",
-       subtitle = "GEO dataset: GSE27830")
-
-print(fig2)
-
-## Save plot
-pdf(file="../../Plots/exercise_7_Gene_expression_IL_breast_cancer.pdf", height = 7, width = 10)
-print(fig1)
-print(fig2)
-dev.off()
-
-### Save data
-
-# Expression table with annotations
-hg104 <- read.csv("../../Raw-Data/ensembl_human_104.csv") #human genome
-
-## csv: All microarray genes
-gene.exp <- data.frame(exprs(breast.vsnrma))
-gene.exp["Transcript.stable.ID"] <- gsub("[\\._].*$" ,"", rownames(gene.exp)) # Prep for merging
-
-write.csv(
-  right_join(hg104, gene.exp, by="Transcript.stable.ID"), 
-  "../../Tables/exercise_7_Microarray_Genes.csv",
-  quote=F,
-  row.names = F
-)
-
-## csv: Only IL microarray genes
-il.exp <- data.frame(t(df.norm.filt.t)[order(rownames(t(df.norm.filt.t))),])
-
-# Prepare extra column for merging
-il.exp["Transcript.name"] <- rownames(il.exp) 
-
-write.csv(right_join(hg104, il.exp, by="Transcript.name"),
-          "../../Tables/exercise_7_Micorarray_Ilgenes.csv",
-          quote=F,
-          row.names=F
-)
-
-save.image("../RDA-Files/exercise_7.rda")
 
 # 4) Annotation of genes with Ensemble Biomart
 #----------------------------------------------
 
 #annotation table from ensemble biomart with the given features is downloaded:
 # ensemble genes 105 -> Mouse genes (GRCm39) -> "Gene.stable.ID", "Gene.stable.ID.version", "Transcript.stable.ID" 
-# "Transcript.stable.ID.version", "Chromosome.scaffold.name", "AFFY.Mouse430.2.probe"       
-#"Gene.name", "MGI.symbol"    
+# "Transcript.stable.ID.version", "Chromosome.scaffold.name", "Gen description"       
+#"Gene.name".   
 
 setwd("/Users/yaxin/Documents/GitHub/2022-topic-04-team-03/Tables")
 a <- read.csv("mart_export.txt")
@@ -291,51 +190,52 @@ a <- read.csv("mart_export.txt")
 
 # exclude Affymetrix control genes which begin with "AFFX"
 eset=exprs(human.vsnrma)
-eset1 =eset[62:95721,]
+eset1 =eset[62:95721,] #the first 62 rows of the data are control genes, there are all together 95721 genes.
 
 ensemble.genes= a[,1]
 ensemble.transcripts= a[,2]
 ensemble.chromosome= a[,3]
 ensemble.description =a[,4]
 ensemble.gene.name=a[,5]
+#filter each variable
 
 #organize the transcript names in eset1
 tr.ID=rownames(eset1)
-tr= substr(tr.ID,0,15)
+tr= substr(tr.ID,0,15) #The transkript ID is way to long, this function extracts the first 15 numbers/alphabets of the ID
 rownames(eset1)= tr
 
-#read in tra data for mouse
+#read in tra data for human
 b <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 
 TRAs= as.character(b[,3])
-#7986
+#60131
 
 TRAs.unique=unique(TRAs)
-#4154
+#19473
 
 # find TRAs  symbols in ensemble data
 i=which(ensemble.gene.name %in% TRAs.unique)
 TRAs.symbols= ensemble.gene.name[i]
-#26989
+#203610
 
 #extract corresponding TRA transcript id from ensemble data
-TRAs.transcripts=ensemble.transcripts[i] #26989
+TRAs.transcripts=ensemble.transcripts[i] #203610
 names(TRAs.symbols) = TRAs.transcripts 
 
 # find the index of rownames that contain transcript Ids from TRA-ensemble comparision
 i1=which(rownames(eset1) %in% TRAs.transcripts) 
-TRA.transcripts2= rownames(eset1)[i1] #11496
+TRA.transcripts2= rownames(eset1)[i1] #77996
 
-TRA.symbols2=TRAs.symbols[TRA.transcripts2] #11496 
+TRA.symbols2=TRAs.symbols[TRA.transcripts2] #77996 
 
 #subset of Affymetrix expression data, that contains only transcripts from TRA-Ensemble comparision
-eset1.TRA= eset1[i1,]  #11496 rows
+eset1.TRA= eset1[i1,]  #77996
 
 # bind the tables
-data.TRA.info= cbind(eset1.TRA, TRA.symbols2)
+data.TRA.info= cbind(eset1.TRA, TRA.symbols2) #
 
 length(unique(TRA.symbols2)) 
-# ---> 3785 out of 4154 TRA genes are present on Affymetrix chips
+# ---> 13406 out of 19473 TRA genes are present on Affymetrix chips
 
 setwd("/Users/yaxin/Documents/GitHub/2022-topic-04-team-03/Tables")
 write.csv(data.TRA.info, file="TRA_Exp_GenName_39897.csv")
