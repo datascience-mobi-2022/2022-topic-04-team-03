@@ -1,20 +1,9 @@
 # 1) Load libraries
 
-library(affy)
-library(vsn)
 library(AnnotationDbi)
-library(hgu133plus2hsenstcdf)
-library(hgu133plus2hsenstprobe)
 library(limma)
 library(pheatmap)
 library(dplyr)
-library(tidyverse)
-library(RColorBrewer)
-library(gplots) #for heatmap
-library(tidyverse) # data manipulation
-library(cluster) # clustering algorithms
-library(factoextra)
-library(gridExtra)
 library("Rcpp")
 library("tidyverse")
 library("affy")
@@ -28,12 +17,12 @@ library("hexbin")
 
 
 # 2) Read in .CEL files
-setwd("/Users/yaxin/Desktop/Bioinformatik/Projekt/Rawdata")
+setwd("C:\\Users\\LKaup\\OneDrive\\Dokumente\\Data Analysis\\2022-topic-04-team-03\\Data\\rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
-setwd("/Users/yaxin/Desktop/Bioinformatik/Projekt")
+setwd("C:\\Linda\\Uni\\Kurse\\SoSe22\\Data Analysis\\Quality Control")
 save.image(file="rawdata_human_18290.rda")
 
 
@@ -98,14 +87,14 @@ image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
 
 human.vsnrma <- vsnrma(data.human)
 
-setwd("/Users/yaxin/Desktop/Bioinformatik/Projekt/Rawdata")
+setwd("C:\\Users\\LKaup\\OneDrive\\Dokumente\\Data Analysis\\2022-topic-04-team-03\\Data\\rawData")
 save.image(file="normalized_human_data_18290.rda")
 
 # 3.3) meanSdPlot
 
 meanSdPlot(human.vsnrma)
 
-setwd("/Users/yaxin/Desktop/Bioinformatik/Projekt/Rawdata/Plots") # was ist das?#
+setwd("C:\\Users\\LKaup\\OneDrive\\Dokumente\\Data Analysis\\2022-topic-04-team-03\\Data\\rawData") # was ist das?#
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 # 3.4) Boxplot
@@ -166,7 +155,7 @@ for(i in 1:9){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("/Users/yaxin/Desktop/Bioinformatik/Projekt/Rawdata", 
+  file.name <- paste("C:\\Users\\LKaup\\OneDrive\\Dokumente\\Data Analysis\\2022-topic-04-team-03\\Data\\rawData", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
@@ -175,3 +164,104 @@ for(i in 1:9){
   dev.off()
 }
 
+### 8. Data analysis
+
+## Create dataframe
+
+df.norm <- as.data.frame(exprs(human.vsnrma))
+
+#Remove .cel from rows
+rownames(df.norm) <- gsub("\\..*$" ,"", rownames(df.norm)) # Strip file endings
+
+#Import IL Gene table from ex 2
+table.il <- DataFrame(read.csv("../../Tables/exercise_2_table_ILgenes.csv", row.names = 3))
+#rownames(table.il) <- table.il$transID
+
+
+## Filter microarray data for IL genes
+
+df.norm.filt <- df.norm[rownames(df.norm)%in%rownames(table.il),]
+
+# Translocate
+df.norm.filt.t <- t(df.norm.filt)
+
+# Regive lost column name
+colnames(df.norm.filt.t) <- table.il[rownames(df.norm.filt), "trans_name"]
+
+
+## Order column names
+df.norm.filt.t <- df.norm.filt.t[, order(colnames(df.norm.filt.t))]
+
+
+## Create column for facetting
+
+map.align <- tibble(Transcript = colnames(df.norm.filt.t), align =(1:dim(df.norm.filt.t)[2] %/% 100)) # A column with separators: 0, 1, 2
+df.norm.filt.longer <- gather(as_tibble(df.norm.filt.t), key="Transcript", value = "Expression") # Merging all transcripts into a single column with a separate key column
+df.norm.merge <- merge(df.norm.filt.longer, map.align, on="Transcript") # Merging our data frame with the map.align column. We lose chip donor but its ok,
+
+## Plot
+
+fig1 <- ggplot(filter(df.norm.merge, align==0 | align==1)) +
+  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
+  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
+    strip.text = element_blank() # Delete facetting text
+  ) + 
+  expand_limits(x=100) +
+  labs(x = "Transcript",
+       title = "Distribution of interleukin expression in breast cancer",
+       subtitle = "GEO dataset: GSE27830")
+
+print(fig1)
+
+
+fig2 <- ggplot(filter(df.norm.merge, align==2 | align==3)) +
+  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
+  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
+    strip.text = element_blank() # Delete facetting text
+  ) + 
+  expand_limits(x=100) +
+  labs(x = "Transcript",
+       title = "Distribution of interleukin expression in breast cancer",
+       subtitle = "GEO dataset: GSE27830")
+
+print(fig2)
+
+## Save plot
+pdf(file="../../Plots/exercise_7_Gene_expression_IL_breast_cancer.pdf", height = 7, width = 10)
+print(fig1)
+print(fig2)
+dev.off()
+
+### Save data
+
+# Expression table with annotations
+hg104 <- read.csv("../../Raw-Data/ensembl_human_104.csv") #human genome
+
+## csv: All microarray genes
+gene.exp <- data.frame(exprs(breast.vsnrma))
+gene.exp["Transcript.stable.ID"] <- gsub("[\\._].*$" ,"", rownames(gene.exp)) # Prep for merging
+
+write.csv(
+  right_join(hg104, gene.exp, by="Transcript.stable.ID"), 
+  "../../Tables/exercise_7_Microarray_Genes.csv",
+  quote=F,
+  row.names = F
+)
+
+## csv: Only IL microarray genes
+il.exp <- data.frame(t(df.norm.filt.t)[order(rownames(t(df.norm.filt.t))),])
+
+# Prepare extra column for merging
+il.exp["Transcript.name"] <- rownames(il.exp) 
+
+write.csv(right_join(hg104, il.exp, by="Transcript.name"),
+          "../../Tables/exercise_7_Micorarray_Ilgenes.csv",
+          quote=F,
+          row.names=F
+)
+
+save.image("../RDA-Files/exercise_7.rda")
