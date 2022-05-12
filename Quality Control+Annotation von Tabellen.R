@@ -240,4 +240,96 @@ length(unique(TRA.symbols2))
 setwd("/Users/yaxin/Documents/GitHub/2022-topic-04-team-03/Tables")
 write.csv(data.TRA.info, file="TRA_Exp_GenName_39897.csv")
 
+########################################
+# 5.1) comparision between 1 Cell stage and 2 Cell stage
+########################################
+M = cbind(eset1[,1]-eset1[,4], 
+          eset1[,2]-eset1[,5], 
+          eset1[,3]-eset1[,6])
+
+colnames(M) = paste(rep("1 cell stage vs 2 cell stage",3), as.character(1:3), "M", sep=".")
+
+# Create and empty matrix, 
+design=as.matrix(rep(1,3))
+colnames(design)= "1 cell-2 cell"
+
+#calculate the fit and thus p-values
+fit1= lmFit(M,design)
+fit1= eBayes(fit1)
+
+pvalue01= sum(p.adjust(fit1$p.value,"BH")< 0.01)
+pvalue01 #0
+
+pvalue05= sum(p.adjust(fit1$p.value,"BH")< 0.05)
+pvalue05 #20
+
+pvalue1= sum(p.adjust(fit1$p.value,"BH")< 0.1)
+pvalue1 #28
+
+pvalue2= sum(p.adjust(fit1$p.value,"BH")< 0.2)
+pvalue2 #225
+
+pvalue3= sum(p.adjust(fit1$p.value,"BH")< 0.3)
+pvalue3 #811
+
+pvalue4= sum(p.adjust(fit1$p.value,"BH")< 0.4)
+pvalue4 #1719
+
+pvalue5= sum(p.adjust(fit1$p.value,"BH")< 0.5)
+pvalue5 #5387
+
+pvalue01= sum(fit1$p.value< 0.01)
+pvalue01 #0
+
+pvalue05= sum(fit1$p.value< 0.05)
+pvalue05 #20
+
+pvalue1= sum(fit1$p.value< 0.1)
+pvalue1 #28
+
+pvalue2= sum(fit1$p.value< 0.2)
+pvalue2 #225
+
+pvalue3= sum(fit1$p.value< 0.3)
+pvalue3 #811
+
+pvalue4= sum(fit1$p.value< 0.4)
+pvalue4 #1719
+
+pvalue5= sum(fit1$p.value< 0.5)
+pvalue5 #5387
+#extracting the differentially expressed transcripts with pvalue=0.5 and lfc=1
+top_table1= topTable(fit1, number = pvalue5, lfc=1, p.value = 0.5,sort.by ="logFC")
+# -> 18 transcripts differentially expressed
+
+setwd("/Users/nazliaybikeboldemir/Desktop/MoBi Data/ders MASTER/Praktika/Bioinfo/Tables")
+write.csv(top_table1, file="topTable1_EggTS01_39897.csv")
+
+
+#annotation with ensemble data
+#-------------------------------
+i2= which(ensemble.transcripts %in% rownames(top_table1))
+tr.symbols= ensemble.symbols[i2]
+trEggTS01 = ensemble.transcripts[i2]
+ensem.EggTS01= cbind(trEggTS01,tr.symbols)
+
+#remove duplicates of transcript Ids in ensem.EggTS01 
+ensem.EggTS01=as.data.frame(ensem.EggTS01)
+ensem.EggTS01=ensem.EggTS01[!duplicated(as.vector(ensem.EggTS01$trEggTS01)), ]
+rownames(ensem.EggTS01)= ensem.EggTS01$trEggTS01
+
+# control a random transcript, if the info is correct
+#a[a$Transcript.stable.ID =="ENSMUST00000149936",]
+
+#merge two tables
+top_table1_anno= merge(top_table1, ensem.EggTS01, by = 'row.names', all = TRUE)
+
+#sort the table regarding the lfc values
+top_table1_anno= top_table1_anno[order(abs(top_table1_anno$logFC), decreasing= TRUE),]
+rownames(top_table1_anno)= top_table1_anno$Row.names
+top_table1_anno$Row.names <- NULL
+top_table1_anno$transcripts <- NULL
+
+setwd("/Users/nazliaybikeboldemir/Desktop/MoBi Data/ders MASTER/Praktika/Bioinfo/Tables")
+write.csv(top_table1_anno, file="topTable1_anno_EggTS01_39897.csv")
 
