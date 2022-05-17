@@ -163,106 +163,183 @@ for(i in 1:9){
   dev.copy2pdf(file = file.name)
   dev.off()
 }
+# 4) Data Analysis
+
+# read in ensembl table with following attributes: "Gene stable ID", 
+#"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
+#"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
+
+setwd("C:/Users/LKaup/OneDrive/Dokumente/Data Analysis/2022-topic-04-team-03/Tables")
+table <- read.csv("fusion.fusion.ensembl.csv")
+ensembl.data <- read.csv("ensembl.human.txt")
+
+# create variables that contain gene ID, transcript ID, 
+#the chromosome name and the gene symbol
+ensembl.genes = ensembl.data[,1]
+ensembl.transcripts = ensembl.data[,3]
+ensembl.chromosome = ensembl.data[,7]
+ensembl.symbols = ensembl.data[,9]
+
+# Create a data frame out of the expression data from the normalized data
+human.vsnrma.df = data.frame(exprs(human.vsnrma))
+
+# Check dimensions
+dim(human.vsnrma.df)
+#[1] 95721    18
+
+# exclude Affymetrix control genes which begin with "AFFX"
+human.vsnrma.df2 = human.vsnrma.df[63:9571,]
+
+dim(human.vsnrma.df2)
+# [1] 9509   18
+
+#remove ".xx_at" from the rownames
+rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
+
+# read in TRA data for human
+tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
+
+# Exclude the following:
+# haben wir weggelassen
+# TRAs= as.character(tra.data[,3])
+
+# Extract unique TRA-Symbols
+#tra.symbols = tra.data[,3]
+
+#tra.unique = unique(tra.symbols)
+# -> 18473 unique tras
+
+# find TRAs  symbols in ensembl data -> evtl nach transcript filtern nicht nach symbol
+#i = which(ensembl.symbols %in% tra.unique)
+#tra.symbols = ensembl.symbols[i]
+# -> 204,514
+# there are still symbols without name in tra.symbols! filter before?
 
 
-### 8. Data analysis
 
-## Create dataframe
+# extract corresponding TRA transcript id from ensemble data
+#tra.transcripts.TE = ensembl.transcripts[i] 
+# -> 204,514
+#names(tra.symbols) = tra.transcripts.TE
+u = which(ensembl.transcripts %in% tra.data)
 
-df.norm <- as.data.frame(exprs(human.vsnrma))
+# find the index of rownames of our dataset that contain transcript Ids from TRA-ensembl comparison
+## hier statt tra.transcripts.TE nach tra.data[,1] (=Transcript namen) filtern
+j = which(rownames(human.vsnrma.df2) %in% tra.transcripts.TE) 
+tra.transcripts.TEH = rownames(human.vsnrma.df2)[j] 
+# -> 6427
 
-#Remove .cel from rows
-rownames(df.norm) <- gsub("\\..*$" ,"", rownames(df.norm)) # Strip file endings
+# assign symbols to extracted tra transcript IDs
+tra.transcripts.symbols.TEH = tra.symbols[tra.transcripts.TEH]
 
-#Import IL Gene table from ex 2
-table.il <- DataFrame(read.csv("../../Tables/exercise_2_table_ILgenes.csv", row.names = 3))
-#rownames(table.il) <- table.il$transID
+#Take dataset and extract tras
+human.vsnrma.tra = human.vsnrma.df2[j,]
+# -> 7,427
 
-
-## Filter microarray data for IL genes
-
-df.norm.filt <- df.norm[rownames(df.norm)%in%rownames(table.il),]
-
-# Translocate
-df.norm.filt.t <- t(df.norm.filt)
-
-# Regive lost column name
-colnames(df.norm.filt.t) <- table.il[rownames(df.norm.filt), "trans_name"]
-
-
-## Order column names
-df.norm.filt.t <- df.norm.filt.t[, order(colnames(df.norm.filt.t))]
+## hier weitermachen
+# bind the tables
+data.TRA.info = cbind(human.vsnrma.tra, tra.transcripts.symbols.TEH)
 
 
-## Create column for facetting
+## wahrscheinlich auch unnötig?:
+# Extract tras from our dataset in tra-dataset
+k = which(tra.data[,1] %in% rownames(human.vsnrma.tra))
+tra.extracted = tra.data[k,]
 
-map.align <- tibble(Transcript = colnames(df.norm.filt.t), align =(1:dim(df.norm.filt.t)[2] %/% 100)) # A column with separators: 0, 1, 2
-df.norm.filt.longer <- gather(as_tibble(df.norm.filt.t), key="Transcript", value = "Expression") # Merging all transcripts into a single column with a separate key column
-df.norm.merge <- merge(df.norm.filt.longer, map.align, on="Transcript") # Merging our data frame with the map.align column. We lose chip donor but its ok,
-
-## Plot
-
-fig1 <- ggplot(filter(df.norm.merge, align==0 | align==1)) +
-  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
-  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
-    strip.text = element_blank() # Delete facetting text
-  ) + 
-  expand_limits(x=100) +
-  labs(x = "Transcript",
-       title = "Distribution of interleukin expression in breast cancer",
-       subtitle = "GEO dataset: GSE27830")
-
-print(fig1)
+tra.extracted = arrange(tra.extracted, ensembl.transcript)
 
 
-fig2 <- ggplot(filter(df.norm.merge, align==2 | align==3)) +
-  geom_boxplot(aes(Transcript, Expression, fill=Transcript), show.legend = F, outlier.size = 0.6, outlier.shape= 16, outlier.stroke = 0, lwd=0.1) +
-  facet_wrap(.~align, scales="free_x", ncol = 1) + #nur eine Spalte
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size = 7),
-    strip.text = element_blank() # Delete facetting text
-  ) + 
-  expand_limits(x=100) +
-  labs(x = "Transcript",
-       title = "Distribution of interleukin expression in breast cancer",
-       subtitle = "GEO dataset: GSE27830")
+## hier noch unsere Daten einfügen:
+length(unique(TRA.symbols2)) 
+# ---> 3785 out of 4154 TRA genes are present on Affymetrix chips
 
-print(fig2)
+setwd("/Users/nazliaybikeboldemir/Desktop/MoBi Data/ders MASTER/Praktika/Bioinfo/Tables")
+write.csv(data.TRA.info, file="TRA_Exp_GenName_39897.csv")
 
-## Save plot
-pdf(file="../../Plots/exercise_7_Gene_expression_IL_breast_cancer.pdf", height = 7, width = 10)
-print(fig1)
-print(fig2)
-dev.off()
 
-### Save data
 
-# Expression table with annotations
-hg104 <- read.csv("../../Raw-Data/ensembl_human_104.csv") #human genome
+colnames(human.vsnrma.df2)
 
-## csv: All microarray genes
-gene.exp <- data.frame(exprs(breast.vsnrma))
-gene.exp["Transcript.stable.ID"] <- gsub("[\\._].*$" ,"", rownames(gene.exp)) # Prep for merging
+#Info from GEO datenbank
+#GSM456643	human embryo at 1 cell stage, biological rep 1
+#GSM456644	human embryo at 1 cell stage, biological rep 2
+#GSM456645	human embryo at 1 cell stage, biological rep 3
+#GSM456646	human embryo at 2 cell stage, biological rep 1
+#GSM456647	human embryo at 2 cell stage, biological rep 2
+#GSM456648	human embryo at 2 cell stage, biological rep 3
+#GSM456649	human embryo at 4 cell stage, biological rep 1
+#GSM456650	human embryo at 4 cell stage, biological rep 2
+#GSM456651	human embryo at 4 cell stage, biological rep 3
+#GSM456652	human embryo at 8 cell stage, biological rep 1
+#GSM456653	human embryo at 8 cell stage, biological rep 2
+#GSM456654	human embryo at 8 cell stage, biological rep 3
+#GSM456655	human embryo at morula stage, biological rep 1
+#GSM456656	human embryo at morula stage, biological rep 2
+#GSM456657	human embryo at morula stage, biological rep 3
+#GSM456658	human blastocyst, biological rep 1
+#GSM456659	human blastocyst, biological rep 2
+#GSM456660	human blastocyst, biological rep 3
 
-write.csv(
-  right_join(hg104, gene.exp, by="Transcript.stable.ID"), 
-  "../../Tables/exercise_7_Microarray_Genes.csv",
-  quote=F,
-  row.names = F
-)
+########################################
+# 5.1) comparision between embryo 1 cell stage and embryo 2 cell stage
+########################################
+M = cbind(human.vsnrma.df[,1]-human.vsnrma.df[,4], 
+          human.vsnrma.df[,2]-human.vsnrma.df[,5], 
+          human.vsnrma.df[,3]-human.vsnrma.df[,6])
 
-## csv: Only IL microarray genes
-il.exp <- data.frame(t(df.norm.filt.t)[order(rownames(t(df.norm.filt.t))),])
+colnames(M) = paste(rep("1S vs 2S",3), as.character(1:3), "M", sep=".")
 
-# Prepare extra column for merging
-il.exp["Transcript.name"] <- rownames(il.exp) 
+# Create and empty matrix, 
+design=as.matrix(rep(1,3))
+colnames(design)= "1S-2S"
 
-write.csv(right_join(hg104, il.exp, by="Transcript.name"),
-          "../../Tables/exercise_7_Micorarray_Ilgenes.csv",
-          quote=F,
-          row.names=F
-)
+#calculate the fit and thus p-values
+fit1= lmFit(M,design)
+fit1= eBayes(fit1)
 
-save.image("../RDA-Files/exercise_7.rda")
+pvalue01= sum(p.adjust(fit1$p.value,"BH")< 0.01)
+pvalue01 #0
+
+pvalue05= sum(p.adjust(fit1$p.value,"BH")< 0.05)
+pvalue05 #20
+
+
+#extracting the differentially expressed transcripts with pvalue=0.5 and lfc=1
+top_table1= topTable(fit1, number = pvalue5, lfc=1, p.value = 0.5,sort.by ="logFC")
+# -> 18 transcripts differentially expressed
+
+setwd("/Users/nazliaybikeboldemir/Desktop/MoBi Data/ders MASTER/Praktika/Bioinfo/Tables")
+write.csv(top_table1, file="topTable1_EggTS01_39897.csv")
+
+
+#annotation with ensemble data
+#-------------------------------
+i2= which(ensemble.transcripts %in% rownames(top_table1))
+tr.symbols= ensemble.symbols[i2]
+trEggTS01 = ensemble.transcripts[i2]
+ensem.EggTS01= cbind(trEggTS01,tr.symbols)
+
+#remove duplicates of transcript Ids in ensem.EggTS01 
+ensem.EggTS01=as.data.frame(ensem.EggTS01)
+ensem.EggTS01=ensem.EggTS01[!duplicated(as.vector(ensem.EggTS01$trEggTS01)), ]
+rownames(ensem.EggTS01)= ensem.EggTS01$trEggTS01
+
+# control a random transcript, if the info is correct
+#a[a$Transcript.stable.ID =="ENSMUST00000149936",]
+
+#merge two tables
+top_table1_anno= merge(top_table1, ensem.EggTS01, by = 'row.names', all = TRUE)
+
+#sort the table regarding the lfc values
+top_table1_anno= top_table1_anno[order(abs(top_table1_anno$logFC), decreasing= TRUE),]
+rownames(top_table1_anno)= top_table1_anno$Row.names
+top_table1_anno$Row.names <- NULL
+top_table1_anno$transcripts <- NULL
+
+setwd("/Users/nazliaybikeboldemir/Desktop/MoBi Data/ders MASTER/Praktika/Bioinfo/Tables")
+write.csv(top_table1_anno, file="topTable1_anno_EggTS01_39897.csv")
+
+
+
+
+
