@@ -9,14 +9,9 @@ library(hgu133plus2hsenstcdf)
 library(hgu133plus2hsenstprobe)
 library(limma)
 library(pheatmap)
-#library(dplyr)
+library(dplyr)
 library(tidyverse)
-#library(RColorBrewer)
-#library(gplots) #for heatmap
-#library(tidyverse) # data manipulation
-#library(cluster) # clustering algorithms
-#library(factoextra)
-#library(gridExtra)
+library(hexbin)
 
 
 # 2) Read in .CEL files
@@ -33,77 +28,58 @@ save.image(file="rawdata_human_18290.rda")
 # 3.1) Single chip control
 
 # GSM456643
-image(data.human[,1], col=rainbow(100, start=0, end=0.75)[100:1]) #-> one little spot
-image(data.human[,2], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,1], col=rainbow(100, start=0, end=0.75)[100:1]) 
 
 # GSM456644
-image(data.human[,4], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,3], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,2], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456645
-image(data.human[,5], col=rainbow(100, start=0, end=0.75)[100:1]) #-> a little smudge on the bottom edge
-image(data.human[,6], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,3], col=rainbow(100, start=0, end=0.75)[100:1]) #-> a little smudge on the bottom edge
 
 # GSM456646
-image(data.human[,7], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,8], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,4], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456647
-image(data.human[,9], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,10], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,5], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456648
-image(data.human[,11], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,12], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,6], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456649
-image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1]) #->very bright?
-image(data.human[,14], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,7], col=rainbow(100, start=0, end=0.75)[100:1]) #->very bright?
 
 # GSM456650
-image(data.human[,15], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,16], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,8], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456651
-image(data.human[,17], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,9], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456652
-image(data.human[,19], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,20], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,10], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456653
-image(data.human[,21], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,22], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,11], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456654
-image(data.human[,23], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,24], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,12], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456655
-image(data.human[,25], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,26], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456656
-image(data.human[,27], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,28], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,14], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456657
-image(data.human[,29], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,30], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,15], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456658
-image(data.human[,31], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,32], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,16], col=rainbow(100, start=0, end=0.75)[100:1])
 
 # GSM456659
-image(data.human[,33], col=rainbow(100, start=0, end=0.75)[100:1]) #-> little dots and little line at the bottom edge
-image(data.human[,34], col=rainbow(100, start=0, end=0.75)[100:1])
+image(data.human[,17], col=rainbow(100, start=0, end=0.75)[100:1]) #-> little dots and little line at the bottom edge
 
 # GSM456660
-image(data.human[,35], col=rainbow(100, start=0, end=0.75)[100:1])
-image(data.human[,36], col=rainbow(100, start=0, end=0.75)[100:1])
-
+image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
 
 
 # 3.2) Normalization
@@ -124,11 +100,19 @@ dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 # 3.4) Boxplot
 
+names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
+          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
+          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
+          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
+          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
+          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
+
+
 # Before normalization:
 par(las=2)
 mmi=c(1,0.7,1.0477939,0.5366749)
 par(mai=mmi)
-boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization")
+boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", xlim = names)
 
 dev.copy2eps(file="boxplot_rawdata_18290.eps")
 
@@ -140,6 +124,8 @@ dev.off() # what does this function do?
 
 
 # 3.5) Density plot
+
+
 
 # Before Normalization:
 hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
@@ -175,17 +161,210 @@ dev.off()
 
 # 3.7) Scatter Plot
 
+expression.data <- exprs(human.vsnrma)
+
+for(i in 1:9){
+  plot(expression.data[,c(i,i+1)], pch=".", cex=2)
+  abline(0, 1, col="red")               # 45 degree dividing line
+  
+  title(main = paste("Scatterplot of probe", 
+                     substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i])), "and", 
+                     substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
+                     sep=" ", collapse = NULL))
+  
+  file.name <- paste("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/rawdata", 
+                     as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
+                     as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
+                     ".pdf", sep="")
+  
+  dev.copy2pdf(file = file.name)
+  dev.off()
+}
 
 
 
 
 
+# 4) Data clean-up
+
+# Are there any NAs in our dataset?
+sum(apply(human.vsnrma.df2,1,function(x){sum(is.na(x))}))
+#> No
+
+
+
+
+# 5) Data Analysis
+
+# 5.1) Annotation
+
+# read in ensembl table with following attributes: "Gene stable ID", 
+#"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
+#"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
+
+setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/rawdata")
+
+ensembl.data <- read.csv("ensembl.human.txt")
+
+# create variables that contain gene ID, transcript ID, 
+#the chromosome name and the gene symbol
+ensembl.genes = ensembl.data[,1]
+ensembl.transcripts = ensembl.data[,3]
+ensembl.chromosome = ensembl.data[,7]
+ensembl.symbols = ensembl.data[,9]
+
+# Create a data frame out of the expression data from the normalized data
+human.vsnrma.df = data.frame(exprs(human.vsnrma))
+
+# Check dimensions
+dim(human.vsnrma.df)
+#[1] 95,721    18
+
+# exclude Affymetrix control genes which begin with "AFFX"
+human.vsnrma.df2 = human.vsnrma.df[63:95721,]
+
+dim(human.vsnrma.df2)
+# [1] 95,659    18
+
+#remove ".xx_at" from the rownames
+rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
+
+# read in TRA data for human
+tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
+
+
+# find the index of rownames of our dataset that contain transcript Ids from the tra dataset
+#We extracted the TRA genes out of the three table(human.vsnrma, tra, ensembl)
+
+j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
+tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
+human.vsnrma.new = human.vsnrma.df2[j,]
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted)
+tra.new = tra.data[k,] #24,783 
+
+#150 genes weniger als bei anderen zwei Tabellen
+c = which(ensembl.transcripts %in% tra.extracted)
+ensembl.new = ensembl.data[c,]
+
+
+#reorder the rows of ensembl.new and tra.new
+tra.new = arrange(tra.new,ensembl.transcript)
+ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+
+#fusion of two tables! tra.new and human.vsnrma.new
+fusion.tra.human = cbind(human.vsnrma.new,tra.new$ensembl.gene,tra.new$tiss.number,tra.new$tissues,tra.new$max.tissue)
+#colnames(fusion.tra.human[,18:21])=c("gene.name","tissue.number","tissue","max.tissue")
+#rename(fusion.tra.human, V19 = gene.name, V20 = tissue.number, V21=tissue, V22=max.tissue)#funktioniert nicht
+
+# fusion of fusion.tra.human and ensembl.new because ensembl.new contains less rows than the other two tables
+p = which(rownames(fusion.tra.human) %in% ensembl.transcripts)
+fusion.tra.human.extracted = fusion.tra.human[p,]
+fusion.fusion.ensembl = cbind(fusion.tra.human.extracted,ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
+
+setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/Tables")
+write.csv(fusion.fusion.ensembl, file="fusion.fusion.ensembl.csv")
 
 
 
 
 
+# 5.2) Exploratory data analysis
 
 
+# Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
+tissue = c("Brain","Esophagus","Heart","Liver","Cervix","Muscle","Ovary","Colon","Breast","Kidney","Pituitary","Testis","Whole Blood","Cells - Transformed fibroblasts", "Cells - EBV-transformed lymphocytes", "Spleen","Lung","Stomach","Pancreas","Small Intestine","Skin","Artery","Adrenal","Gland","Pituitary","Nerve","Minor","Salivary","Bladder","Adipose","Thyroid","Prostate","Vagina")
+tissue.number = c()
+
+for (i in 1:33) {
+  tissue.number[[i]] = nrow(fusion.fusion.ensembl %>% filter(grepl(tissue[i],fusion.fusion.ensembl[,21])))
+}
+print(tissue.number)
+tissue.distribution = cbind(tissue,tissue.number)
+tissue.distribution = as.data.frame(tissue.distribution)
+
+# Arranging the list according to the descending TRAs number
+tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
+
+# Create a barplot
+library(RColorBrewer)
+coul <- brewer.pal(5, "Set2")
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
+
+setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/plots")
+
+dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
+
+
+# Create a heatmap of the TRA genes in our dataset
+## What does unlist mean? -> Transforms list into matrix
+human.vsnrma.new = matrix(unlist(human.vsnrma.new), ncol = 6, nrow = 24783)
+
+colnames(human.vsnrma.new) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
+
+heatmap = pheatmap(human.vsnrma.new, 
+                   cluster_cols=FALSE, 
+                   show_rownames = TRUE, 
+                   legend=TRUE, 
+                   fontsize_row=0.5,
+                   main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
+
+setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/plots")
+dev.copy2pdf(file="heatmap.pdf")
+
+
+# 5.3) Limma analysis
+
+#GSM456643 human embryo at 1 cell stage, biological rep 1
+#GSM456645 human embryo at 1 cell stage, biological rep 2
+#GSM456644 human embryo at 1 cell stage, biological rep 3
+#GSM456646	human embryo at 2 cell stage, biological rep 1
+#GSM456647	human embryo at 2 cell stage, biological rep 2
+#GSM456648	human embryo at 2 cell stage, biological rep 3
+#GSM456649	human embryo at 4 cell stage, biological rep 1
+#GSM456650	human embryo at 4 cell stage, biological rep 2
+#GSM456651	human embryo at 4 cell stage, biological rep 3
+#GSM456652	human embryo at 8 cell stage, biological rep 1
+#GSM456653	human embryo at 8 cell stage, biological rep 2
+#GSM456654	human embryo at 8 cell stage, biological rep 3
+#GSM456655	human embryo at morula stage, biological rep 1
+#GSM456656	human embryo at morula stage, biological rep 2
+#GSM456657	human embryo at morula stage, biological rep 3
+#GSM456658	human blastocyst, biological rep 1
+#GSM456659	human blastocyst, biological rep 2
+#GSM456660	human blastocyst, biological rep 3
+
+
+# Rename colnames of our dataset: "x stage, rep y" for a better overview
+colnames(human.vsnrma.df2) = names
+
+# Define the different stages of the chips in a vector
+stage = c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst")
+
+# Create a design matrix with the stages
+design = model.matrix(~0 + stage)
+            
+# Create a contrast matrix which compares all the stages with one another 
+cm = makeContrasts(stage1.2 = stage1-stage2, stage1.4 = stage1-stage4, stage1.8 = stage1-stage8, stage1.morula = stage1-stagemorula, stage1.blastocyst = stage1-stageblastocyst,
+                   stage2.4 = stage2-stage4, stage2.8 = stage2-stage8, stage2.morula = stage2-stagemorula,  stage2.blastocyst = stage2-stageblastocyst,
+                   stage4.8 = stage4-stage8, stage4.morula = stage4-stagemorula,  stage4.blastocyst = stage4-stageblastocyst,
+                   stage8.morula = stage8-stagemorula, stage8.blastocyst = stage8-stageblastocyst,
+                   stagemorula.blastocyst = stagemorula-stageblastocyst, 
+                   levels = design)
+
+# Fit the coefficients of the model
+fit = lmFit(human.vsnrma.df2, design)
+fit2 = contrasts.fit(fit, contrasts = cm)
+
+# Calculate the t-statistics
+fit2 = eBayes(fit2)
+
+# Number of differentially expressed genes (p-value = 0.05)
+results = decideTests(fit2, p.value = 0.05)
+summary(results)
+
+# Number of differentially expressed genes (p-value = 0.01)
+results2 = decideTests(fit2, p.value = 0.01)
+summary(results2)
 
 
