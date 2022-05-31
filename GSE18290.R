@@ -338,6 +338,8 @@ dev.copy2pdf(file="heatmap.pdf")
 # Rename colnames of our dataset: "x stage, rep y" for a better overview
 colnames(human.vsnrma.df2) = names
 
+################# Our solution ##############################################
+
 # Define the different stages of the chips in a vector
 stage = c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst")
 
@@ -368,3 +370,71 @@ results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
 
 
+
+
+
+
+
+
+
+########### Different solution from Dinkelacker's R course ##################
+
+# Compare 1-cell stage to 2-cell stage
+M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,4], 
+          human.vsnrma.df2[,2]-human.vsnrma.df2[,5],
+          human.vsnrma.df2[,3]-human.vsnrma.df2[,6])
+
+colnames(M) = paste(rep("1 cell stage vs 2 cell stage",3), "rep", as.character(1:3), sep=".")
+
+# Create and empty matrix, 
+design = as.matrix(rep(1,3))
+colnames(design) = "1 cell-2 cell"
+
+#calculate the fit and thus p-values
+fit= lmFit(M,design)
+fit= eBayes(fit)
+
+results = decideTests(fit)
+summary(results)
+
+
+
+
+# Compare 2-cell stage to 4-cell stage
+M = cbind(human.vsnrma.df2[,4]-human.vsnrma.df2[,7], 
+          human.vsnrma.df2[,5]-human.vsnrma.df2[,8],
+          human.vsnrma.df2[,6]-human.vsnrma.df2[,9])
+
+colnames(M) = paste(rep("2 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
+
+# Create and empty matrix, 
+design = as.matrix(rep(1,3))
+colnames(design) = "2 cell-4 cell"
+
+#calculate the fit and thus p-values
+fit= lmFit(M,design)
+fit= eBayes(fit)
+
+results = decideTests(fit)
+summary(results)
+
+
+
+
+# Compare 1-cell stage to 4-cell stage
+M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,7], 
+          human.vsnrma.df2[,2]-human.vsnrma.df2[,8],
+          human.vsnrma.df2[,3]-human.vsnrma.df2[,9])
+
+colnames(M) = paste(rep("1 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
+
+# Create and empty matrix, 
+design = as.matrix(rep(1,3))
+colnames(design) = "1 cell-4 cell"
+
+#calculate the fit and thus p-values
+fit= lmFit(M,design)
+fit= eBayes(fit)
+
+results = decideTests(fit)
+summary(results)
