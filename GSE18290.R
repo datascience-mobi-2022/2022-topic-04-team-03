@@ -15,13 +15,13 @@ library(hexbin)
 
 
 # 2) Read in .CEL files
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/rawdata/GSE18290_RAW")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Data/rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")
-save.image(file="rawdata_human_18290.rda")
+#setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
+#save.image(file="rawdata_human_18290.rda")#
 
 
 # 3) Quality control
@@ -86,15 +86,15 @@ image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
 
 human.vsnrma <- vsnrma(data.human)
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")
-save.image(file="normalized_human_data_18290.rda")
+#setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
+#save.image(file="normalized_human_data_18290.rda")#
 
 
 # 3.3) meanSdPlot
 
 meanSdPlot(human.vsnrma)
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/plots")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 
@@ -118,6 +118,7 @@ dev.copy2eps(file="boxplot_rawdata_18290.eps")
 
 # After Normalization:
 boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization")
+
 dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 dev.off() # what does this function do?
 
@@ -129,6 +130,7 @@ dev.off() # what does this function do?
 
 # Before Normalization:
 hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
+
 dev.copy2pdf(file="Histogram_rawdata_39897.pdf", width = 10, height = 7)
 
 # After Normalization:
@@ -156,14 +158,15 @@ plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
 title(sub="human embryogenesis rawdata - shifted")
 
 dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
-dev.off()
+#dev.off()
 
 
 # 3.7) Scatter Plot
 
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
 expression.data <- exprs(human.vsnrma)
 
-for(i in 1:9){
+for(i in 1:1){
   plot(expression.data[,c(i,i+1)], pch=".", cex=2)
   abline(0, 1, col="red")               # 45 degree dividing line
   
@@ -172,11 +175,10 @@ for(i in 1:9){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/rawdata", 
+  file.name <- paste("~/Documents/GitHub/2022-topic-04-team-03/Plots", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
-  
   dev.copy2pdf(file = file.name)
   dev.off()
 }
@@ -184,11 +186,10 @@ for(i in 1:9){
 
 
 
-
 # 4) Data clean-up
 
 # Are there any NAs in our dataset?
-sum(apply(human.vsnrma.df2,1,function(x){sum(is.na(x))}))
+sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #> No
 
 
@@ -202,7 +203,7 @@ sum(apply(human.vsnrma.df2,1,function(x){sum(is.na(x))}))
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/rawdata")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
 
 ensembl.data <- read.csv("ensembl.human.txt")
 
@@ -216,15 +217,35 @@ ensembl.symbols = ensembl.data[,9]
 # Create a data frame out of the expression data from the normalized data
 human.vsnrma.df = data.frame(exprs(human.vsnrma))
 
+#rename the colnames to the stages
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456643.CEL'] <- '1-cell stage.rep.1'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456644.CEL'] <- '1-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456645.CEL'] <- '1-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456646.CEL'] <- '2-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456647.CEL'] <- '2-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456648.CEL'] <- '2-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456649.CEL'] <- '4-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456650.CEL'] <- '4-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456651.CEL'] <- '4-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456652.CEL'] <- '8-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456653.CEL'] <- '8-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456654.CEL'] <- '8-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456655.CEL'] <- 'morula stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456656.CEL'] <- 'morula stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456657.CEL'] <- 'morula stage.rep.3'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456658.CEL'] <- 'blastocyst stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456659.CEL'] <- 'blastocyst stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456660.CEL'] <- 'blastocyst stage.rep.3' 
+
 # Check dimensions
 dim(human.vsnrma.df)
-#[1] 95,721    18
+#95,721    18
 
 # exclude Affymetrix control genes which begin with "AFFX"
 human.vsnrma.df2 = human.vsnrma.df[63:95721,]
 
 dim(human.vsnrma.df2)
-# [1] 95,659    18
+# 95,659    18
 
 #remove ".xx_at" from the rownames
 rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
@@ -238,32 +259,45 @@ tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 
 j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
 tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
-human.vsnrma.new = human.vsnrma.df2[j,]
+human.vsnrma.only.tra = human.vsnrma.df2[j,]
+#dim(24783,18)
 
 k = which(tra.data$ensembl.transcript %in% tra.extracted)
-tra.new = tra.data[k,] #24,783 
+tra.expressed.in.chips = tra.data[k,] #24,783 
+#dim(24783,10)
 
 #150 genes weniger als bei anderen zwei Tabellen
 c = which(ensembl.transcripts %in% tra.extracted)
-ensembl.new = ensembl.data[c,]
+ensembl.only.tra = ensembl.data[c,]
+#dim(24623,9)
+
+#reorder the rows of ensembl.only.tra and tra.expressed.in.chips
+tra.expressed.in.chips = arrange(tra.expressed.in.chips,ensembl.transcript)
+ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
+
+#fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
+fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
+colnames(fusion.tra.expression.tra.table[19:22])=c("gene.name","tissue.number","tissue","max.tissue")
+
+#rename colnames
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$ensembl.gene'] <- 'ensembl.gene'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tiss.number'] <- 'tiss.number'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tissues'] <- 'tissue'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$max.tissue'] <- 'max.tissue'
 
 
-#reorder the rows of ensembl.new and tra.new
-tra.new = arrange(tra.new,ensembl.transcript)
-ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+# fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
+p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
+fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
 
-#fusion of two tables! tra.new and human.vsnrma.new
-fusion.tra.human = cbind(human.vsnrma.new,tra.new$ensembl.gene,tra.new$tiss.number,tra.new$tissues,tra.new$max.tissue)
-#colnames(fusion.tra.human[,18:21])=c("gene.name","tissue.number","tissue","max.tissue")
-#rename(fusion.tra.human, V19 = gene.name, V20 = tissue.number, V21=tissue, V22=max.tissue)#funktioniert nicht
+#rename colnames
+names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Gene.description'] <- 'Gene.description'
+names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
 
-# fusion of fusion.tra.human and ensembl.new because ensembl.new contains less rows than the other two tables
-p = which(rownames(fusion.tra.human) %in% ensembl.transcripts)
-fusion.tra.human.extracted = fusion.tra.human[p,]
-fusion.fusion.ensembl = cbind(fusion.tra.human.extracted,ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/Tables")
-write.csv(fusion.fusion.ensembl, file="fusion.fusion.ensembl.csv")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
+write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
 
 
 
@@ -277,7 +311,7 @@ tissue = c("Brain","Esophagus","Heart","Liver","Cervix","Muscle","Ovary","Colon"
 tissue.number = c()
 
 for (i in 1:33) {
-  tissue.number[[i]] = nrow(fusion.fusion.ensembl %>% filter(grepl(tissue[i],fusion.fusion.ensembl[,21])))
+  tissue.number[[i]] = nrow(fusion.tra.expression.tra.table.ensembl.table %>% filter(grepl(tissue[i],fusion.tra.expression.tra.table.ensembl.table[,21])))
 }
 print(tissue.number)
 tissue.distribution = cbind(tissue,tissue.number)
@@ -291,25 +325,25 @@ library(RColorBrewer)
 coul <- brewer.pal(5, "Set2")
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/plots")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
 
 dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 
 
 # Create a heatmap of the TRA genes in our dataset
 ## What does unlist mean? -> Transforms list into matrix
-human.vsnrma.new = matrix(unlist(human.vsnrma.new), ncol = 6, nrow = 24783)
+human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 6, nrow = 24783)
 
-colnames(human.vsnrma.new) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
+colnames(human.vsnrma.only.tra.matrix) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
 
-heatmap = pheatmap(human.vsnrma.new, 
+heatmap = pheatmap(human.vsnrma.only.tra.matrix, 
                    cluster_cols=FALSE, 
                    show_rownames = TRUE, 
                    legend=TRUE, 
                    fontsize_row=0.5,
                    main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
 
-setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/plots")
+setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
 dev.copy2pdf(file="heatmap.pdf")
 
 
@@ -438,3 +472,9 @@ fit= eBayes(fit)
 
 results = decideTests(fit)
 summary(results)
+
+setwd("~/Documents/GitHub/2022-topic-04-team-03")
+save.image(file="human_18290.RData")
+
+# 5.4) Dimenstionality Reduction using PCA
+human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
