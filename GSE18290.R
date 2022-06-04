@@ -218,24 +218,8 @@ ensembl.symbols = ensembl.data[,9]
 human.vsnrma.df = data.frame(exprs(human.vsnrma))
 
 #rename the colnames to the stages
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456643.CEL'] <- '1-cell stage.rep.1'
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456644.CEL'] <- '1-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456645.CEL'] <- '1-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456646.CEL'] <- '2-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456647.CEL'] <- '2-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456648.CEL'] <- '2-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456649.CEL'] <- '4-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456650.CEL'] <- '4-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456651.CEL'] <- '4-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456652.CEL'] <- '8-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456653.CEL'] <- '8-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456654.CEL'] <- '8-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456655.CEL'] <- 'morula stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456656.CEL'] <- 'morula stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456657.CEL'] <- 'morula stage.rep.3'
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456658.CEL'] <- 'blastocyst stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456659.CEL'] <- 'blastocyst stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456660.CEL'] <- 'blastocyst stage.rep.3' 
+colnames(human.vsnrma.df)<-c('1-cell stage.rep.1','1-cell stage.rep.2','1-cell stage.rep.3' ,'2-cell stage.rep.1' ,'2-cell stage.rep.2','2-cell stage.rep.3' ,'4-cell stage.rep.1' ,'4-cell stage.rep.2' ,'4-cell stage.rep.3' ,'8-cell stage.rep.1','8-cell stage.rep.2','8-cell stage.rep.3','morula stage.rep.1','morula stage.rep.2','morula stage.rep.3','blastocyst stage.rep.1','blastocyst stage.rep.2','blastocyst stage.rep.3')   
+
 
 # Check dimensions
 dim(human.vsnrma.df)
@@ -277,23 +261,16 @@ ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
 
 #fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
 fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
-colnames(fusion.tra.expression.tra.table[19:22])=c("gene.name","tissue.number","tissue","max.tissue")
-
-#rename colnames
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$ensembl.gene'] <- 'ensembl.gene'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tiss.number'] <- 'tiss.number'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tissues'] <- 'tissue'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$max.tissue'] <- 'max.tissue'
+colnames(fusion.tra.expression.tra.table)[19:22]<-c('ensembl.gene','tissue.number','tissue','max.tissue')
 
 
 # fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
 p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
 fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
-fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
 
 #rename colnames
-names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Gene.description'] <- 'Gene.description'
-names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
+colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c('gene.name','gene.description','chromosome.scaffold.name')
 
 
 setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
@@ -478,3 +455,5 @@ save.image(file="human_18290.bis.limma.RData")
 
 # 5.4) Dimenstionality Reduction using PCA
 human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
+rownames(human.vsnrma.df2[,1])->rownames(human.vsnrma.df2)
+one.cell.stage=data.frame("1-cell stage"=unlist(human.vsnrma.df2[,1:3]))
