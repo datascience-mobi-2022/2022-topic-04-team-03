@@ -166,7 +166,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
 expression.data <- exprs(human.vsnrma)
 
-for(i in 1:1){
+for(i in 1:17){
   plot(expression.data[,c(i,i+1)], pch=".", cex=2)
   abline(0, 1, col="red")               # 45 degree dividing line
   
@@ -474,7 +474,7 @@ results = decideTests(fit)
 summary(results)
 
 setwd("~/Documents/GitHub/2022-topic-04-team-03")
-save.image(file="human_18290.RData")
+save.image(file="human_18290.bis.limma.RData")
 
 # 5.4) Dimenstionality Reduction using PCA
 human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
