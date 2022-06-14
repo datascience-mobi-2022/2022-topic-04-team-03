@@ -15,7 +15,7 @@ library(hexbin)
 
 
 # 2) Read in .CEL files
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Data/rawData")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Data\\rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
@@ -94,7 +94,7 @@ human.vsnrma <- vsnrma(data.human)
 
 meanSdPlot(human.vsnrma)
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 
@@ -163,7 +163,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 
 # 3.7) Scatter Plot
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
 expression.data <- exprs(human.vsnrma)
 
 for(i in 1:17){
@@ -175,7 +175,7 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~/Documents/GitHub/2022-topic-04-team-03/Plots", 
+  file.name <- paste("~\\GitHub\\2022-topic-04-team-03\\Plots", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
@@ -203,7 +203,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Tables")
 
 ensembl.data <- read.csv("ensembl.human.txt")
 
@@ -296,7 +296,7 @@ names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression
 names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
 
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Tables")
 write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
 
 
@@ -325,7 +325,7 @@ library(RColorBrewer)
 coul <- brewer.pal(5, "Set2")
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
 
 dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 
@@ -343,7 +343,7 @@ heatmap = pheatmap(human.vsnrma.only.tra.matrix,
                    fontsize_row=0.5,
                    main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
 dev.copy2pdf(file="heatmap.pdf")
 
 
@@ -473,8 +473,29 @@ fit= eBayes(fit)
 results = decideTests(fit)
 summary(results)
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03")
+setwd("~\\GitHub\\2022-topic-04-team-03")
 save.image(file="human_18290.bis.limma.RData")
 
 # 5.4) Dimenstionality Reduction using PCA
 human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
+
+
+topVar = apply(human.vsnrma.df2, 1, var)
+q75 = quantile(topVar, probs = 0.75)
+i.topvar = which(topVar >= q75)
+human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
+dim(human.vsnrma.df2.topVar)
+pca = prcomp(t(human.vsnrma.df2.topVar), center = F, scale. = F)
+print(pca)
+
+#zeigt an welche PCs wievel standardabweichung erklären
+plot(pca$sdev)
+#PCs anteile an gesamt Varianz
+variance = (pca$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+
+color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
