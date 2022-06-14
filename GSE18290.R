@@ -403,6 +403,63 @@ summary(results)
 results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
 
+# Create fits for every contrast and then create tables with the results of Limma analysis
+# Stage 1-2
+fit.1.2 = contrasts.fit(fit, contrasts = cm[,1])
+fit.1.2 = eBayes(fit.1.2)
+
+pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
+# 0
+pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
+# 0
+
+
+# Stage 1-4
+fit.1.4 = contrasts.fit(fit, contrasts = cm[,2])
+fit.1.4 = eBayes(fit.1.4)
+
+pvalue01 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.01)
+# 0
+pvalue05 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.05)
+# 195
+
+limma.table.1.4 = topTable(fit.1.4, number = pvalue05)
+
+
+# Stage 1-8
+fit.1.8 = contrasts.fit(fit, contrasts = cm[,3])
+fit.1.8 = eBayes(fit.1.8)
+
+pvalue01 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.01)
+# 23,333
+pvalue05 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.05)
+# 34,439
+
+limma.table.1.8 = topTable(fit.1.8, number = pvalue01)
+
+
+# Stage 1-morula
+fit.1.m = contrasts.fit(fit, contrasts = cm[,4])
+fit.1.m = eBayes(fit.1.m)
+
+pvalue01 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.01)
+# 30,991
+pvalue05 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.05)
+# 40,461
+
+limma.table.1.m = topTable(fit.1.m, number = pvalue01)
+
+
+# Stage 1-blastocyst
+fit.1.b = contrasts.fit(fit, contrasts = cm[,4])
+fit.1.b = eBayes(fit.1.b)
+
+pvalue01 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.01)
+# 30,991
+pvalue05 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.05)
+# 40,461
+
+limma.table.1.b = topTable(fit.1.b, number = pvalue01)
 
 
 
@@ -411,74 +468,13 @@ summary(results2)
 
 
 
-########### Different solution from Dinkelacker's R course ##################
-
-# Compare 1-cell stage to 2-cell stage
-M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,4], 
-          human.vsnrma.df2[,2]-human.vsnrma.df2[,5],
-          human.vsnrma.df2[,3]-human.vsnrma.df2[,6])
-
-colnames(M) = paste(rep("1 cell stage vs 2 cell stage",3), "rep", as.character(1:3), sep=".")
-
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "1 cell-2 cell"
-
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
-
-results = decideTests(fit)
-summary(results)
 
 
+#setwd("~\\GitHub\\2022-topic-04-team-03")
+#save.image(file="human_18290.bis.limma.RData")
 
 
-# Compare 2-cell stage to 4-cell stage
-M = cbind(human.vsnrma.df2[,4]-human.vsnrma.df2[,7], 
-          human.vsnrma.df2[,5]-human.vsnrma.df2[,8],
-          human.vsnrma.df2[,6]-human.vsnrma.df2[,9])
-
-colnames(M) = paste(rep("2 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
-
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "2 cell-4 cell"
-
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
-
-results = decideTests(fit)
-summary(results)
-
-
-
-
-# Compare 1-cell stage to 4-cell stage
-M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,7], 
-          human.vsnrma.df2[,2]-human.vsnrma.df2[,8],
-          human.vsnrma.df2[,3]-human.vsnrma.df2[,9])
-
-colnames(M) = paste(rep("1 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
-
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "1 cell-4 cell"
-
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
-
-results = decideTests(fit)
-summary(results)
-
-setwd("~\\GitHub\\2022-topic-04-team-03")
-save.image(file="human_18290.bis.limma.RData")
-
-# 5.4) Dimenstionality Reduction using PCA
-
-
+# 5.4) Dimension Reduction using PCA
 
 topVar = apply(human.vsnrma.df2, 1, var)
 q75 = quantile(topVar, probs = 0.75)
