@@ -477,7 +477,7 @@ setwd("~\\GitHub\\2022-topic-04-team-03")
 save.image(file="human_18290.bis.limma.RData")
 
 # 5.4) Dimenstionality Reduction using PCA
-human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
+
 
 
 topVar = apply(human.vsnrma.df2, 1, var)
@@ -499,3 +499,4 @@ barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the fi
 color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+
