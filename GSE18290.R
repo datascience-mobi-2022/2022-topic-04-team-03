@@ -15,7 +15,7 @@ library(hexbin)
 
 
 # 2) Read in .CEL files
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Data/rawData")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
@@ -94,7 +94,7 @@ human.vsnrma <- vsnrma(data.human)
 
 meanSdPlot(human.vsnrma)
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 
@@ -163,7 +163,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 
 # 3.7) Scatter Plot
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 expression.data <- exprs(human.vsnrma)
 
 for(i in 1:17){
@@ -175,7 +175,7 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~/Documents/GitHub/2022-topic-04-team-03/Plots", 
+  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
@@ -203,7 +203,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 ensembl.data <- read.csv("ensembl.human.txt")
 
@@ -218,8 +218,24 @@ ensembl.symbols = ensembl.data[,9]
 human.vsnrma.df = data.frame(exprs(human.vsnrma))
 
 #rename the colnames to the stages
-colnames(human.vsnrma.df)<-c('1-cell stage.rep.1','1-cell stage.rep.2','1-cell stage.rep.3' ,'2-cell stage.rep.1' ,'2-cell stage.rep.2','2-cell stage.rep.3' ,'4-cell stage.rep.1' ,'4-cell stage.rep.2' ,'4-cell stage.rep.3' ,'8-cell stage.rep.1','8-cell stage.rep.2','8-cell stage.rep.3','morula stage.rep.1','morula stage.rep.2','morula stage.rep.3','blastocyst stage.rep.1','blastocyst stage.rep.2','blastocyst stage.rep.3')   
-
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456643.CEL'] <- '1-cell stage.rep.1'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456644.CEL'] <- '1-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456645.CEL'] <- '1-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456646.CEL'] <- '2-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456647.CEL'] <- '2-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456648.CEL'] <- '2-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456649.CEL'] <- '4-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456650.CEL'] <- '4-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456651.CEL'] <- '4-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456652.CEL'] <- '8-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456653.CEL'] <- '8-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456654.CEL'] <- '8-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456655.CEL'] <- 'morula stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456656.CEL'] <- 'morula stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456657.CEL'] <- 'morula stage.rep.3'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456658.CEL'] <- 'blastocyst stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456659.CEL'] <- 'blastocyst stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456660.CEL'] <- 'blastocyst stage.rep.3' 
 
 # Check dimensions
 dim(human.vsnrma.df)
@@ -261,19 +277,26 @@ ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
 
 #fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
 fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
-colnames(fusion.tra.expression.tra.table)[19:22]<-c('ensembl.gene','tissue.number','tissue','max.tissue')
+colnames(fusion.tra.expression.tra.table[19:22])=c("gene.name","tissue.number","tissue","max.tissue")
+
+#rename colnames
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$ensembl.gene'] <- 'ensembl.gene'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tiss.number'] <- 'tiss.number'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tissues'] <- 'tissue'
+names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$max.tissue'] <- 'max.tissue'
 
 
 # fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
 p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
 fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
-fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
 
 #rename colnames
-colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c('gene.name','gene.description','chromosome.scaffold.name')
+names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Gene.description'] <- 'Gene.description'
+names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
 
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Tables")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
 
 
@@ -302,7 +325,7 @@ library(RColorBrewer)
 coul <- brewer.pal(5, "Set2")
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
 dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 
@@ -320,7 +343,7 @@ heatmap = pheatmap(human.vsnrma.only.tra.matrix,
                    fontsize_row=0.5,
                    main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
 
-setwd("~/Documents/GitHub/2022-topic-04-team-03/Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2pdf(file="heatmap.pdf")
 
 
@@ -380,6 +403,63 @@ summary(results)
 results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
 
+# Create fits for every contrast and then create tables with the results of Limma analysis
+# Stage 1-2
+fit.1.2 = contrasts.fit(fit, contrasts = cm[,1])
+fit.1.2 = eBayes(fit.1.2)
+
+pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
+# 0
+pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
+# 0
+
+
+# Stage 1-4
+fit.1.4 = contrasts.fit(fit, contrasts = cm[,2])
+fit.1.4 = eBayes(fit.1.4)
+
+pvalue01 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.01)
+# 0
+pvalue05 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.05)
+# 195
+
+limma.table.1.4 = topTable(fit.1.4, number = pvalue05)
+
+
+# Stage 1-8
+fit.1.8 = contrasts.fit(fit, contrasts = cm[,3])
+fit.1.8 = eBayes(fit.1.8)
+
+pvalue01 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.01)
+# 23,333
+pvalue05 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.05)
+# 34,439
+
+limma.table.1.8 = topTable(fit.1.8, number = pvalue01)
+
+
+# Stage 1-morula
+fit.1.m = contrasts.fit(fit, contrasts = cm[,4])
+fit.1.m = eBayes(fit.1.m)
+
+pvalue01 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.01)
+# 30,991
+pvalue05 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.05)
+# 40,461
+
+limma.table.1.m = topTable(fit.1.m, number = pvalue01)
+
+
+# Stage 1-blastocyst
+fit.1.b = contrasts.fit(fit, contrasts = cm[,4])
+fit.1.b = eBayes(fit.1.b)
+
+pvalue01 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.01)
+# 30,991
+pvalue05 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.05)
+# 40,461
+
+limma.table.1.b = topTable(fit.1.b, number = pvalue01)
 
 
 
@@ -388,72 +468,31 @@ summary(results2)
 
 
 
-########### Different solution from Dinkelacker's R course ##################
-
-# Compare 1-cell stage to 2-cell stage
-M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,4], 
-          human.vsnrma.df2[,2]-human.vsnrma.df2[,5],
-          human.vsnrma.df2[,3]-human.vsnrma.df2[,6])
-
-colnames(M) = paste(rep("1 cell stage vs 2 cell stage",3), "rep", as.character(1:3), sep=".")
-
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "1 cell-2 cell"
-
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
-
-results = decideTests(fit)
-summary(results)
 
 
+#setwd("~\\GitHub\\2022-topic-04-team-03")
+#save.image(file="human_18290.bis.limma.RData")
 
 
-# Compare 2-cell stage to 4-cell stage
-M = cbind(human.vsnrma.df2[,4]-human.vsnrma.df2[,7], 
-          human.vsnrma.df2[,5]-human.vsnrma.df2[,8],
-          human.vsnrma.df2[,6]-human.vsnrma.df2[,9])
+# 5.4) Dimension Reduction using PCA
 
-colnames(M) = paste(rep("2 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
+topVar = apply(human.vsnrma.df2, 1, var)
+q75 = quantile(topVar, probs = 0.75)
+i.topvar = which(topVar >= q75)
+human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
+dim(human.vsnrma.df2.topVar)
+pca = prcomp(t(human.vsnrma.df2.topVar), center = F, scale. = F)
+print(pca)
 
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "2 cell-4 cell"
+#zeigt an welche PCs wievel standardabweichung erklären
+plot(pca$sdev)
+#PCs anteile an gesamt Varianz
+variance = (pca$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
 
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
+color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
-results = decideTests(fit)
-summary(results)
+plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
 
-
-
-
-# Compare 1-cell stage to 4-cell stage
-M = cbind(human.vsnrma.df2[,1]-human.vsnrma.df2[,7], 
-          human.vsnrma.df2[,2]-human.vsnrma.df2[,8],
-          human.vsnrma.df2[,3]-human.vsnrma.df2[,9])
-
-colnames(M) = paste(rep("1 cell stage vs 4 cell stage",3), "rep", as.character(1:3), sep=".")
-
-# Create and empty matrix, 
-design = as.matrix(rep(1,3))
-colnames(design) = "1 cell-4 cell"
-
-#calculate the fit and thus p-values
-fit= lmFit(M,design)
-fit= eBayes(fit)
-
-results = decideTests(fit)
-summary(results)
-
-setwd("~/Documents/GitHub/2022-topic-04-team-03")
-save.image(file="human_18290.bis.limma.RData")
-
-# 5.4) Dimenstionality Reduction using PCA
-human.vsnrma.df2.pca=prcomp(human.vsnrma.df2,scale=TRUE,centers=TRUE)
-rownames(human.vsnrma.df2[,1])->rownames(human.vsnrma.df2)
-one.cell.stage=data.frame("1-cell stage"=unlist(human.vsnrma.df2[,1:3]))
