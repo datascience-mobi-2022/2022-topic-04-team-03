@@ -15,7 +15,7 @@ library(hexbin)
 
 
 # 2) Read in .CEL files
-setwd("~\\GitHub\\2022-topic-04-team-03\\Data\\rawData")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
@@ -94,7 +94,7 @@ human.vsnrma <- vsnrma(data.human)
 
 meanSdPlot(human.vsnrma)
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 
 
@@ -163,7 +163,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 
 # 3.7) Scatter Plot
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 expression.data <- exprs(human.vsnrma)
 
 for(i in 1:17){
@@ -175,7 +175,7 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~\\GitHub\\2022-topic-04-team-03\\Plots", 
+  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
@@ -203,7 +203,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Tables")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 ensembl.data <- read.csv("ensembl.human.txt")
 
@@ -296,7 +296,7 @@ names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression
 names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
 
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Tables")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
 
 
@@ -325,7 +325,7 @@ library(RColorBrewer)
 coul <- brewer.pal(5, "Set2")
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
 dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 
@@ -343,7 +343,7 @@ heatmap = pheatmap(human.vsnrma.only.tra.matrix,
                    fontsize_row=0.5,
                    main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
 
-setwd("~\\GitHub\\2022-topic-04-team-03\\Plots")
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2pdf(file="heatmap.pdf")
 
 
