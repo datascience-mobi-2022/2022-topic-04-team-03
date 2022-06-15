@@ -277,23 +277,16 @@ ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
 
 #fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
 fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
-colnames(fusion.tra.expression.tra.table[19:22])=c("gene.name","tissue.number","tissue","max.tissue")
-
-#rename colnames
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$ensembl.gene'] <- 'ensembl.gene'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tiss.number'] <- 'tiss.number'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$tissues'] <- 'tissue'
-names(fusion.tra.expression.tra.table)[names(fusion.tra.expression.tra.table) == 'tra.expressed.in.chips$max.tissue'] <- 'max.tissue'
+colnames(fusion.tra.expression.tra.table)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
 
 
 # fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
 p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
 fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
-fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
 
 #rename colnames
-names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Gene.description'] <- 'Gene.description'
-names(fusion.tra.expression.tra.table.ensembl.table)[names(fusion.tra.expression.tra.table.ensembl.table) == 'ensembl.only.tra$Chromosome.scaffold.name'] <- 'Chromosome.scaffold.name'
+colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c("Gene.name","Gene.description","Chromosome.scaffold.name")
 
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
@@ -476,6 +469,8 @@ limma.table.1.b = topTable(fit.1.b, number = pvalue01)
 
 # 5.4) Dimension Reduction using PCA
 
+#code von Carl
+
 topVar = apply(human.vsnrma.df2, 1, var)
 q75 = quantile(topVar, probs = 0.75)
 i.topvar = which(topVar >= q75)
@@ -496,3 +491,29 @@ color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue"
 
 plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
 
+
+# code von Data camp
+pca = prcomp(t(human.vsnrma.df2), center = T, scale. = F)
+
+# Variability of each principal component: pr.var
+pca.var <- pca$sdev^2
+
+# Variance explained by each principal component: pve
+pve <- pca.var / sum(pca.var)
+
+# Plot variance explained for each principal component
+plot(pve, xlab = "Principal Component",
+     ylab = "Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+# Plot cumulative proportion of variance explained
+plot(cumsum(pve), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+## 4 PCs are enough to show more than 90%
+
+color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
+plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
