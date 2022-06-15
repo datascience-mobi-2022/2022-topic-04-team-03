@@ -413,69 +413,81 @@ pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
 pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
 # 0
 
-#Stages Toptable
+
+# Create fits for every contrast and then create tables with the results of limma analysis
+
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-for(i in 1:15) {
-  fit.1.i = contrasts.fit(fit, contrasts = cm[,i])
-  fit.1.i = eBayes(fit.1.i)
-  pvalue01 = sum(p.adjust(fit.1.i$p.value, "BH") < 0.01)
+
+
+for(i in 2:15) {
+  fit.1 = contrasts.fit(fit, contrasts = cm[,i])
+  fit.1 = eBayes(fit.1)
   
-  pvalue05 = sum(p.adjust(fit.1.i$p.value, "BH") < 0.05)
- 
-  limma.table.1.i = topTable(fit.1.i, number = pvalue05)
+  pvalue01 = sum(p.adjust(fit.1$p.value, "BH") < 0.01)
+  pvalue05 = sum(p.adjust(fit.1$p.value, "BH") < 0.05)
   
-  file.name <- paste("limma.table",colnames(cm)[i], sep=" ")
-  toString(filename) = limma.table.1.i                 
-  #(limma.table.1.i,file = file.name)
+  if (i==2){
+    limma.table.1.4 = topTable(fit.1, number = pvalue05)
   }
+  
+  if (i==3){
+    limma.table.1.8 = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==4){
+    limma.table.1.m = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==5){
+    limma.table.1.b = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==6){
+    limma.table.2.4 = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==7){
+    limma.table.2.8 = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==8){
+    limma.table.2.m = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==9){
+    limma.table.2.b = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==10){
+    limma.table.4.8 = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==11){
+    limma.table.4.m = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==12){
+    limma.table.4.b = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==13){
+    limma.table.8.m = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==14){
+    limma.table.8.b = topTable(fit.1, number = pvalue05)
+  }
+  
+  if (i==15){
+    limma.table.m.b = topTable(fit.1, number = pvalue05)
+  }
+  
+  #file.name = paste("limma.table",colnames(cm)[i], sep=" ")
+  #toString(filename) = limma.table.1.i                 
+  #(limma.table.1.i,file = file.name)
+}
 
-
-# Stage 1-4
-fit.1.4 = contrasts.fit(fit, contrasts = cm[,2])
-fit.1.4 = eBayes(fit.1.4)
-
-pvalue01 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.01)
-# 0
-pvalue05 = sum(p.adjust(fit.1.4$p.value, "BH") < 0.05)
-# 195
-
-limma.table.1.4 = topTable(fit.1.4, number = pvalue05)
-
-
-# Stage 1-8
-fit.1.8 = contrasts.fit(fit, contrasts = cm[,3])
-fit.1.8 = eBayes(fit.1.8)
-
-pvalue01 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.01)
-# 23,333
-pvalue05 = sum(p.adjust(fit.1.8$p.value, "BH") < 0.05)
-# 34,439
-
-limma.table.1.8 = topTable(fit.1.8, number = pvalue01)
-
-
-# Stage 1-morula
-fit.1.m = contrasts.fit(fit, contrasts = cm[,4])
-fit.1.m = eBayes(fit.1.m)
-
-pvalue01 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.01)
-# 30,991
-pvalue05 = sum(p.adjust(fit.1.m$p.value, "BH") < 0.05)
-# 40,461
-
-limma.table.1.m = topTable(fit.1.m, number = pvalue01)
-
-
-# Stage 1-blastocyst
-fit.1.b = contrasts.fit(fit, contrasts = cm[,4])
-fit.1.b = eBayes(fit.1.b)
-
-pvalue01 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.01)
-# 30,991
-pvalue05 = sum(p.adjust(fit.1.b$p.value, "BH") < 0.05)
-# 40,461
-
-limma.table.1.b = topTable(fit.1.b, number = pvalue01)
+# Annotate topTables
 
 
 
