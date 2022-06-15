@@ -1,5 +1,3 @@
-
-
 # 1) Load libraries
 
 library(affy)
@@ -23,65 +21,6 @@ data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 #setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
 #save.image(file="rawdata_human_18290.rda")#
 
-
-# 3) Quality control
-# 3.1) Single chip control
-
-# GSM456643
-image(data.human[,1], col=rainbow(100, start=0, end=0.75)[100:1]) 
-
-# GSM456644
-image(data.human[,2], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456645
-image(data.human[,3], col=rainbow(100, start=0, end=0.75)[100:1]) #-> a little smudge on the bottom edge
-
-# GSM456646
-image(data.human[,4], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456647
-image(data.human[,5], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456648
-image(data.human[,6], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456649
-image(data.human[,7], col=rainbow(100, start=0, end=0.75)[100:1]) #->very bright?
-
-# GSM456650
-image(data.human[,8], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456651
-image(data.human[,9], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456652
-image(data.human[,10], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456653
-image(data.human[,11], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456654
-image(data.human[,12], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456655
-image(data.human[,13], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456656
-image(data.human[,14], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456657
-image(data.human[,15], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456658
-image(data.human[,16], col=rainbow(100, start=0, end=0.75)[100:1])
-
-# GSM456659
-image(data.human[,17], col=rainbow(100, start=0, end=0.75)[100:1]) #-> little dots and little line at the bottom edge
-
-# GSM456660
-image(data.human[,18], col=rainbow(100, start=0, end=0.75)[100:1])
-
-
 # 3.2) Normalization
 
 human.vsnrma <- vsnrma(data.human)
@@ -89,113 +28,6 @@ human.vsnrma <- vsnrma(data.human)
 #setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
 #save.image(file="normalized_human_data_18290.rda")#
 
-
-# 3.3) meanSdPlot
-
-meanSdPlot(human.vsnrma)
-
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
-
-
-# 3.4) Boxplot
-
-names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
-          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
-          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
-          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
-          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
-          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
-
-
-# Before normalization:
-par(las=2)
-mmi=c(1,0.7,1.0477939,0.5366749)
-par(mai=mmi)
-boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", xlim = names)
-
-dev.copy2eps(file="boxplot_rawdata_18290.eps")
-
-# After Normalization:
-boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization")
-
-dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
-dev.off() # what does this function do?
-
-
-
-# 3.5) Density plot
-
-
-
-# Before Normalization:
-hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
-
-dev.copy2pdf(file="Histogram_rawdata_39897.pdf", width = 10, height = 7)
-
-# After Normalization:
-
-eset=exprs(human.vsnrma)
-
-plot(density(eset[,1]), type="n", xlab="log Intensity", ylim=c(0,1), main="Density function of log Intensity of human embryogenesis normalized")
-for (i in 1:ncol(eset)) {
-  lines(density(eset[,i]), col=rainbow(35)[i])
-}
-
-dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
-
-
-
-# 3.6) RNA Degradation Plot
-
-par(mfrow = c(2,1))
-rnadeg.raw = AffyRNAdeg(data.human)
-
-plotAffyRNAdeg(rnadeg.raw, col=rainbow(35))
-title(sub="human embroyogenesis rawdata")
-
-plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
-title(sub="human embryogenesis rawdata - shifted")
-
-dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
-#dev.off()
-
-
-# 3.7) Scatter Plot
-
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-expression.data <- exprs(human.vsnrma)
-
-for(i in 1:17){
-  plot(expression.data[,c(i,i+1)], pch=".", cex=2)
-  abline(0, 1, col="red")               # 45 degree dividing line
-  
-  title(main = paste("Scatterplot of probe", 
-                     substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i])), "and", 
-                     substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
-                     sep=" ", collapse = NULL))
-  
-  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
-                     as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
-                     as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
-                     ".pdf", sep="")
-  dev.copy2pdf(file = file.name)
-  dev.off()
-}
-
-
-
-
-# 4) Data clean-up
-
-# Are there any NAs in our dataset?
-sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
-#> No
-
-
-
-
-# 5) Data Analysis
 
 # 5.1) Annotation
 
@@ -294,8 +126,6 @@ write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expres
 
 
 
-
-
 # 5.2) Exploratory data analysis
 
 
@@ -328,16 +158,6 @@ dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 6, nrow = 24783)
 
 colnames(human.vsnrma.only.tra.matrix) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
-
-heatmap = pheatmap(human.vsnrma.only.tra.matrix, 
-                   cluster_cols=FALSE, 
-                   show_rownames = TRUE, 
-                   legend=TRUE, 
-                   fontsize_row=0.5,
-                   main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
-
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-dev.copy2pdf(file="heatmap.pdf")
 
 
 # 5.3) Limma analysis
@@ -372,7 +192,7 @@ stage = c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "bla
 
 # Create a design matrix with the stages
 design = model.matrix(~0 + stage)
-            
+
 # Create a contrast matrix which compares all the stages with one another 
 cm = makeContrasts(stage1.2 = stage1-stage2, stage1.4 = stage1-stage4, stage1.8 = stage1-stage8, stage1.morula = stage1-stagemorula, stage1.blastocyst = stage1-stageblastocyst,
                    stage2.4 = stage2-stage4, stage2.8 = stage2-stage8, stage2.morula = stage2-stagemorula,  stage2.blastocyst = stage2-stageblastocyst,
@@ -396,152 +216,5 @@ summary(results)
 results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
 
-# Create fits for every contrast and then create tables with the results of Limma analysis
-# Stage 1-2
-fit.1.2 = contrasts.fit(fit, contrasts = cm[,1])
-fit.1.2 = eBayes(fit.1.2)
-
-pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
-# 0
-pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
-# 0
-
-
-# Create fits for every contrast and then create tables with the results of limma analysis
-
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-
-
-for(i in 2:15) {
-  fit.1 = contrasts.fit(fit, contrasts = cm[,i])
-  fit.1 = eBayes(fit.1)
-  
-  pvalue01 = sum(p.adjust(fit.1$p.value, "BH") < 0.01)
-  pvalue05 = sum(p.adjust(fit.1$p.value, "BH") < 0.05)
-  
-  if (i==2){
-    limma.table.1.4 = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==3){
-    limma.table.1.8 = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==4){
-    limma.table.1.m = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==5){
-    limma.table.1.b = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==6){
-    limma.table.2.4 = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==7){
-    limma.table.2.8 = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==8){
-    limma.table.2.m = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==9){
-    limma.table.2.b = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==10){
-    limma.table.4.8 = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==11){
-    limma.table.4.m = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==12){
-    limma.table.4.b = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==13){
-    limma.table.8.m = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==14){
-    limma.table.8.b = topTable(fit.1, number = pvalue05)
-  }
-  
-  if (i==15){
-    limma.table.m.b = topTable(fit.1, number = pvalue05)
-  }
-  
-  #file.name = paste("limma.table",colnames(cm)[i], sep=" ")
-  #toString(filename) = limma.table.1.i                 
-  #(limma.table.1.i,file = file.name)
-}
-
-# Annotate topTables
-
-
-
-
-
-
-
-
-
-
-#setwd("~\\GitHub\\2022-topic-04-team-03")
-#save.image(file="human_18290.bis.limma.RData")
-
-
-# 5.4) Dimension Reduction using PCA
-
-#code von Carl
-
-topVar = apply(human.vsnrma.df2, 1, var)
-q75 = quantile(topVar, probs = 0.75)
-i.topvar = which(topVar >= q75)
-human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
-dim(human.vsnrma.df2.topVar)
-pca = prcomp(t(human.vsnrma.df2.topVar), center = F, scale. = F)
-print(pca)
-
-#zeigt an welche PCs wievel standardabweichung erklären
-plot(pca$sdev)
-#PCs anteile an gesamt Varianz
-variance = (pca$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-
-color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
-
-plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
-
-
-# code von Data camp
-pca = prcomp(t(human.vsnrma.df2), center = T, scale. = F)
-
-# Variability of each principal component: pr.var
-pca.var <- pca$sdev^2
-
-# Variance explained by each principal component: pve
-pve <- pca.var / sum(pca.var)
-
-# Plot variance explained for each principal component
-plot(pve, xlab = "Principal Component",
-     ylab = "Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-# Plot cumulative proportion of variance explained
-plot(cumsum(pve), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-## 4 PCs are enough to show more than 90%
-
-color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
-
-plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
-plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
-plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
+setwd("~//documents//GitHub//2022-topic-04-team-03")
+save.image(file="human_18290.RData")
