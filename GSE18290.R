@@ -406,6 +406,22 @@ pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
 pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
 # 0
 
+#Stages Toptable
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+for(i in 1:15) {
+  fit.1.i = contrasts.fit(fit, contrasts = cm[,i])
+  fit.1.i = eBayes(fit.1.i)
+  pvalue01 = sum(p.adjust(fit.1.i$p.value, "BH") < 0.01)
+  
+  pvalue05 = sum(p.adjust(fit.1.i$p.value, "BH") < 0.05)
+ 
+  limma.table.1.i = topTable(fit.1.i, number = pvalue05)
+  
+  file.name <- paste("limma.table",colnames(cm)[i], sep=" ")
+  toString(filename) = limma.table.1.i                 
+  #(limma.table.1.i,file = file.name)
+  }
+
 
 # Stage 1-4
 fit.1.4 = contrasts.fit(fit, contrasts = cm[,2])
