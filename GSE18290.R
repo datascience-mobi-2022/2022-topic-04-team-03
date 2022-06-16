@@ -247,7 +247,7 @@ human.vsnrma.df2 = human.vsnrma.df[63:95721,]
 dim(human.vsnrma.df2)
 # 95,659    18
 
-#remove ".xx_at" from the rownames
+# remove ".xx_at" from the rownames
 rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
 
 # read in TRA data for human
@@ -255,7 +255,7 @@ tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 
 
 # find the index of rownames of our dataset that contain transcript Ids from the tra dataset
-#We extracted the TRA genes out of the three table(human.vsnrma, tra, ensembl)
+# We extracted the TRA genes out of the three tables(human.vsnrma, tra, ensembl)
 
 j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
 tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
@@ -481,6 +481,40 @@ for(i in 2:15) {
 }
 
 # Annotate topTables
+# Define a function for annotation 
+# Parameter x is the limma table
+
+limma.annotation = function(x){
+  a = which(ensembl.transcripts %in% rownames(x))
+  ensembl.new = ensembl.data[a,]
+  
+  b = which(rownames(x) %in% ensembl.new$Transcript.stable.ID)
+  x.new = x[b,]
+  
+  ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+  x.new = arrange(x.new, rownames(x.new))
+  
+  annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
+  annotated.x = arrange(annotated.x, adj.P.Val)
+  return(annotated.x)
+}
+
+annotated.limma.1.4 = limma.annotation(limma.table.1.4)
+annotated.limma.1.8 = limma.annotation(limma.table.1.8)
+annotated.limma.1.m = limma.annotation(limma.table.1.m)
+annotated.limma.1.b = limma.annotation(limma.table.1.b)
+# annotated.limma.2.4 = limma.annotation(limma.table.2.4)
+# Error
+annotated.limma.2.8 = limma.annotation(limma.table.2.8)
+# Error
+annotated.limma.2.m = limma.annotation(limma.table.2.m)
+annotated.limma.2.b = limma.annotation(limma.table.2.b)
+annotated.limma.4.8 = limma.annotation(limma.table.4.8)
+annotated.limma.4.m = limma.annotation(limma.table.4.m)
+annotated.limma.4.b = limma.annotation(limma.table.4.b)
+annotated.limma.8.m = limma.annotation(limma.table.8.m)
+annotated.limma.8.b = limma.annotation(limma.table.8.b)
+annotated.limma.m.b = limma.annotation(limma.table.m.b)
 
 
 
