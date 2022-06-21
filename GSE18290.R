@@ -531,6 +531,56 @@ annotated.limma.m.b = limma.annotation(limma.table.m.b)
 
 # 5.4) Dimension Reduction using PCA
 
+###code von Carl
+
+#topVar = apply(human.vsnrma.df2, 1, var)
+#q75 = quantile(topVar, probs = 0.75)
+#i.topvar = which(topVar >= q75)
+#human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
+#dim(human.vsnrma.df2.topVar)
+#pca = prcomp(t(human.vsnrma.df2.topVar), center = F, scale. = F)
+#print(pca)
+
+#zeigt an welche PCs wievel standardabweichung erklären
+#plot(pca$sdev)
+#PCs anteile an gesamt Varianz
+#variance = (pca$sdev)^2
+#prop.variance = variance/sum(variance)
+#names(prop.variance) = 1:length(prop.variance)
+#barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+
+#color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+#plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+
+
+### code von Data camp
+#pca = prcomp(t(human.vsnrma.df2), center = T, scale. = F)
+
+# Variability of each principal component: pr.var
+#pca.var <- pca$sdev^2
+
+# Variance explained by each principal component: pve
+#pve <- pca.var / sum(pca.var)
+
+# Plot variance explained for each principal component
+#plot(pve, xlab = "Principal Component",
+     #ylab = "Proportion of Variance Explained",
+     #ylim = c(0, 1), type = "b")
+
+# Plot cumulative proportion of variance explained
+#plot(cumsum(pve), xlab = "Principal Component",
+     #ylab = "Cumulative Proportion of Variance Explained",
+     #ylim = c(0, 1), type = "b")
+## 4 PCs are enough to show more than 90%
+
+#color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+#plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+#plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
+#plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
+
+
 #code von Carl
 
 topVar = apply(human.vsnrma.df2, 1, var)
@@ -538,44 +588,298 @@ q75 = quantile(topVar, probs = 0.75)
 i.topvar = which(topVar >= q75)
 human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
 dim(human.vsnrma.df2.topVar)
-pca = prcomp(t(human.vsnrma.df2.topVar), center = F, scale. = F)
+
+pca = prcomp(t(human.vsnrma.df2.topVar), center = T, scale. = T)
 print(pca)
 
 #zeigt an welche PCs wievel standardabweichung erklären
 plot(pca$sdev)
+
 #PCs anteile an gesamt Varianz
 variance = (pca$sdev)^2
 prop.variance = variance/sum(variance)
 names(prop.variance) = 1:length(prop.variance)
 barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
 
-color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
-
-plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
-
-
-# code von Data camp
-pca = prcomp(t(human.vsnrma.df2), center = T, scale. = F)
-
-# Variability of each principal component: pr.var
-pca.var <- pca$sdev^2
-
-# Variance explained by each principal component: pve
-pve <- pca.var / sum(pca.var)
-
-# Plot variance explained for each principal component
-plot(pve, xlab = "Principal Component",
-     ylab = "Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
 # Plot cumulative proportion of variance explained
-plot(cumsum(pve), xlab = "Principal Component",
+plot(cumsum(prop.variance), xlab = "Principal Component",
      ylab = "Cumulative Proportion of Variance Explained",
      ylim = c(0, 1), type = "b")
-## 4 PCs are enough to show more than 90%
 
+abline(h=0.9)
+
+#Zeigen von PC1 and PC2
 color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
-plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
-plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
+
+#Zeigen von PC2 and PC3
+plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC1',ylab='PC2')
+
+# 4 PCs are enough to show more than 90%
+
+#Kmeans to cluster the stages
+# Use map_dbl to run many models with varying value of k (centers)
+tot_withinss <- map_dbl(1:10,  function(k){
+  model <- kmeans(x = pca$x[,1:4], centers = k,nstart=30)
+  model$tot.withinss
+})
+
+# Generate a data frame containing both k and tot_withinss
+elbow_df <- data.frame(
+  k = 1:10 ,
+  tot_withinss = tot_withinss
+)
+
+# Plot the elbow plot
+ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:10)
+# seems like k=2 is the best
+
+#show cluster
+model <- kmeans(x = pca$x[,1:4], centers = 2,nstart=30)
+model$cluster
+
+#Plot the Siloutte plot
+library(cluster)
+library(factoextra)
+
+# Use map_dbl to run many models with varying value of k
+sil_width <- map_dbl(2:10,  function(k){
+  model <- pam(pca$x[,1:4], k = k)
+  model$silinfo$avg.width
+})
+
+# Generate a data frame containing both k and sil_width
+sil_df <- data.frame(
+  k = 2:10,
+  sil_width = sil_width
+)
+
+# Plot the relationship between k and sil_width
+ggplot(sil_df, aes(x = k, y = sil_width)) +
+  geom_line() +
+  scale_x_continuous(breaks = 2:10)
+
+#it seems like that k=4 is a good choice
+
+# Generate a k-means model using the pam() function with a k = 4
+pam_k4 <- pam(pca$x[,1:13],k=4)
+
+# Show the clustering
+pam_k4$clustering
+
+#clustering without PCA
+# Use map_dbl to run many models with varying value of k (centers)
+tot_withinss <- map_dbl(1:10,  function(k){
+  model <- kmeans(x = t(human.vsnrma.df, centers = k,nstart=30)
+                  model$tot.withinss
+})
+  
+  # Generate a data frame containing both k and tot_withinss
+  elbow_df <- data.frame(
+    k = 1:10 ,
+    tot_withinss = tot_withinss
+  )
+  
+  # Plot the elbow plot
+  ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
+    geom_line() +
+    scale_x_continuous(breaks = 1:10)
+  # seems like k=2 is the best
+  
+  #show cluster
+  model <- kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
+  model$cluster
+  
+  #Plot the Siloutte plot
+  library(cluster)
+  library(factoextra)
+  
+  # Use map_dbl to run many models with varying value of k
+  sil_width <- map_dbl(2:10,  function(k){
+    model <- pam(t(human.vsnrma.df2), k = k)
+    model$silinfo$avg.width
+  })
+  
+  # Generate a data frame containing both k and sil_width
+  sil_df <- data.frame(
+    k = 2:10,
+    sil_width = sil_width
+  )
+  
+  # Plot the relationship between k and sil_width
+  ggplot(sil_df, aes(x = k, y = sil_width)) +
+    geom_line() +
+    scale_x_continuous(breaks = 2:10)
+  
+  #it seems like that k=2 is a good choice
+  
+  # Generate a k-means model using the pam() function with a k = 4
+  pam_k2 <- pam(t(human.vsnrma.df2),k=2)
+  
+  # Show the clustering
+  pam_k2$clustering
+  
+  ###Finding Variance Genes
+  pc1=pca$rotation[,1]
+  top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+  ensembl.data[j,]
+  
+  pc2=pca$rotation[,2]
+  top_genes_pca2 = names(sort(abs(pc2), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca2)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca2)
+  ensembl.data[j,]
+  
+  pc3=pca$rotation[,3]
+  top_genes_pca3 = names(sort(abs(pc3), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca3)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca3)
+  ensembl.data[j,]
+  
+  pc4=pca$rotation[,4]
+  top_genes_pca4 = names(sort(abs(pc4), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca4)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca4)
+  ensembl.data[j,]
+  
+  #1-2-4 cell vergleich mit 8 cell
+  pca.1.8=prcomp(t(human.vsnrma.df2[,1:12]))
+  #zeigt an welche PCs wievel standardabweichung erklären
+  plot(pca.1.8$sdev)
+  
+  #PCs anteile an gesamt Varianz
+  variance = (pca.1.8$sdev)^2
+  prop.variance = variance/sum(variance)
+  names(prop.variance) = 1:length(prop.variance)
+  barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+  
+  # Plot cumulative proportion of variance explained
+  plot(cumsum(prop.variance), xlab = "Principal Component",
+       ylab = "Cumulative Proportion of Variance Explained",
+       ylim = c(0, 1), type = "b")
+  
+  abline(h=0.9)
+  
+  color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+  
+  plot(pca.1.8$x[,1], pca.1.8$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+  
+  ###Finding Variance Genes
+  pc1=pca.1.8$rotation[,1]
+  top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+  View(ensembl.data[j,])
+  
+  #8-cell vergleicht mit m 
+  pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
+  #zeigt an welche PCs wievel standardabweichung erklären
+  plot(pca.8.m$sdev)
+  
+  #PCs anteile an gesamt Varianz
+  variance = (pca.8.m$sdev)^2
+  prop.variance = variance/sum(variance)
+  names(prop.variance) = 1:length(prop.variance)
+  barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+  
+  # Plot cumulative proportion of variance explained
+  plot(cumsum(prop.variance), xlab = "Principal Component",
+       ylab = "Cumulative Proportion of Variance Explained",
+       ylim = c(0, 1), type = "b")
+  
+  abline(h=0.9)
+  
+  color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+  
+  plot(pca.8.m$x[,1], pca.8.m$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+  
+  ###Finding Variance Genes
+  pc1=pca.8.m$rotation[,1]
+  top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+  View(ensembl.data[j,])
+  
+  #m vergleicht mit b
+  pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
+  #zeigt an welche PCs wievel standardabweichung erklären
+  plot(pca.m.b$sdev)
+  
+  #PCs anteile an gesamt Varianz
+  variance = (pca.m.b$sdev)^2
+  prop.variance = variance/sum(variance)
+  names(prop.variance) = 1:length(prop.variance)
+  barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+  
+  # Plot cumulative proportion of variance explained
+  plot(cumsum(prop.variance), xlab = "Principal Component",
+       ylab = "Cumulative Proportion of Variance Explained",
+       ylim = c(0, 1), type = "b")
+  
+  abline(h=0.9)
+  
+  color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+  
+  plot(pca.m.b$x[,1], pca.m.b$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+  
+  ###Finding Variance Genes
+  pc1=pca.8.m.b$rotation[,1]
+  top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+  fusion.tra.expression.tra.table.ensembl.table[k,]
+  
+  j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+  ensembl.data[j,]
+  
+  
+  6.#filter DE genes
+  #between 1 cell - 8 cell stadium
+  hist(limma.table.1.8$logFC)
+  c=which(limma.table.1.8$logFC< -5)
+  limma.table.1.8.down=limma.table.1.8[c,]
+  limma.1.8.down.sig=rownames(limma.table.1.8.down[which(limma.table.1.8.down$P.Value < 0.05),])
+  c=which(limma.table.1.8$logFC > 4)
+  limma.table.1.8.up=limma.table.1.8[c,]
+  limma.1.8.up.sig=rownames(limma.table.1.8.up[which(limma.table.1.8.up$P.Value < 0.05),])
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% limma.1.8.up.sig)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+  j = which(ensembl.data$Transcript.stable.ID%in%limma.1.8.up.sig )
+  View(ensembl.data[j,])
+  
+  #between 8 cell -  m stadium
+  hist(limma.table.8.m$logFC)
+  
+  c=which(limma.table.8.m$logFC< -3)
+  limma.table.8.m.down=limma.table.8.m[c,]
+  limma.8.m.down.sig=rownames(limma.table.8.m.down[which(limma.table.1.8.down$P.Value < 0.05),])
+  c=which(limma.table.8.m$logFC > 4)
+  limma.table.8.m.up=limma.table.8.m[c,]
+  limma.8.m.up.sig=rownames(limma.table.8.m.up[which(limma.table.8.m.up$P.Value < 0.05),])
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% limma.8.m.up.sig)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+  j = which(ensembl.data$Transcript.stable.ID%in%limma.8.m.up.sig )
+  View(ensembl.data[j,])
+  
+  limma.table.1.8.arranged=arrange(limma.table.1.8,desc(abs(logFC)))
+  
