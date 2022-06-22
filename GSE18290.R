@@ -424,59 +424,59 @@ for(i in 2:15) {
   pvalue05 = sum(p.adjust(fit.1$p.value, "BH") < 0.05)
   
   if (i==2){
-    limma.table.1.4 = topTable(fit.1,number=pvalue01,p.value = 0.01)
+    limma.table.1.4 = topTable(fit.1,number=pvalue01)
   }
   
   if (i==3){
-    limma.table.1.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.1.8 = topTable(fit.1, number = pvalue01)
   }
   
   if (i==4){
-    limma.table.1.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.1.m = topTable(fit.1, number = pvalue01)
   }
   
   if (i==5){
-    limma.table.1.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.1.b = topTable(fit.1, number = pvalue01)
   }
   
   if (i==6){
-    limma.table.2.4 = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.2.4 = topTable(fit.1, number = pvalue01)
   }
   
   if (i==7){
-    limma.table.2.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.2.8 = topTable(fit.1, number = pvalue01)
   }
   
   if (i==8){
-    limma.table.2.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.2.m = topTable(fit.1, number = pvalue01)
   }
   
   if (i==9){
-    limma.table.2.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.2.b = topTable(fit.1, number = pvalue01)
   }
   
   if (i==10){
-    limma.table.4.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.4.8 = topTable(fit.1, number = pvalue01)
   }
   
   if (i==11){
-    limma.table.4.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.4.m = topTable(fit.1, number = pvalue01)
   }
   
   if (i==12){
-    limma.table.4.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.4.b = topTable(fit.1, number = pvalue01)
   }
   
   if (i==13){
-    limma.table.8.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.8.m = topTable(fit.1, number = pvalue01)
   }
   
   if (i==14){
-    limma.table.8.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.8.b = topTable(fit.1, number = pvalue01)
   }
   
   if (i==15){
-    limma.table.m.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
+    limma.table.m.b = topTable(fit.1, number = pvalue01)
   }
   
   #file.name = paste("limma.table",colnames(cm)[i], sep=" ")
@@ -943,3 +943,105 @@ j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.1.8 )
   fit.m.b = eBayes(fit.m.b)
   volcanoplot(fit.8.m,highlight = 10)
   
+###1.8-stadium
+annotated.limma.1.8=arrange(annotated.limma.1.8,rownames(annotated.limma.1.8))
+j = which(rownames(annotated.limma.1.8) %in% tra.data$ensembl.transcript) 
+#5322
+tra.extracted.1.8 = rownames(annotated.limma.1.8)[j] 
+#5322
+tra.1.8 = annotated.limma.1.8[j,]
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted.1.8)
+tra.data.1.8 = tra.data[k,]
+tra.data.1.8=arrange(tra.data.1.8,tra.data.1.8$ensembl.transcript)
+
+tra.limma.1.8=cbind(tra.1.8,tra.data.1.8$ensembl.gene,tra.data.1.8$tiss.number,tra.data.1.8$tissues,tra.data.1.8$max.tissue)
+colnames(tra.limma.1.8)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+annotated.limma.1.8=cbind(annotated.limma.1.8,"ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.limma.1.8[,10:13]="NA"
+colnames(annotated.limma.1.8)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.tra.limma.1.8=rbind(tra.limma.1.8,annotated.limma.1.8[-j,])
+annotated.tra.limma.1.8=arrange(annotated.tra.limma.1.8,desc(annotated.tra.limma.1.8$logFC))
+
+###8.m-stadium
+annotated.limma.8.m=arrange(annotated.limma.8.m,rownames(annotated.limma.8.m))
+j = which(rownames(annotated.limma.8.m) %in% tra.data$ensembl.transcript) 
+#5443
+tra.extracted.8.m = rownames(annotated.limma.8.m)[j] 
+#5443
+tra.8.m = annotated.limma.8.m[j,]
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted.8.m)
+tra.data.8.m = tra.data[k,]
+tra.data.8.m=arrange(tra.data.8.m,tra.data.8.m$ensembl.transcript)
+
+tra.limma.8.m=cbind(tra.8.m,tra.data.8.m$ensembl.gene,tra.data.8.m$tiss.number,tra.data.8.m$tissues,tra.data.8.m$max.tissue)
+colnames(tra.limma.8.m)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted.8.m)
+tra.data.8.m = tra.data[k,]
+tra.data.8.m=arrange(tra.data.8.m,tra.data.8.m$ensembl.transcript)
+
+tra.limma.8.m=cbind(tra.8.m,tra.data.8.m$ensembl.gene,tra.data.8.m$tiss.number,tra.data.8.m$tissues,tra.data.8.m$max.tissue)
+colnames(tra.limma.8.m)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+annotated.limma.8.m=cbind(annotated.limma.8.m,"ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.limma.8.m[,10:13]="NA"
+colnames(annotated.limma.8.m)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.tra.limma.8.m=rbind(tra.limma.8.m,annotated.limma.8.m[-j,])
+annotated.tra.limma.8.m=arrange(annotated.tra.limma.8.m,desc(annotated.tra.limma.8.m$logFC))
+
+###b.m-stadium
+annotated.limma.m.b=arrange(annotated.limma.m.b,rownames(annotated.limma.m.b))
+j = which(rownames(annotated.limma.m.b) %in% tra.data$ensembl.transcript) 
+#5443
+tra.extracted.m.b = rownames(annotated.limma.m.mb)[j] 
+#5443
+tra.m.b = annotated.limma.m.b[j,]
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted.m.b)
+tra.data.m.b = tra.data[k,]
+tra.data.m.b=arrange(tra.data.m.b,tra.data.m.b$ensembl.transcript)
+
+tra.limma.m.b=cbind(tra.m.b,tra.data.m.b$ensembl.gene,tra.data.m.b$tiss.number,tra.data.m.b$tissues,tra.data.m.b$max.tissue)
+colnames(tra.limma.m.b)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted.m.b)
+tra.data.m.b = tra.data[k,]
+tra.data.m.b=arrange(tra.data.m.b,tra.data.m.b$ensembl.transcript)
+
+tra.limma.m.b=cbind(tra.m.b,tra.data.m.b$ensembl.gene,tra.data.m.b$tiss.number,tra.data.m.b$tissues,tra.data.m.b$max.tissue)
+colnames(tra.limma.m.b)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+annotated.limma.m.b=cbind(annotated.limma.m.b,"ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.limma.m.b[,10:13]="NA"
+colnames(annotated.limma.m.b)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+annotated.tra.limma.m.b=rbind(tra.limma.m.b,annotated.limma.m.b[-j,])
+annotated.tra.limma.m.b=arrange(annotated.tra.limma.m.b,desc(annotated.tra.limma.m.b$logFC))
+
+
+
+
+
+#150 genes weniger als bei anderen zwei Tabellen
+c = which(ensembl.transcripts %in% tra.extracted)
+ensembl.only.tra = ensembl.data[c,]
+#dim(24623,9)
+
+#reorder the rows of ensembl.only.tra and tra.expressed.in.chips
+tra.expressed.in.chips = arrange(tra.expressed.in.chips,ensembl.transcript)
+ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
+
+#fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
+fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
+colnames(fusion.tra.expression.tra.table)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+
+# fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
+p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
+fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+
+#rename colnames
+colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c("Gene.name","Gene.description","Chromosome.scaffold.name")
