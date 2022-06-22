@@ -206,6 +206,8 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 ensembl.data <- read.csv("ensembl.human.txt")
+dim(ensembl.data)
+##268341      9
 
 # create variables that contain gene ID, transcript ID, 
 #the chromosome name and the gene symbol
@@ -252,6 +254,8 @@ rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
 
 # read in TRA data for human
 tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
+dim(tra.data)
+#60131    10
 
 
 # find the index of rownames of our dataset that contain transcript Ids from the tra dataset
@@ -420,59 +424,59 @@ for(i in 2:15) {
   pvalue05 = sum(p.adjust(fit.1$p.value, "BH") < 0.05)
   
   if (i==2){
-    limma.table.1.4 = topTable(fit.1, number = pvalue05)
+    limma.table.1.4 = topTable(fit.1,number=pvalue01,p.value = 0.01)
   }
   
   if (i==3){
-    limma.table.1.8 = topTable(fit.1, number = pvalue05)
+    limma.table.1.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==4){
-    limma.table.1.m = topTable(fit.1, number = pvalue05)
+    limma.table.1.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==5){
-    limma.table.1.b = topTable(fit.1, number = pvalue05)
+    limma.table.1.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==6){
-    limma.table.2.4 = topTable(fit.1, number = pvalue05)
+    limma.table.2.4 = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==7){
-    limma.table.2.8 = topTable(fit.1, number = pvalue05)
+    limma.table.2.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==8){
-    limma.table.2.m = topTable(fit.1, number = pvalue05)
+    limma.table.2.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==9){
-    limma.table.2.b = topTable(fit.1, number = pvalue05)
+    limma.table.2.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==10){
-    limma.table.4.8 = topTable(fit.1, number = pvalue05)
+    limma.table.4.8 = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==11){
-    limma.table.4.m = topTable(fit.1, number = pvalue05)
+    limma.table.4.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==12){
-    limma.table.4.b = topTable(fit.1, number = pvalue05)
+    limma.table.4.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==13){
-    limma.table.8.m = topTable(fit.1, number = pvalue05)
+    limma.table.8.m = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==14){
-    limma.table.8.b = topTable(fit.1, number = pvalue05)
+    limma.table.8.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   if (i==15){
-    limma.table.m.b = topTable(fit.1, number = pvalue05)
+    limma.table.m.b = topTable(fit.1, number = pvalue01,p.value = 0.01)
   }
   
   #file.name = paste("limma.table",colnames(cm)[i], sep=" ")
@@ -495,6 +499,7 @@ limma.annotation = function(x){
   x.new = arrange(x.new, rownames(x.new))
   
   annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
+  colnames(annotated.x)[7:9]<-c("gene.name","gene.description","Chromosome.scaffold.name")
   annotated.x = arrange(annotated.x, adj.P.Val)
   return(annotated.x)
 }
@@ -614,7 +619,10 @@ color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue"
 plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
 
 #Zeigen von PC2 and PC3
-plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC1',ylab='PC2')
+plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
+
+#Zeigen von PC3 and PC4
+plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
 
 # 4 PCs are enough to show more than 90%
 
@@ -849,37 +857,89 @@ tot_withinss <- map_dbl(1:10,  function(k){
   ensembl.data[j,]
   
   
-  6.#filter DE genes
-  #between 1 cell - 8 cell stadium
-  hist(limma.table.1.8$logFC)
-  c=which(limma.table.1.8$logFC< -5)
-  limma.table.1.8.down=limma.table.1.8[c,]
-  limma.1.8.down.sig=rownames(limma.table.1.8.down[which(limma.table.1.8.down$P.Value < 0.05),])
-  c=which(limma.table.1.8$logFC > 4)
-  limma.table.1.8.up=limma.table.1.8[c,]
-  limma.1.8.up.sig=rownames(limma.table.1.8.up[which(limma.table.1.8.up$P.Value < 0.05),])
+  # 6) filter DE genes
+  ###between 1 cell - 8 cell stadium
   
-  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% limma.1.8.up.sig)
+  hist(annotated.limma.1.8$logFC)
+  #abline(v=mean(abs(limma.table.1.8$logFC)))#
+  #c=which(limma.table.1.8$logFC< 0)
+  #limma.1.8.down=limma.table.1.8[c,]
+  #limma.1.8.down.sig=rownames(annotated.limma.1.8.down[which(annotated.limma.1.8.down$P.Value < 0.05),])
+  #limma.table.1.8.arranged=arrange(limma.table.1.8,desc(abs(logFC)))
+  #limma.1.8.down.sig=arrange(limma.1.8.down.sig,)
+ 
+  #filter the top 20 DE upregulated genes
+c=which(annotated.limma.1.8$logFC > 2)
+limma.table.1.8.up=annotated.limma.1.8[c,]
+limma.1.8.up.sig=limma.table.1.8.up[which(limma.table.1.8.up$P.Value < 0.05),]
+limma.1.8.up.sig=arrange(limma.1.8.up.sig,desc(limma.1.8.up.sig$logFC))  
+interesting_genes.1.8=rownames(limma.1.8.up.sig[1:20,])
+
+k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.1.8)
   View(fusion.tra.expression.tra.table.ensembl.table[k,])
   
-  j = which(ensembl.data$Transcript.stable.ID%in%limma.1.8.up.sig )
+j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.1.8 )
   View(ensembl.data[j,])
   
   #between 8 cell -  m stadium
   hist(limma.table.8.m$logFC)
+  ###filter the top20 DE upregulated genes
   
-  c=which(limma.table.8.m$logFC< -3)
-  limma.table.8.m.down=limma.table.8.m[c,]
-  limma.8.m.down.sig=rownames(limma.table.8.m.down[which(limma.table.1.8.down$P.Value < 0.05),])
-  c=which(limma.table.8.m$logFC > 4)
-  limma.table.8.m.up=limma.table.8.m[c,]
-  limma.8.m.up.sig=rownames(limma.table.8.m.up[which(limma.table.8.m.up$P.Value < 0.05),])
+  #c=which(limma.table.8.m$logFC< -3)
+  #limma.table.8.m.down=limma.table.8.m[c,]
+  #limma.8.m.down.sig=rownames(limma.table.8.m.down[which(limma.table.1.8.down$P.Value < 0.05),])
+  #c=which(limma.table.8.m$logFC > 4)
   
-  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% limma.8.m.up.sig)
+  c=which(annotated.limma.8.m$logFC > 2)
+  limma.table.8.m.up=annotated.limma.8.m[c,]
+  limma.8.m.up.sig=limma.table.8.m.up[which(limma.table.8.m.up$P.Value < 0.05),]
+  limma.8.m.up.sig=arrange(limma.8.m.up.sig,desc(limma.8.m.up.sig$logFC))  
+  
+  #Transcript of Top 20 genes
+  interesting_genes.8.m=rownames(limma.8.m.up.sig[1:20,])
+  #Name of Top 20 genes
+  limma.8.m.up.sig[1:20,]$`ensembl.new$Gene.name`
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.8.m)
   View(fusion.tra.expression.tra.table.ensembl.table[k,])
   
-  j = which(ensembl.data$Transcript.stable.ID%in%limma.8.m.up.sig )
+  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.8.m )
   View(ensembl.data[j,])
   
-  limma.table.1.8.arranged=arrange(limma.table.1.8,desc(abs(logFC)))
+  #between m - b stadium
+  
+  ###filter the top 20 regulated genes
+  
+  c=which(annotated.limma.m.b$logFC > 2)
+  limma.table.m.b.up=annotated.limma.m.b[c,]
+  limma.m.b.up.sig=limma.table.m.b.up[which(limma.table.m.b.up$P.Value < 0.05),]
+  limma.m.b.up.sig=arrange(limma.m.b.up.sig,desc(limma.m.b.up.sig$logFC))  
+  interesting_genes.m.b=rownames(limma.m.b.up.sig[1:20,])
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.m.b)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.m.b )
+  View(ensembl.data[j,])
+  
+  ###Volcanoplot
+  library(EnhancedVolcano)
+  EnhancedVolcano(annotated.limma.4.8[,1:6],lab=annotated.limma.4.8[,7],x = 'logFC',y = 'P.Value', pCutoff = 0.05,
+                  FCcutoff = 3,)
+  EnhancedVolcano(annotated.limma.8.m[,1:6],lab=annotated.limma.8.m[,7],x = 'logFC',y = 'P.Value', pCutoff = 10e-8,
+                  FCcutoff = 2,)
+  EnhancedVolcano(annotated.limma.m.b[,1:6],lab=annotated.limma.m.b[,7],x = 'logFC',y = 'P.Value', pCutoff = 10e-8,
+                  FCcutoff = 2,)
+  
+  
+  
+  
+  
+  fit.8.m = contrasts.fit(fit, contrasts = cm[,13])
+  fit.8.m = eBayes(fit.8.m)
+  volcanoplot(fit.8.m,highlight = 10)
+  
+  fit.m.b = contrasts.fit(fit, contrasts = cm[,15])
+  fit.m.b = eBayes(fit.m.b)
+  volcanoplot(fit.8.m,highlight = 10)
   
