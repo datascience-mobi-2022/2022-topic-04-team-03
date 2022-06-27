@@ -694,7 +694,7 @@ colnames(human.vsnrma.df2) = names
 ################# Our solution ##############################################
 
 # Define the different stages of the chips in a vector
-stage = c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst")
+stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst"),levels= c(1,2,4,8,"morula","blastocyst"))
 
 # Create a design matrix with the stages
 design = model.matrix(~0 + stage)
