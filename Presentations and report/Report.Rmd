@@ -1,13 +1,12 @@
-|                                                                     |
-|---------------------------------------------------------------------|
-| title: 'Data Science project: XXX '                                 |
-| author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "    |
-| date: "Data Analysis Project SS22"                                  |
-| supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' |
-| output: pdf_document                                                |
+title: 'Data Science project: XXX '\
+author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "\
+date: "Data Analysis Project SS22"\
+supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "")
+getwd()
 ```
 
 ###load library
@@ -40,43 +39,43 @@ library(hexbin)
 
 ## 3.1 Quality Control and Normalization of the Data
 
-###setting working directory and loading
+### setting working directory and loading
 
-```{r}
+```{r set working directory}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 ```
 
-###Single chip control: reading in the microarray chips
+### Single chip control: reading in the microarray chips
 
-```{r}
+```{r chips}
 for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
 ```
 
-###Normalization
+### Normalization
 
-```{r normalization, echo = FALSE, message = FALSE, comment = F, results="hide"}
+```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide"}
 human.vsnrma <- vsnrma(data.human)
 #setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
 #save.image(file="normalized_human_data_18290.rda")#
 
 ```
 
-###Plots meanSdPlot
+### Plots meanSdPlot
 
-```{r}
+```{r meanSdPlot}
 meanSdPlot(human.vsnrma)
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 ```
 
-###Boxplots
+### Boxplots
 
-```{r}
+```{r boxplots}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
           "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
@@ -100,10 +99,9 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 dev.off() # what does this function do?
 ```
 
+### Density Plots
 
-###Density Plot
-
-```{r}
+```{r density plots}
 # Before Normalization:
 hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
 
@@ -121,7 +119,8 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 ```
 
 ###RNA Degradation Plot
-```{r}
+
+```{r RNA Degradation Plot}
 par(mfrow = c(2,1))
 rnadeg.raw = AffyRNAdeg(data.human)
 
@@ -135,8 +134,9 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 #dev.off()
 ```
 
-###Scatter Plot
-```{r}
+### Scatter Plot
+
+```{r scatter plot}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 expression.data <- exprs(human.vsnrma)
 
@@ -158,4 +158,215 @@ for(i in 1:17){
 }
 ```
 
+### Data Clean-up
 
+```{r data clean-up}
+# Are there any NAs in our dataset?
+sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
+#> No
+
+```
+
+## 3.2 Data Analysis
+
+### Annotation
+
+### Exploratory data analysis
+
+### Principal component analysis
+
+```{r code von Carl}
+###Using PCA to analyse our 18 chips, to see whether there are any outlier chip and whether the different replicates cluster with each other.
+
+topVar = apply(human.vsnrma.df2, 1, var)
+q75 = quantile(topVar, probs = 0.75)
+i.topvar = which(topVar >= q75)
+human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
+dim(human.vsnrma.df2.topVar)
+
+pca = prcomp(t(human.vsnrma.df2.topVar), center = T, scale. = T)
+print(pca)
+```
+
+```{r show how much variance each PC explains}
+plot(pca$sdev)
+variance = (pca$sdev)^2
+prop.variance = variance/sum(variance)
+```
+
+```{r}
+# Plot cumulative proportion of variance explained
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+```
+
+4 PCs are enough to show more than 90%
+
+```{r Plot PC1 and PC2}
+color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+```
+
+We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
+
+```{r plots PC2/3 and PC3/4}
+#Plot PC2 and PC3
+plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
+
+#Plot PC3 and PC4
+plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
+```
+
+Now we want to use Kmeans on the first 4 PCs (which explain 90% of the Variance) to find potential clusters and compare it with the cluster that we have observed in PCA just now
+
+```{r run models with varying value of k}
+#Use map_dbl to run many models with varying value of k (centers)
+tot_withinss <- map_dbl(1:10,  function(k){
+  model <- kmeans(x = pca$x[,1:4], centers = k,nstart=30)
+  model$tot.withinss
+})
+```
+
+```{r data frame with k & tot_withinns}
+# Generate a data frame containing both k and tot_withinss
+elbow_df <- data.frame(
+  k = 1:10 ,
+  tot_withinss = tot_withinss
+)
+```
+
+```{r plot with elbow plot}
+ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:10)
+```
+
+seems like k=2 is the best
+
+```{r show cluster}
+model <- kmeans(x = pca$x[,1:4], centers = 2,nstart=30)
+model$cluster
+```
+
+Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
+
+```{r Plot the Siloutte plot}
+library(cluster)
+library(factoextra)
+```
+
+```{r Use map_dbl to run many models with varying value of k}
+sil_width <- map_dbl(2:10,  function(k){
+  model <- pam(pca$x[,1:4], k = k)
+  model$silinfo$avg.width
+})
+```
+
+```{r}
+# Generate a data frame containing both k and sil_width
+sil_df <- data.frame(
+  k = 2:10,
+  sil_width = sil_width
+)
+```
+
+```{r}
+# Plot the relationship between k and sil_width
+ggplot(sil_df, aes(x = k, y = sil_width)) +
+  geom_line() +
+  scale_x_continuous(breaks = 2:10)
+```
+
+it seems like that k=4 is a good choice
+
+```{r}
+# Generate a k-means model using the pam() function with a k = 4
+pam_k4 <- pam(pca$x[,1:13],k=4)
+```
+
+```{r}
+# Show the clustering
+pam_k4$clustering
+```
+
+Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
+
+Using Kmeans based on the original expression data (human.vsnrma.df2) to cluster and compare the results with the Kmeans results based on 4PCs
+
+```{r}
+# Use map_dbl to run many models with varying value of k (centers)
+tot_withinss <- map_dbl(1:10,  function(k){
+    model <- kmeans(x = t(human.vsnrma.df2), centers = k,nstart=30)
+    model$tot.withinss
+})
+```
+
+```{r}
+# Generate a data frame containing both k and tot_withinss
+elbow_df <- data.frame(
+    k = 1:10 ,
+    tot_withinss = tot_withinss
+)
+```
+
+```{r}
+# Plot the elbow plot
+ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
+    geom_line() +
+    scale_x_continuous(breaks = 1:10)
+```
+
+seems like k=2 is the best
+
+```{r}
+#show cluster
+model <- kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
+model$cluster
+```
+
+Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
+
+```{r}
+###Plot the Siloutte plot
+library(cluster)
+library(factoextra)
+```
+
+```{r}
+# Use map_dbl to run many models with varying value of k
+sil_width <- map_dbl(2:10,  function(k){
+    model <- pam(t(human.vsnrma.df2), k = k)
+    model$silinfo$avg.width
+})
+```
+
+```{r}
+# Generate a data frame containing both k and sil_width
+sil_df <- data.frame(
+    k = 2:10,
+    sil_width = sil_width
+)
+```
+
+```{r}
+# Plot the relationship between k and sil_width
+ggplot(sil_df, aes(x = k, y = sil_width)) +
+    geom_line() +
+    scale_x_continuous(breaks = 2:10)
+```
+
+it seems like that k=2 is a good choice
+
+```{r}
+# Generate a k-means model using the pam() function with a k = 4
+pam_k2 <- pam(t(human.vsnrma.df2),k=2)
+  
+# Show the clustering
+pam_k2$clustering
+```
+
+Silouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
