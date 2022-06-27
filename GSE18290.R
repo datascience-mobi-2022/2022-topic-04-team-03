@@ -694,7 +694,7 @@ colnames(human.vsnrma.df2) = names
 ################# Our solution ##############################################
 
 # Define the different stages of the chips in a vector
-stage = c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst")
+stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst"),levels= c(1,2,4,8,"morula","blastocyst"))
 
 # Create a design matrix with the stages
 design = model.matrix(~0 + stage)
@@ -806,6 +806,41 @@ for(i in 2:15) {
   #(limma.table.1.i,file = file.name)
 }
 
+
+# Check dimensions
+dim(limma.table.1.2)
+# 0  0
+dim(limma.table.1.4)
+# 0 0
+dim(limma.table.1.8)
+# 23,333     6
+dim(limma.table.1.m)
+# 30,991     6
+dim(limma.table.1.b)
+# 30,848     6
+dim(limma.table.2.4)
+# 0   0
+dim(limma.table.2.8)
+# 21,484     6
+dim(limma.table.2.m)
+# 30,016     6
+dim(limma.table.2.b)
+# 30,180     6
+dim(limma.table.4.8)
+# 21,007     6
+dim(limma.table.4.m)
+# 29,425     6
+dim(limma.table.4.b)
+# 29,188     6
+dim(limma.table.8.m)
+# 6,324    6
+dim(limma.table.8.b)
+# 12,065     6
+dim(limma.table.m.b)
+# 5,077    6
+
+
+
 # Annotate topTables
 # Define a function for annotation 
 # Parameter x is the limma table
@@ -826,14 +861,14 @@ annotated.x = arrange(annotated.x, adj.P.Val)
   return(annotated.x)
 }
 
-annotated.limma.1.4 = limma.annotation(limma.table.1.4)
+# annotated.limma.1.4 = limma.annotation(limma.table.1.4)
+# dim limma.table.1.4 = 0 0
 annotated.limma.1.8 = limma.annotation(limma.table.1.8)
 annotated.limma.1.m = limma.annotation(limma.table.1.m)
 annotated.limma.1.b = limma.annotation(limma.table.1.b)
 # annotated.limma.2.4 = limma.annotation(limma.table.2.4)
-# Error
+# Error cause dim = 0 0
 annotated.limma.2.8 = limma.annotation(limma.table.2.8)
-# Error
 annotated.limma.2.m = limma.annotation(limma.table.2.m)
 annotated.limma.2.b = limma.annotation(limma.table.2.b)
 annotated.limma.4.8 = limma.annotation(limma.table.4.8)
@@ -842,8 +877,6 @@ annotated.limma.4.b = limma.annotation(limma.table.4.b)
 annotated.limma.8.m = limma.annotation(limma.table.8.m)
 annotated.limma.8.b = limma.annotation(limma.table.8.b)
 annotated.limma.m.b = limma.annotation(limma.table.m.b)
-
-
 
 
 #setwd("~\\GitHub\\2022-topic-04-team-03")
@@ -857,30 +890,48 @@ annotated.limma.m.b = limma.annotation(limma.table.m.b)
 ## using Enhancedvolcanoplot with input from limma tables that contain all genes
 
 ##we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
+#<<<<<<< HEAD
+n_occur = data.frame(table(ensembl.data$Transcript.stable.ID))
+n_occur = arrange(n_occur,desc(n_occur$Freq))
+a = sum(n_occur$Freq>1)
+duplicate.ensembl = n_occur$Var1[1:40]
+j = which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
+ensembl.duplicate = ensembl.data[j,]
+Nth.delete = function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
+ensembl.duplicate.genes = Nth.delete(ensembl.duplicate, 2)
+ensembl.unique = rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#=======
 n_occur=data.frame(table(ensembl.data$Transcript.stable.ID))
 n_occur=arrange(n_occur,desc(n_occur$Freq))
 a=sum(n_occur$Freq>1)
 duplicate.ensembl=n_occur$Var1[1:40]
 j=which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
 ensembl.duplicate=ensembl.data[j,]
+ensembl.duplicate=arrange(ensembl.duplicate,ensembl.duplicate$Transcript.stable.ID)
 Nth.delete<-function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
 ensembl.duplicate.genes=Nth.delete(ensembl.duplicate, 2)
 ensembl.unique=rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
 
 ##generate a function with the output of limma tables (complete) with sig. genes and non sig. genes
-generate.limma.table.vollst <- function(fit,n){
+generate.limma.table.vollst = function(fit,n){
   fit.1 = contrasts.fit(fit, contrasts = cm[,n])
   fit.1 = eBayes(fit.1)
   limma.table.vollst=topTable(fit.1,number = dim(fit.1)[1])
   return(limma.table.vollst)
 }
 
-limma.table.vollst.1.8=generate.limma.table.vollst(fit,3)
-limma.table.vollst.8.m=generate.limma.table.vollst(fit,13)
-limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
+limma.table.vollst.1.8 = generate.limma.table.vollst(fit,3)
+limma.table.vollst.8.m = generate.limma.table.vollst(fit,13)
+limma.table.vollst.m.b = generate.limma.table.vollst(fit,15)
 
 ##anotation of the limma table (complete) with emsembl information
+#<<<<<<< HEAD
+ensembl.limma.annotation = function(x){}
+#=======
+
 ensembl.limma.annotation <- function(x){
+#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
   a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
   ensembl.new = ensembl.unique[a,]
   
@@ -896,28 +947,28 @@ ensembl.limma.annotation <- function(x){
   return(annotated.x)
 }
 
-annotated.limma.tabel.vollst.1.8=ensembl.limma.annotation(limma.table.vollst.1.8)
-annotated.limma.tabel.vollst.8.m=ensembl.limma.annotation(limma.table.vollst.8.m) 
-annotated.limma.tabel.vollst.m.b=ensembl.limma.annotation(limma.table.vollst.m.b)
+annotated.limma.tabel.vollst.1.8 = ensembl.limma.annotation(limma.table.vollst.1.8)
+annotated.limma.tabel.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8.m) 
+annotated.limma.tabel.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
 
 ##creating volcanoplots
 library(EnhancedVolcano)
 
-EnhancedVolcano(annotated.limma.tabel.vollst.1.8[,1:6],lab=annotated.limma.tabel.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
-                FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels=c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+EnhancedVolcano(annotated.limma.tabel.vollst.1.8[,1:6],lab = annotated.limma.tabel.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
+                FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
-EnhancedVolcano(annotated.limma.tabel.vollst.8.m[,1:6],lab=annotated.limma.tabel.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
-                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels=c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+EnhancedVolcano(annotated.limma.tabel.vollst.8.m[,1:6],lab = annotated.limma.tabel.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
-EnhancedVolcano(annotated.limma.tabel.vollst.m.b[,1:6],lab=annotated.limma.tabel.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
-                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels=c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+EnhancedVolcano(annotated.limma.tabel.vollst.m.b[,1:6],lab = annotated.limma.tabel.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
 
 ##annotate the tra genes in limma tables (only sig. genes) with tra information
 
 fuse.tra.limma <- function(x){
   
-  x=arrange(x,rownames(x))
+  x = arrange(x,rownames(x))
   j = which(rownames(x) %in% tra.data$ensembl.transcript) 
   
   tra.extracted.stages = rownames(x)[j] 
@@ -926,26 +977,29 @@ fuse.tra.limma <- function(x){
   
   k = which(tra.data$ensembl.transcript %in% tra.extracted.stages)
   tra.data.stages = tra.data[k,]
-  tra.data.stages=arrange(tra.data.stages,tra.data.stages$ensembl.transcript)
+  tra.data.stages = arrange(tra.data.stages,tra.data.stages$ensembl.transcript)
   
-  tra.limma.stages=cbind(tra.stages,tra.data.stages$ensembl.gene,tra.data.stages$tiss.number,tra.data.stages$tissues,tra.data.stages$max.tissue)
+  tra.limma.stages = cbind(tra.stages,tra.data.stages$ensembl.gene,tra.data.stages$tiss.number,tra.data.stages$tissues,tra.data.stages$max.tissue)
   colnames(tra.limma.stages)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
   
   
-  x=cbind(x,"ensembl.gene","tissue.number","tissues","max.tissue")
-  x[,10:13]="NA"
-  colnames(x)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
-  annotated.tra.limma.stages=rbind(tra.limma.stages,x[-j,])
-  annotated.tra.limma.stages=arrange(annotated.tra.limma.stages,desc(annotated.tra.limma.stages$logFC))
+  x = cbind(x,"ensembl.gene","tissue.number","tissues","max.tissue")
+  x[,10:13] = "NA"
+  colnames(x)[10:13] = c("ensembl.gene","tissue.number","tissues","max.tissue")
+  annotated.tra.limma.stages = rbind(tra.limma.stages,x[-j,])
+  annotated.tra.limma.stages = arrange(annotated.tra.limma.stages,desc(annotated.tra.limma.stages$logFC))
   return(annotated.tra.limma.stages)
 }
 
 ###1.8-stadium
-annotated.tra.limma.1.8=fuse.tra.limma(annotated.limma.1.8)
+annotated.tra.limma.1.8 = fuse.tra.limma(annotated.limma.1.8)
 ###8.m-stadium  
-annotated.tra.limma.8.m=fuse.tra.limma(annotated.limma.8.m) 
+annotated.tra.limma.8.m = fuse.tra.limma(annotated.limma.8.m) 
 ###m.b-stadium
-annotated.tra.limma.m.b=fuse.tra.limma(annotated.limma.m.b)
+annotated.tra.limma.m.b = fuse.tra.limma(annotated.limma.m.b)
+
+View(annotated.tra.limma.1.8)
+
 
 
 #Yaxin tried some random things out 
