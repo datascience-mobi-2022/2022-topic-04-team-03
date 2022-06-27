@@ -1,16 +1,17 @@
----
-title: 'Data Science project: XXX '
-author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "
-date: "Data Analysis Project SS22"
-supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter'
-output: pdf_document
-----
+|                                                                     |
+|---------------------------------------------------------------------|
+| title: 'Data Science project: XXX '                                 |
+| author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "    |
+| date: "Data Analysis Project SS22"                                  |
+| supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' |
+| output: pdf_document                                                |
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ###load library
+
 ```{r load packages, eval=TRUE, include=FALSE, echo=FALSE, message=FALSE, comment=FALSE}
 library(affy)
 library(vsn)
@@ -27,19 +28,20 @@ library(hexbin)
 
 \newpage
 
-# Abstract
+# 1.Abstract
 
 \newpage
 
-# Introduction
+# 2.Introduction
 
 \newpage
 
-# Methods and Results
+# 3.Methods and Results
 
-**Quality Control and Normalization of the Data**
+## 3.1 Quality Control and Normalization of the Data
 
-setting working directory and loading 
+###setting working directory and loading
+
 ```{r}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
@@ -47,14 +49,113 @@ data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 ```
 
-Single chip control: reading in the microarray chips
+###Single chip control: reading in the microarray chips
+
 ```{r}
 for (i in 1:18){
-   image(data.mouse[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
+   image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
 ```
 
+###Normalization
 
-### Normalization
 ```{r normalization, echo = FALSE, message = FALSE, comment = F, results="hide"}
+human.vsnrma <- vsnrma(data.human)
+#setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
+#save.image(file="normalized_human_data_18290.rda")#
 
 ```
+
+###Plots meanSdPlot
+
+```{r}
+meanSdPlot(human.vsnrma)
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+```
+
+###Boxplots
+
+```{r}
+names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
+          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
+          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
+          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
+          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
+          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
+
+
+# Before normalization:
+par(las=2)
+mmi=c(1,0.7,1.0477939,0.5366749)
+par(mai=mmi)
+boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", xlim = names)
+
+dev.copy2eps(file="boxplot_rawdata_18290.eps")
+
+# After Normalization:
+boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization")
+
+dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
+dev.off() # what does this function do?
+```
+
+
+###Density Plot
+
+```{r}
+# Before Normalization:
+hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
+
+dev.copy2pdf(file="Histogram_rawdata_39897.pdf", width = 10, height = 7)
+
+# After Normalization:
+eset=exprs(human.vsnrma)
+
+plot(density(eset[,1]), type="n", xlab="log Intensity", ylim=c(0,1), main="Density function of log Intensity of human embryogenesis normalized")
+for (i in 1:ncol(eset)) {
+  lines(density(eset[,i]), col=rainbow(35)[i])
+}
+
+dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
+```
+
+###RNA Degradation Plot
+```{r}
+par(mfrow = c(2,1))
+rnadeg.raw = AffyRNAdeg(data.human)
+
+plotAffyRNAdeg(rnadeg.raw, col=rainbow(35))
+title(sub="human embroyogenesis rawdata")
+
+plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
+title(sub="human embryogenesis rawdata - shifted")
+
+dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
+#dev.off()
+```
+
+###Scatter Plot
+```{r}
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+expression.data <- exprs(human.vsnrma)
+
+for(i in 1:17){
+  plot(expression.data[,c(i,i+1)], pch=".", cex=2)
+  abline(0, 1, col="red")               # 45 degree dividing line
+  
+  title(main = paste("Scatterplot of probe", 
+                     substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i])), "and", 
+                     substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
+                     sep=" ", collapse = NULL))
+  
+  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
+                     as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
+                     as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
+                     ".pdf", sep="")
+  dev.copy2pdf(file = file.name)
+  dev.off()
+}
+```
+
+
