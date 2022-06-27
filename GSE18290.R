@@ -843,6 +843,11 @@ annotated.x = arrange(annotated.x, adj.P.Val)
 annotated.limma.1.8 = limma.annotation(limma.table.1.8)
 annotated.limma.1.m = limma.annotation(limma.table.1.m)
 annotated.limma.1.b = limma.annotation(limma.table.1.b)
+<<<<<<< Updated upstream
+=======
+#annotated.limma.2.4 = limma.annotation(limma.table.2.4)
+# Error
+>>>>>>> Stashed changes
 annotated.limma.2.8 = limma.annotation(limma.table.2.8)
 annotated.limma.2.m = limma.annotation(limma.table.2.m)
 annotated.limma.2.b = limma.annotation(limma.table.2.b)
@@ -852,8 +857,54 @@ annotated.limma.4.b = limma.annotation(limma.table.4.b)
 annotated.limma.8.m = limma.annotation(limma.table.8.m)
 annotated.limma.8.b = limma.annotation(limma.table.8.b)
 annotated.limma.m.b = limma.annotation(limma.table.m.b)
+#annotated limma tables mit TRAs annotaten
+#1.4 und 1.2 sind 00
+annotated.limma.1.8$ensembl.transcript = rownames(annotated.limma.1.8)
+annotated.limma.1.8.tra <- merge(annotated.limma.1.8, tra.data, by = 'ensembl.transcript')
 
+annotated.limma.1.m$ensembl.transcript = rownames(annotated.limma.1.m)
+annotated.limma.1.m.tra <- merge(annotated.limma.1.m, tra.data, by = 'ensembl.transcript')
 
+<<<<<<< Updated upstream
+=======
+annotated.limma.1.b$ensembl.transcript = rownames(annotated.limma.1.b)
+annotated.limma.1.b.tra <- merge(annotated.limma.1.b, tra.data, by = 'ensembl.transcript')
+#2.4. ist 00
+annotated.limma.2.8$ensembl.transcript = rownames(annotated.limma.2.8)
+annotated.limma.2.8.tra <- merge(annotated.limma.2.8, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.2.m$ensembl.transcript = rownames(annotated.limma.2.m)
+annotated.limma.2.m.tra <- merge(annotated.limma.2.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.2.b$ensembl.transcript = rownames(annotated.limma.2.b)
+annotated.limma.2.b.tra <- merge(annotated.limma.2.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.8$ensembl.transcript = rownames(annotated.limma.4.8)
+annotated.limma.4.8.tra <- merge(annotated.limma.4.8, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.m$ensembl.transcript = rownames(annotated.limma.4.m)
+annotated.limma.4.m.tra <- merge(annotated.limma.4.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.b$ensembl.transcript = rownames(annotated.limma.4.b)
+annotated.limma.4.b.tra <- merge(annotated.limma.4.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.8.m$ensembl.transcript = rownames(annotated.limma.8.m)
+annotated.limma.8.m.tra <- merge(annotated.limma.8.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.8.b$ensembl.transcript = rownames(annotated.limma.8.b)
+annotated.limma.8.b.tra <- merge(annotated.limma.8.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.m.b$ensembl.transcript = rownames(annotated.limma.m.b)
+annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.transcript')
+
+#plot development of tissue during stages
+n_occur=data.frame(table(annotated.limma.1.8.tra$max.tissue))
+for (i in 53) {
+  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur$Var1[i])
+  
+}
+
+>>>>>>> Stashed changes
 #setwd("~\\GitHub\\2022-topic-04-team-03")
 #save.image(file="human_18290.bis.limma.RData")
 
@@ -895,10 +946,28 @@ generate.limma.table.vollst = function(fit,n){
   limma.table.vollst=topTable(fit.1,number = dim(fit.1)[1])
   return(limma.table.vollst)
 }
+<<<<<<< Updated upstream
 
 limma.table.vollst.1.8 = generate.limma.table.vollst(fit,3)
 limma.table.vollst.8.m = generate.limma.table.vollst(fit,13)
 limma.table.vollst.m.b = generate.limma.table.vollst(fit,15)
+=======
+limma.table.vollst.1.2=generate.limma.table.vollst(fit,1)
+limma.table.vollst.1.4=generate.limma.table.vollst(fit,2)
+limma.table.vollst.1.8=generate.limma.table.vollst(fit,3)
+limma.table.vollst.1.m=generate.limma.table.vollst(fit,4)
+limma.table.vollst.1.b=generate.limma.table.vollst(fit,5)
+limma.table.vollst.2.4=generate.limma.table.vollst(fit,6)
+limma.table.vollst.2.8=generate.limma.table.vollst(fit,7)
+limma.table.vollst.2.m=generate.limma.table.vollst(fit,8)
+limma.table.vollst.2.b=generate.limma.table.vollst(fit,9)
+limma.table.vollst.4.8=generate.limma.table.vollst(fit,10)
+limma.table.vollst.4.m=generate.limma.table.vollst(fit,11)
+limma.table.vollst.4.b=generate.limma.table.vollst(fit,12)
+limma.table.vollst.8.m=generate.limma.table.vollst(fit,13)
+limma.table.vollst.8.b=generate.limma.table.vollst(fit,14)
+limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
+>>>>>>> Stashed changes
 
 ##anotation of the limma table (complete) with emsembl information
 #<<<<<<< HEAD
