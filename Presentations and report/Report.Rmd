@@ -1,0 +1,14 @@
+---
+title: 'Data Science project: XXX '
+author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "
+date: "Data Analysis Project SS22"
+supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter'
+output: pdf_document
+----
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Abstract
+
