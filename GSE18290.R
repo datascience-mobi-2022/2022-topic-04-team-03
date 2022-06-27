@@ -890,6 +890,7 @@ annotated.limma.m.b = limma.annotation(limma.table.m.b)
 ## using Enhancedvolcanoplot with input from limma tables that contain all genes
 
 ##we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
+#<<<<<<< HEAD
 n_occur = data.frame(table(ensembl.data$Transcript.stable.ID))
 n_occur = arrange(n_occur,desc(n_occur$Freq))
 a = sum(n_occur$Freq>1)
@@ -899,6 +900,18 @@ ensembl.duplicate = ensembl.data[j,]
 Nth.delete = function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
 ensembl.duplicate.genes = Nth.delete(ensembl.duplicate, 2)
 ensembl.unique = rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#=======
+n_occur=data.frame(table(ensembl.data$Transcript.stable.ID))
+n_occur=arrange(n_occur,desc(n_occur$Freq))
+a=sum(n_occur$Freq>1)
+duplicate.ensembl=n_occur$Var1[1:40]
+j=which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
+ensembl.duplicate=ensembl.data[j,]
+ensembl.duplicate=arrange(ensembl.duplicate,ensembl.duplicate$Transcript.stable.ID)
+Nth.delete<-function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
+ensembl.duplicate.genes=Nth.delete(ensembl.duplicate, 2)
+ensembl.unique=rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
 
 ##generate a function with the output of limma tables (complete) with sig. genes and non sig. genes
 generate.limma.table.vollst = function(fit,n){
@@ -913,7 +926,12 @@ limma.table.vollst.8.m = generate.limma.table.vollst(fit,13)
 limma.table.vollst.m.b = generate.limma.table.vollst(fit,15)
 
 ##anotation of the limma table (complete) with emsembl information
-ensembl.limma.annotation = function(x){
+#<<<<<<< HEAD
+ensembl.limma.annotation = function(x){}
+#=======
+
+ensembl.limma.annotation <- function(x){
+#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
   a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
   ensembl.new = ensembl.unique[a,]
   
@@ -979,6 +997,9 @@ annotated.tra.limma.1.8 = fuse.tra.limma(annotated.limma.1.8)
 annotated.tra.limma.8.m = fuse.tra.limma(annotated.limma.8.m) 
 ###m.b-stadium
 annotated.tra.limma.m.b = fuse.tra.limma(annotated.limma.m.b)
+
+View(annotated.tra.limma.1.8)
+
 
 
 #Yaxin tried some random things out 
