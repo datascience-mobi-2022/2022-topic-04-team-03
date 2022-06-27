@@ -898,10 +898,13 @@ annotated.limma.m.b$ensembl.transcript = rownames(annotated.limma.m.b)
 annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.transcript')
 
 #plot development of tissue during stages
+
 n_occur=data.frame(table(annotated.limma.1.8.tra$max.tissue))
-for (i in 53) {
+tissue.vector=c()
+for (i in 1:53) {
+
   tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur$Var1[i])
-  
+  tissue.vector[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
 }
 
 >>>>>>> Stashed changes
