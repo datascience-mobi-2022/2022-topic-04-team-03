@@ -10,5 +10,51 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+###load library
+```{r load packages, eval=TRUE, include=FALSE, echo=FALSE, message=FALSE, comment=FALSE}
+library(affy)
+library(vsn)
+library(AnnotationDbi)
+library(hgu133plus2hsenstcdf)
+library(hgu133plus2hsenstprobe)
+library(limma)
+library(pheatmap)
+library(dplyr)
+library(tidyverse)
+library(hexbin)
+
+```
+
+\newpage
+
 # Abstract
 
+\newpage
+
+# Introduction
+
+\newpage
+
+# Methods and Results
+
+**Quality Control and Normalization of the Data**
+
+setting working directory and loading 
+```{r}
+setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
+
+data.human=ReadAffy()
+data.human@cdfName <- "HGU133Plus2_Hs_ENST"
+```
+
+Single chip control: reading in the microarray chips
+```{r}
+for (i in 1:18){
+   image(data.mouse[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
+```
+
+
+### Normalization
+```{r normalization, echo = FALSE, message = FALSE, comment = F, results="hide"}
+
+```
