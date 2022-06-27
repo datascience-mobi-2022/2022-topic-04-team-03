@@ -691,7 +691,7 @@ tot_withinss <- map_dbl(1:10,  function(k){
 # Rename colnames of our dataset: "x stage, rep y" for a better overview
 colnames(human.vsnrma.df2) = names
 
-################# Our solution ##############################################
+
 
 # Define the different stages of the chips in a vector
 stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst"),levels= c(1,2,4,8,"morula","blastocyst"))
@@ -737,74 +737,52 @@ pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
-
-for(i in 2:15) {
-  fit.1 = contrasts.fit(fit, contrasts = cm[,i])
-  fit.1 = eBayes(fit.1)
-  
-  pvalue01 = sum(p.adjust(fit.1$p.value, "BH") < 0.01)
-  pvalue05 = sum(p.adjust(fit.1$p.value, "BH") < 0.05)
-  
-  if (i==2){
-    limma.table.1.4 = topTable(fit.1,number=pvalue01)
-  }
-  
-  if (i==3){
-    limma.table.1.8 = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==4){
-    limma.table.1.m = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==5){
-    limma.table.1.b = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==6){
-    limma.table.2.4 = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==7){
-    limma.table.2.8 = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==8){
-    limma.table.2.m = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==9){
-    limma.table.2.b = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==10){
-    limma.table.4.8 = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==11){
-    limma.table.4.m = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==12){
-    limma.table.4.b = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==13){
-    limma.table.8.m = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==14){
-    limma.table.8.b = topTable(fit.1, number = pvalue01)
-  }
-  
-  if (i==15){
-    limma.table.m.b = topTable(fit.1, number = pvalue01)
-  }
-  
-  #file.name = paste("limma.table",colnames(cm)[i], sep=" ")
-  #toString(filename) = limma.table.1.i                 
-  #(limma.table.1.i,file = file.name)
+# Create fit tables for every comparison
+fit.function = function(i){
+  fit.table = contrasts.fit(fit, contrasts = cm[,i])
+  fit.table = eBayes(fit.table)
 }
+
+fit.1.2 = fit.function(1)
+fit.1.4 = fit.function(2)
+fit.1.8 = fit.function(3)
+fit.1.m = fit.function(4)
+fit.1.b = fit.function(5)
+fit.2.4 = fit.function(6)
+fit.2.8 = fit.function(7)
+fit.2.m = fit.function(8)
+fit.2.b = fit.function(9)
+fit.4.8 = fit.function(10)
+fit.4.m = fit.function(11)
+fit.4.b = fit.function(12)
+fit.8.m = fit.function(13)
+fit.8.b = fit.function(14)
+fit.m.b = fit.function(15)
+
+# Create topTables for every comparison
+top.table = function(i){
+  fit.table = contrasts.fit(fit, contrasts = cm[,i])
+  fit.table = eBayes(fit.table)
+  
+  pvalue01 = sum(p.adjust(fit.table$p.value, "BH") < 0.01)
+  topTable(fit.table, number = pvalue01)
+}
+
+limma.table.1.2 = top.table(1)
+limma.table.1.4 = top.table(2)
+limma.table.1.8 = top.table(3)
+limma.table.1.m = top.table(4)
+limma.table.1.b = top.table(5)
+limma.table.2.4 = top.table(6)
+limma.table.2.8 = top.table(7)
+limma.table.2.m = top.table(8)
+limma.table.2.b = top.table(9)
+limma.table.4.8 = top.table(10)
+limma.table.4.m = top.table(11)
+limma.table.4.b = top.table(12)
+limma.table.8.m = top.table(13)
+limma.table.8.b = top.table(14)
+limma.table.m.b = top.table(15)
 
 
 # Check dimensions
@@ -855,19 +833,16 @@ x.new = x[b,]
 ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
 x.new = arrange(x.new, rownames(x.new))
   
-annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
-colnames(annotated.x)[7:9]<-c("gene.name","gene.description","Chromosome.scaffold.name")
+annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name, ensembl.new$Gene.stable.ID)
+colnames(annotated.x)[7:10]<-c("gene.name","gene.description","Chromosome.scaffold.name", "Gene.stable.ID")
 annotated.x = arrange(annotated.x, adj.P.Val)
   return(annotated.x)
 }
 
-# annotated.limma.1.4 = limma.annotation(limma.table.1.4)
-# dim limma.table.1.4 = 0 0
+
 annotated.limma.1.8 = limma.annotation(limma.table.1.8)
 annotated.limma.1.m = limma.annotation(limma.table.1.m)
 annotated.limma.1.b = limma.annotation(limma.table.1.b)
-# annotated.limma.2.4 = limma.annotation(limma.table.2.4)
-# Error cause dim = 0 0
 annotated.limma.2.8 = limma.annotation(limma.table.2.8)
 annotated.limma.2.m = limma.annotation(limma.table.2.m)
 annotated.limma.2.b = limma.annotation(limma.table.2.b)
@@ -931,7 +906,6 @@ ensembl.limma.annotation = function(x){}
 #=======
 
 ensembl.limma.annotation <- function(x){
-#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
   a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
   ensembl.new = ensembl.unique[a,]
   
@@ -947,20 +921,20 @@ ensembl.limma.annotation <- function(x){
   return(annotated.x)
 }
 
-annotated.limma.tabel.vollst.1.8 = ensembl.limma.annotation(limma.table.vollst.1.8)
-annotated.limma.tabel.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8.m) 
-annotated.limma.tabel.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
+annotated.limma.table.vollst.1.8 = ensembl.limma.annotation(limma.table.vollst.1.8)
+annotated.limma.table.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8.m) 
+annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
 
 ##creating volcanoplots
 library(EnhancedVolcano)
 
-EnhancedVolcano(annotated.limma.tabel.vollst.1.8[,1:6],lab = annotated.limma.tabel.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
+EnhancedVolcano(annotated.limma.table.vollst.1.8[,1:6],lab = annotated.limma.table.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
                 FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
-EnhancedVolcano(annotated.limma.tabel.vollst.8.m[,1:6],lab = annotated.limma.tabel.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+EnhancedVolcano(annotated.limma.table.vollst.8.m[,1:6],lab = annotated.limma.table.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
                 FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
-EnhancedVolcano(annotated.limma.tabel.vollst.m.b[,1:6],lab = annotated.limma.tabel.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+EnhancedVolcano(annotated.limma.table.vollst.m.b[,1:6],lab = annotated.limma.table.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
                 FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
 
@@ -1062,6 +1036,96 @@ j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.1.8 )
   k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.m.b)
   View(fusion.tra.expression.tra.table.ensembl.table[k,])
   
-  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.m.b )
+  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.m.b)
   View(ensembl.data[j,])
+
   
+  
+## 5.6) Set enrichment analysis
+
+  
+# Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for SEA-code
+# Extract unique transcripts in ensembl data
+ensembl.unique = unique(ensembl.data$Transcript.stable.ID)
+  
+# Annotate Expression set with Ensembl Gene IDs
+a = which(ensembl.unique %in% rownames(human.vsnrma.df2))
+ensembl.new = ensembl.data[a,]
+  
+b = which(rownames(human.vsnrma.df2) %in% ensembl.unique)
+human.vsnrma.df2.new = human.vsnrma.df2[b,]
+  
+ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+human.vsnrma.df2.new = arrange(human.vsnrma.df2.new, rownames(human.vsnrma.df2.new))
+  
+annotated.human.vsnrma.df2 = cbind(human.vsnrma.df2.new, ensembl.new$Gene.stable.ID)
+  
+# Convert Ensembl Gene IDs to Entrez IDs
+
+library("org.Hs.eg.db")
+#columns(org.Hs.eg.db) # returns list of available keytypes
+annotated.human.vsnrma.df2$entrez = mapIds(org.Hs.eg.db,
+                                             keys = annotated.human.vsnrma.df2$`ensembl.new$Gene.stable.ID`, #Column containing Ensembl gene ids
+                                             column="ENTREZID",
+                                             keytype="ENSEMBL")
+  
+  
+# Create fit table with annotated expression set
+annotated.fit = lmFit(annotated.human.vsnrma.df2[,1:18], design)
+  
+# Create fit tables for every comparison
+fit.function = function(i){
+    fit.table = contrasts.fit(annotated.fit, contrasts = cm[,i])
+    fit.table = eBayes(fit.table)
+  }
+  
+fit.1.2 = fit.function(1)
+fit.1.4 = fit.function(2)
+fit.1.8 = fit.function(3)
+fit.1.m = fit.function(4)
+fit.1.b = fit.function(5)
+fit.2.4 = fit.function(6)
+fit.2.8 = fit.function(7)
+fit.2.m = fit.function(8)
+fit.2.b = fit.function(9)
+fit.4.8 = fit.function(10)
+fit.4.m = fit.function(11)
+fit.4.b = fit.function(12)
+fit.8.m = fit.function(13)
+fit.8.b = fit.function(14)
+fit.m.b = fit.function(15)
+  
+  
+# Create a function to perform SEA on every fit table
+  
+SEA.function = function(x){
+    enrich_kegg = kegga(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
+    topKEGG(enrich_kegg)
+  }
+  
+SEA.1.2 = SEA.function(fit.1.2)
+# No DE genes
+SEA.1.4 = SEA.function(fit.1.4)
+SEA.1.8 = SEA.function(fit.1.8)
+SEA.1.m = SEA.function(fit.1.m)
+SEA.1.b = SEA.function(fit.1.b)
+SEA.2.4 = SEA.function(fit.2.4)
+SEA.2.8 = SEA.function(fit.2.8)
+SEA.2.m = SEA.function(fit.2.m)
+SEA.2.b = SEA.function(fit.2.b)
+SEA.4.8 = SEA.function(fit.4.8)
+SEA.4.m = SEA.function(fit.4.m)
+SEA.4.b = SEA.function(fit.4.b)
+SEA.8.m = SEA.function(fit.8.m)
+SEA.8.b = SEA.function(fit.8.b)
+SEA.m.b = SEA.function(fit.m.b)
+
+
+
+
+
+
+
+
+
+
