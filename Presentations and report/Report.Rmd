@@ -170,6 +170,74 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 ## 3.2 Data Analysis
 
 ### Annotation
+```{r}
+# read in ensembl table with following attributes: "Gene stable ID", 
+#"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
+#"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+
+ensembl.data <- read.csv("ensembl.human.txt")
+dim(ensembl.data)
+##268341      9
+```
+
+```{r}
+# create variables that contain gene ID, transcript ID, 
+#the chromosome name and the gene symbol
+ensembl.genes = ensembl.data[,1]
+ensembl.transcripts = ensembl.data[,3]
+ensembl.chromosome = ensembl.data[,7]
+ensembl.symbols = ensembl.data[,9]
+```
+
+```{r}
+# Create a data frame out of the expression data from the normalized data
+human.vsnrma.df = data.frame(exprs(human.vsnrma))
+```
+
+```{r}
+#rename the colnames to the stages
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456643.CEL'] <- '1-cell stage.rep.1'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456644.CEL'] <- '1-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456645.CEL'] <- '1-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456646.CEL'] <- '2-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456647.CEL'] <- '2-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456648.CEL'] <- '2-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456649.CEL'] <- '4-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456650.CEL'] <- '4-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456651.CEL'] <- '4-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456652.CEL'] <- '8-cell stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456653.CEL'] <- '8-cell stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456654.CEL'] <- '8-cell stage.rep.3' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456655.CEL'] <- 'morula stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456656.CEL'] <- 'morula stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456657.CEL'] <- 'morula stage.rep.3'
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456658.CEL'] <- 'blastocyst stage.rep.1' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456659.CEL'] <- 'blastocyst stage.rep.2' 
+names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456660.CEL'] <- 'blastocyst stage.rep.3' 
+```
+
+```{r}
+# Check dimensions
+dim(human.vsnrma.df)
+#95,721    18
+# exclude Affymetrix control genes which begin with "AFFX"
+human.vsnrma.df2 = human.vsnrma.df[63:95721,]
+
+dim(human.vsnrma.df2)
+# 95,659    18
+```
+
+```{r}
+# remove ".xx_at" from the rownames
+rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
+
+# read in TRA data for human
+tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
+dim(tra.data)
+#60131    10
+```
 
 ### Exploratory data analysis
 
@@ -370,3 +438,116 @@ pam_k2$clustering
 ```
 
 Silouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
+
+Finding genes which explain for the variance by looking at genes with the highst loading in PCs
+
+Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
+
+```{r}
+a=c(1,2,3,10,11,12)
+pca.1.8=prcomp(t(human.vsnrma.df2[,a]))
+```
+
+```{r}
+# Plot cumulative proportion of variance explained
+variance = (pca.1.8$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+```
+
+two PCs are enough to show 90% variance
+
+Finding variance genes which explain the variance of PC1 between 1-cell stage and 8-cell stage
+
+```{r}
+pc1=pca.1.8$rotation[,1]
+top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+
+#Variance genes 1-cell stage and 8-cell stage
+j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+View(ensembl.data[j,])
+
+#Variance TRA genes 1-cell stage and 8-cell stage
+k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+fusion.tra.expression.tra.table.ensembl.table[k,]
+```
+
+```{r}
+#Use PCA to plot 3 replicates of 8-cell stage and morula stage
+pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
+```
+
+```{r}
+# Plot cumulative proportion of variance explained
+plot(pca.8.m$sdev)
+variance = (pca.8.m$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+```
+
+three PCs are enough to show 90% variance
+
+Finding variance genes which explain the variance of PC1 between 8-cell stage and morula stage
+
+```{r}
+pc1=pca.8.m$rotation[,1]
+top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+
+#Variance genes 8-cell stage and morula stage
+j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+View(ensembl.data[j,])
+
+#Variance TRA genes 8-cell stage and morula stage
+k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+fusion.tra.expression.tra.table.ensembl.table[k,]
+```
+
+*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
+
+Use PCA to plot 3 replicates of morula stage and blastocyst stage
+
+```{r}
+pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
+
+# Plot cumulative proportion of variance explained
+plot(pca.m.b$sdev)
+variance = (pca.m.b$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+```
+
+four PCs are enough to show 90% variance
+
+Finding variance genes which explain the variance of PC1 between morula stage and blastocyst stage
+
+```{r}
+pc1=pca.m.b$rotation[,1]
+top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
+
+#Variance genes morula stage and blastocyst stage
+j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+ensembl.data[j,]
+
+#Variance tra genes morula stage and blastocyst stage
+k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
+fusion.tra.expression.tra.table.ensembl.table[k,]
+
+```
