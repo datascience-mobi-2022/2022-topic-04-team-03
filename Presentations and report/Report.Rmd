@@ -50,7 +50,7 @@ data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
 ### Single chip control: reading in the microarray chips
 
-```{r chips}
+```{r chips pictures}
 for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
 ```
@@ -59,7 +59,10 @@ for (i in 1:18){
 
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide"}
 human.vsnrma <- vsnrma(data.human)
-#setwd("/Users/Clara/Documents/Studium/Bioinformatik/Projekt/sessions/rda")#
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+
+expression.data <- exprs(human.vsnrma)
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 #save.image(file="normalized_human_data_18290.rda")#
 
 ```
@@ -118,7 +121,7 @@ for (i in 1:ncol(eset)) {
 dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 ```
 
-###RNA Degradation Plot
+### RNA Degradation Plot
 
 ```{r RNA Degradation Plot}
 par(mfrow = c(2,1))
@@ -170,7 +173,8 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 ## 3.2 Data Analysis
 
 ### Annotation
-```{r}
+
+```{r }
 # read in ensembl table with following attributes: "Gene stable ID", 
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
@@ -239,7 +243,101 @@ dim(tra.data)
 #60131    10
 ```
 
+```{r}
+# find the index of rownames of our dataset that contain transcript Ids from the tra dataset
+# We extracted the TRA genes out of the three tables(human.vsnrma, tra, ensembl)
+
+j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
+tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
+human.vsnrma.only.tra = human.vsnrma.df2[j,]
+#dim(24783,18)
+
+k = which(tra.data$ensembl.transcript %in% tra.extracted)
+tra.expressed.in.chips = tra.data[k,] #24,783 
+#dim(24783,10)
+```
+
+150 genes weniger als bei anderen zwei Tabellen
+
+```{r}
+c = which(ensembl.transcripts %in% tra.extracted)
+ensembl.only.tra = ensembl.data[c,]
+#dim(24623,9)
+```
+
+```{r}
+#reorder the rows of ensembl.only.tra and tra.expressed.in.chips
+tra.expressed.in.chips = arrange(tra.expressed.in.chips,ensembl.transcript)
+ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
+
+#fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
+fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
+colnames(fusion.tra.expression.tra.table)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+
+
+# fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
+p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
+fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
+fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+
+#rename colnames
+colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c("Gene.name","Gene.description","Chromosome.scaffold.name")
+
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
+
+```
+
 ### Exploratory data analysis
+
+```{r}
+# Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
+tissue = c("Brain","Esophagus","Heart","Liver","Cervix","Muscle","Ovary","Colon","Breast","Kidney","Pituitary","Testis","Whole Blood","Cells - Transformed fibroblasts", "Cells - EBV-transformed lymphocytes", "Spleen","Lung","Stomach","Pancreas","Small Intestine","Skin","Artery","Adrenal","Gland","Pituitary","Nerve","Minor","Salivary","Bladder","Adipose","Thyroid","Prostate","Vagina")
+tissue.number = c()
+
+for (i in 1:33) {
+  tissue.number[[i]] = nrow(fusion.tra.expression.tra.table.ensembl.table %>% filter(grepl(tissue[i],fusion.tra.expression.tra.table.ensembl.table[,21])))
+}
+print(tissue.number)
+tissue.distribution = cbind(tissue,tissue.number)
+tissue.distribution = as.data.frame(tissue.distribution)
+```
+
+```{r}
+# Arranging the list according to the descending TRAs number
+tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
+```
+
+```{r}
+# Create a barplot
+library(RColorBrewer)
+coul <- brewer.pal(5, "Set2")
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+
+dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
+```
+
+```{r}
+# Create a heatmap of the TRA genes in our dataset
+## What does unlist mean? -> Transforms list into matrix
+human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 6, nrow = 24783)
+
+colnames(human.vsnrma.only.tra.matrix) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
+
+heatmap = pheatmap(human.vsnrma.only.tra.matrix, 
+                   cluster_cols=FALSE, 
+                   show_rownames = TRUE, 
+                   legend=TRUE, 
+                   fontsize_row=0.5,
+                   main = "Expression of 24,783 TRA genes in 6 different stages of embryogenesis")
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+dev.copy2pdf(file="heatmap.pdf")
+
+```
 
 ### Principal component analysis
 
@@ -549,5 +647,520 @@ ensembl.data[j,]
 #Variance tra genes morula stage and blastocyst stage
 k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
 fusion.tra.expression.tra.table.ensembl.table[k,]
+```
+
+### Limma analysis
+
+```{r limma Analysis}
+names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
+          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
+          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
+          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
+          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
+          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
+
+
+# Rename colnames of our dataset: "x stage, rep y" for a better overview
+colnames(human.vsnrma.df2) = names
+
+# Define the different stages of the chips in a vector
+stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst"),levels= c(1,2,4,8,"morula","blastocyst"))
+
+# Create a design matrix with the stages
+design = model.matrix(~0 + stage)
+            
+# Create a contrast matrix which compares all the stages with one another 
+cm = makeContrasts(stage1.2 = stage1-stage2, stage1.4 = stage1-stage4, stage1.8 = stage1-stage8, stage1.morula = stage1-stagemorula, stage1.blastocyst = stage1-stageblastocyst,
+                   stage2.4 = stage2-stage4, stage2.8 = stage2-stage8, stage2.morula = stage2-stagemorula,  stage2.blastocyst = stage2-stageblastocyst,
+                   stage4.8 = stage4-stage8, stage4.morula = stage4-stagemorula,  stage4.blastocyst = stage4-stageblastocyst,
+                   stage8.morula = stage8-stagemorula, stage8.blastocyst = stage8-stageblastocyst,
+                   stagemorula.blastocyst = stagemorula-stageblastocyst, 
+                   levels = design)
+
+# Fit the coefficients of the model
+fit = lmFit(human.vsnrma.df2, design)
+fit2 = contrasts.fit(fit, contrasts = cm)
+
+# Calculate the t-statistics
+fit2 = eBayes(fit2)
+
+# Number of differentially expressed genes (p-value = 0.05)
+results = decideTests(fit2, p.value = 0.05)
+summary(results)
+
+# Number of differentially expressed genes (p-value = 0.01)
+results2 = decideTests(fit2, p.value = 0.01)
+summary(results2)
+
+# Create fits for every contrast and then create tables with the results of Limma analysis
+# Stage 1-2
+fit.1.2 = contrasts.fit(fit, contrasts = cm[,1])
+fit.1.2 = eBayes(fit.1.2)
+
+pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
+# 0
+pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
+# 0
 
 ```
+
+```{r fitFunction}
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+
+fit.function = function(i){
+  fit.table = contrasts.fit(fit, contrasts = cm[,i])
+  fit.table = eBayes(fit.table)
+}
+```
+
+```{r limma fit tables}
+fit.1.2 = fit.function(1)
+fit.1.4 = fit.function(2)
+fit.1.8 = fit.function(3)
+fit.1.m = fit.function(4)
+fit.1.b = fit.function(5)
+fit.2.4 = fit.function(6)
+fit.2.8 = fit.function(7)
+fit.2.m = fit.function(8)
+fit.2.b = fit.function(9)
+fit.4.8 = fit.function(10)
+fit.4.m = fit.function(11)
+fit.4.b = fit.function(12)
+fit.8.m = fit.function(13)
+fit.8.b = fit.function(14)
+fit.m.b = fit.function(15)
+```
+
+```{r topTable function}
+top.table = function(i){
+  fit.table = contrasts.fit(fit, contrasts = cm[,i])
+  fit.table = eBayes(fit.table)
+  
+  pvalue01 = sum(p.adjust(fit.table$p.value, "BH") < 0.01)
+  topTable(fit.table, number = pvalue01)
+}
+```
+
+```{r limma topTables}
+limma.table.1.2 = top.table(1)
+limma.table.1.4 = top.table(2)
+limma.table.1.8 = top.table(3)
+limma.table.1.m = top.table(4)
+limma.table.1.b = top.table(5)
+limma.table.2.4 = top.table(6)
+limma.table.2.8 = top.table(7)
+limma.table.2.m = top.table(8)
+limma.table.2.b = top.table(9)
+limma.table.4.8 = top.table(10)
+limma.table.4.m = top.table(11)
+limma.table.4.b = top.table(12)
+limma.table.8.m = top.table(13)
+limma.table.8.b = top.table(14)
+limma.table.m.b = top.table(15)
+```
+
+```{r annotation function}
+limma.annotation = function(x){
+a = which(ensembl.transcripts %in% rownames(x))
+ensembl.new = ensembl.data[a,]
+  
+b = which(rownames(x) %in% ensembl.new$Transcript.stable.ID)
+x.new = x[b,]
+  
+ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+x.new = arrange(x.new, rownames(x.new))
+  
+annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name, ensembl.new$Gene.stable.ID)
+colnames(annotated.x)[7:10]<-c("gene.name","gene.description","Chromosome.scaffold.name", "Gene.stable.ID")
+annotated.x = arrange(annotated.x, adj.P.Val)
+  return(annotated.x)
+}
+```
+
+```{r limma annotation}
+annotated.limma.1.8 = limma.annotation(limma.table.1.8)
+annotated.limma.1.m = limma.annotation(limma.table.1.m)
+annotated.limma.1.b = limma.annotation(limma.table.1.b)
+#annotated.limma.2.4 = limma.annotation(limma.table.2.4)
+annotated.limma.2.8 = limma.annotation(limma.table.2.8)
+annotated.limma.2.m = limma.annotation(limma.table.2.m)
+annotated.limma.2.b = limma.annotation(limma.table.2.b)
+annotated.limma.4.8 = limma.annotation(limma.table.4.8)
+annotated.limma.4.m = limma.annotation(limma.table.4.m)
+annotated.limma.4.b = limma.annotation(limma.table.4.b)
+annotated.limma.8.m = limma.annotation(limma.table.8.m)
+annotated.limma.8.b = limma.annotation(limma.table.8.b)
+annotated.limma.m.b = limma.annotation(limma.table.m.b)
+```
+
+```{r limma TRAs}
+#annotated limma tables mit TRAs annotaten
+#1.4 und 1.2 sind 00
+annotated.limma.1.8$ensembl.transcript = rownames(annotated.limma.1.8)
+annotated.limma.1.8.tra <- merge(annotated.limma.1.8, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.1.m$ensembl.transcript = rownames(annotated.limma.1.m)
+annotated.limma.1.m.tra <- merge(annotated.limma.1.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.1.b$ensembl.transcript = rownames(annotated.limma.1.b)
+annotated.limma.1.b.tra <- merge(annotated.limma.1.b, tra.data, by = 'ensembl.transcript')
+#2.4. ist 00
+annotated.limma.2.8$ensembl.transcript = rownames(annotated.limma.2.8)
+annotated.limma.2.8.tra <- merge(annotated.limma.2.8, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.2.m$ensembl.transcript = rownames(annotated.limma.2.m)
+annotated.limma.2.m.tra <- merge(annotated.limma.2.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.2.b$ensembl.transcript = rownames(annotated.limma.2.b)
+annotated.limma.2.b.tra <- merge(annotated.limma.2.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.8$ensembl.transcript = rownames(annotated.limma.4.8)
+annotated.limma.4.8.tra <- merge(annotated.limma.4.8, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.m$ensembl.transcript = rownames(annotated.limma.4.m)
+annotated.limma.4.m.tra <- merge(annotated.limma.4.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.4.b$ensembl.transcript = rownames(annotated.limma.4.b)
+annotated.limma.4.b.tra <- merge(annotated.limma.4.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.8.m$ensembl.transcript = rownames(annotated.limma.8.m)
+annotated.limma.8.m.tra <- merge(annotated.limma.8.m, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.8.b$ensembl.transcript = rownames(annotated.limma.8.b)
+annotated.limma.8.b.tra <- merge(annotated.limma.8.b, tra.data, by = 'ensembl.transcript')
+
+annotated.limma.m.b$ensembl.transcript = rownames(annotated.limma.m.b)
+annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.transcript')
+
+```
+
+
+```{r tissue plot}
+#Erstellen Means pro stage pro tissue
+n_occur1.8=data.frame(table(annotated.limma.1.8.tra$max.tissue))
+tissue.vector1.8=c()
+for (i in 1:53) {
+
+  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.vector1.8[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
+}
+
+
+n_occur1.m=data.frame(table(annotated.limma.1.m.tra$max.tissue))
+tissue.vector1.m=c()
+for (i in 1:53) {
+
+  tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.vector1.m[[i]]= mean(c(annotated.limma.1.m.tra[tissue.genes,2]))
+}
+
+n_occur1.b=data.frame(table(annotated.limma.1.b.tra$max.tissue))
+tissue.vector1.b=c()
+for (i in 1:53) {
+
+  tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.vector1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
+}
+
+#Erstellen Plot Data
+tissue.matrix = cbind(tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
+rownames(tissue.matrix) = n_occur$Var1[1:53] 
+as_tibble(tissue.matrix)
+
+#plot# Fragggeee???
+ggplot(tissue.matrix, aes(x = colnames(tissue.matrix), y= tissue.matrix[,1:3], color= row.names(tissue.matrix)) + geom_line() +
+           geom_point()) 
+
+```
+
+### filter DE genes
+create Volcanoplots to visualize the DE genes
+using Enhancedvolcanoplot with input from limma tables that contain all genes
+
+we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
+<<<<<<< HEAD
+```{r}
+n_occur = data.frame(table(ensembl.data$Transcript.stable.ID))
+n_occur = arrange(n_occur,desc(n_occur$Freq))
+a = sum(n_occur$Freq>1)
+duplicate.ensembl = n_occur$Var1[1:40]
+j = which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
+ensembl.duplicate = ensembl.data[j,]
+Nth.delete = function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
+ensembl.duplicate.genes = Nth.delete(ensembl.duplicate, 2)
+ensembl.unique = rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#=======
+n_occur=data.frame(table(ensembl.data$Transcript.stable.ID))
+n_occur=arrange(n_occur,desc(n_occur$Freq))
+a=sum(n_occur$Freq>1)
+duplicate.ensembl=n_occur$Var1[1:40]
+j=which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
+ensembl.duplicate=ensembl.data[j,]
+ensembl.duplicate=arrange(ensembl.duplicate,ensembl.duplicate$Transcript.stable.ID)
+Nth.delete<-function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
+ensembl.duplicate.genes=Nth.delete(ensembl.duplicate, 2)
+ensembl.unique=rbind(ensembl.data[-j,],ensembl.duplicate.genes)
+#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
+```
+
+
+generate a function with the output of limma tables (complete) with sig. genes and non sig. genes
+```{r limma tables with sig & non sig. genes}
+generate.limma.table.vollst = function(fit,n){
+  fit.1 = contrasts.fit(fit, contrasts = cm[,n])
+  fit.1 = eBayes(fit.1)
+  limma.table.vollst=topTable(fit.1,number = dim(fit.1)[1])
+  return(limma.table.vollst)
+}
+<<<<<<< Updated upstream
+
+limma.table.vollst.1.8 = generate.limma.table.vollst(fit,3)
+limma.table.vollst.8.m = generate.limma.table.vollst(fit,13)
+limma.table.vollst.m.b = generate.limma.table.vollst(fit,15)
+=======
+limma.table.vollst.1.2=generate.limma.table.vollst(fit,1)
+limma.table.vollst.1.4=generate.limma.table.vollst(fit,2)
+limma.table.vollst.1.8=generate.limma.table.vollst(fit,3)
+limma.table.vollst.1.m=generate.limma.table.vollst(fit,4)
+limma.table.vollst.1.b=generate.limma.table.vollst(fit,5)
+limma.table.vollst.2.4=generate.limma.table.vollst(fit,6)
+limma.table.vollst.2.8=generate.limma.table.vollst(fit,7)
+limma.table.vollst.2.m=generate.limma.table.vollst(fit,8)
+limma.table.vollst.2.b=generate.limma.table.vollst(fit,9)
+limma.table.vollst.4.8=generate.limma.table.vollst(fit,10)
+limma.table.vollst.4.m=generate.limma.table.vollst(fit,11)
+limma.table.vollst.4.b=generate.limma.table.vollst(fit,12)
+limma.table.vollst.8.m=generate.limma.table.vollst(fit,13)
+limma.table.vollst.8.b=generate.limma.table.vollst(fit,14)
+limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
+>>>>>>> Stashed changes
+```
+
+anotation of the limma table (complete) with emsembl information
+```{r}
+ensembl.limma.annotation = function(x){}
+#=======
+
+ensembl.limma.annotation <- function(x){
+  a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
+  ensembl.new = ensembl.unique[a,]
+  
+  b = which(rownames(x)%in% ensembl.new$Transcript.stable.ID)
+  x.new = x[b,]
+  
+  ensembl.new = arrange(ensembl.new,ensembl.new$Transcript.stable.ID)
+  x.new = arrange(x.new, rownames(x.new))
+  
+  annotated.x = cbind(x.new, ensembl.new$Gene.name, ensembl.new$Gene.description,ensembl.new$Chromosome.scaffold.name)
+  colnames(annotated.x)[7:9]<-c("gene.name","gene.description","Chromosome.scaffold.name")
+  annotated.x = arrange(annotated.x, adj.P.Val)
+  return(annotated.x)
+}
+
+annotated.limma.table.vollst.1.8 = ensembl.limma.annotation(limma.table.vollst.1.8)
+annotated.limma.table.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8.m) 
+annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
+```
+
+```{r volcano plots}
+library(EnhancedVolcano)
+
+EnhancedVolcano(annotated.limma.table.vollst.1.8[,1:6],lab = annotated.limma.table.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
+                FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+
+EnhancedVolcano(annotated.limma.table.vollst.8.m[,1:6],lab = annotated.limma.table.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+
+EnhancedVolcano(annotated.limma.table.vollst.m.b[,1:6],lab = annotated.limma.table.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
+                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+```
+
+annotate the tra genes in limma tables (only sig. genes) with tra information
+
+```{r}
+fuse.tra.limma <- function(x){
+  
+  x = arrange(x,rownames(x))
+  j = which(rownames(x) %in% tra.data$ensembl.transcript) 
+  
+  tra.extracted.stages = rownames(x)[j] 
+  
+  tra.stages = x[j,]
+  
+  k = which(tra.data$ensembl.transcript %in% tra.extracted.stages)
+  tra.data.stages = tra.data[k,]
+  tra.data.stages = arrange(tra.data.stages,tra.data.stages$ensembl.transcript)
+  
+  tra.limma.stages = cbind(tra.stages,tra.data.stages$ensembl.gene,tra.data.stages$tiss.number,tra.data.stages$tissues,tra.data.stages$max.tissue)
+  colnames(tra.limma.stages)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+  
+  
+  x = cbind(x,"ensembl.gene","tissue.number","tissues","max.tissue")
+  x[,10:13] = "NA"
+  colnames(x)[10:13] = c("ensembl.gene","tissue.number","tissues","max.tissue")
+  annotated.tra.limma.stages = rbind(tra.limma.stages,x[-j,])
+  annotated.tra.limma.stages = arrange(annotated.tra.limma.stages,desc(annotated.tra.limma.stages$logFC))
+  return(annotated.tra.limma.stages)
+}
+
+```
+
+```{r}
+###1.8-stadium
+annotated.tra.limma.1.8 = fuse.tra.limma(annotated.limma.1.8)
+###8.m-stadium  
+annotated.tra.limma.8.m = fuse.tra.limma(annotated.limma.8.m) 
+###m.b-stadium
+annotated.tra.limma.m.b = fuse.tra.limma(annotated.limma.m.b)
+
+View(annotated.tra.limma.1.8)
+```
+
+filter the top 20 DE upregulated genes for diffrent stages:
+```{r 1 cell & 8 cell}
+  #abline(v=mean(abs(limma.table.1.8$logFC)))#
+  #c=which(limma.table.1.8$logFC< 0)
+  #limma.1.8.down=limma.table.1.8[c,]
+  #limma.1.8.down.sig=rownames(annotated.limma.1.8.down[which(annotated.limma.1.8.down$P.Value < 0.05),])
+  #limma.table.1.8.arranged=arrange(limma.table.1.8,desc(abs(logFC)))
+  #limma.1.8.down.sig=arrange(limma.1.8.down.sig,)
+ hist(annotated.limma.1.8$logFC)
+c=which(annotated.limma.1.8$logFC > 2)
+limma.table.1.8.up=annotated.limma.1.8[c,]
+limma.1.8.up.sig=limma.table.1.8.up[which(limma.table.1.8.up$P.Value < 0.05),]
+limma.1.8.up.sig=arrange(limma.1.8.up.sig,desc(limma.1.8.up.sig$logFC))  
+interesting_genes.1.8=rownames(limma.1.8.up.sig[1:20,])
+
+k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.1.8)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.1.8 )
+  View(ensembl.data[j,])
+```
+
+```{r between 8 cell & m}
+hist(limma.table.8.m$logFC)
+
+  
+  #c=which(limma.table.8.m$logFC< -3)
+  #limma.table.8.m.down=limma.table.8.m[c,]
+  #limma.8.m.down.sig=rownames(limma.table.8.m.down[which(limma.table.1.8.down$P.Value < 0.05),])
+  #c=which(limma.table.8.m$logFC > 4)
+  
+  c=which(annotated.limma.8.m$logFC > 2)
+  limma.table.8.m.up=annotated.limma.8.m[c,]
+  limma.8.m.up.sig=limma.table.8.m.up[which(limma.table.8.m.up$P.Value < 0.05),]
+  limma.8.m.up.sig=arrange(limma.8.m.up.sig,desc(limma.8.m.up.sig$logFC))  
+  
+  #Transcript of Top 20 genes
+  interesting_genes.8.m=rownames(limma.8.m.up.sig[1:20,])
+  #Name of Top 20 genes
+  limma.8.m.up.sig[1:20,]$`ensembl.new$Gene.name`
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.8.m)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.8.m )
+  View(ensembl.data[j,])
+```
+
+```{r between m - b stadium}
+  c=which(annotated.limma.m.b$logFC > 2)
+  limma.table.m.b.up=annotated.limma.m.b[c,]
+  limma.m.b.up.sig=limma.table.m.b.up[which(limma.table.m.b.up$P.Value < 0.05),]
+  limma.m.b.up.sig=arrange(limma.m.b.up.sig,desc(limma.m.b.up.sig$logFC))  
+  interesting_genes.m.b=rownames(limma.m.b.up.sig[1:20,])
+  
+  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.m.b)
+  View(fusion.tra.expression.tra.table.ensembl.table[k,])
+  
+  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.m.b)
+  View(ensembl.data[j,])
+```
+
+
+### Set enrichment analysis
+
+```{r}
+# Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for SEA-code
+# Extract unique transcripts in ensembl data
+ensembl.unique = unique(ensembl.data$Transcript.stable.ID)
+  
+```
+
+```{r Annotate Expression set with Ensembl Gene IDs}
+a = which(ensembl.unique %in% rownames(human.vsnrma.df2))
+ensembl.new = ensembl.data[a,]
+  
+b = which(rownames(human.vsnrma.df2) %in% ensembl.unique)
+human.vsnrma.df2.new = human.vsnrma.df2[b,]
+  
+ensembl.new = arrange(ensembl.new,Transcript.stable.ID)
+human.vsnrma.df2.new = arrange(human.vsnrma.df2.new, rownames(human.vsnrma.df2.new))
+  
+annotated.human.vsnrma.df2 = cbind(human.vsnrma.df2.new, ensembl.new$Gene.stable.ID)
+  
+```
+
+```{r Convert Ensembl Gene IDs to Entrez IDs}
+library("org.Hs.eg.db")
+#columns(org.Hs.eg.db) # returns list of available keytypes
+annotated.human.vsnrma.df2$entrez = mapIds(org.Hs.eg.db,
+                                             keys = annotated.human.vsnrma.df2$`ensembl.new$Gene.stable.ID`, #Column containing Ensembl gene ids
+                                             column="ENTREZID",
+                                             keytype="ENSEMBL")
+```
+
+```{r fit table with annotated expression set}
+annotated.fit = lmFit(annotated.human.vsnrma.df2[,1:18], design)
+```
+
+```{r Create fit tables for every comparison}
+fit.function = function(i){
+    fit.table = contrasts.fit(annotated.fit, contrasts = cm[,i])
+    fit.table = eBayes(fit.table)
+  }
+  
+fit.1.2 = fit.function(1)
+fit.1.4 = fit.function(2)
+fit.1.8 = fit.function(3)
+fit.1.m = fit.function(4)
+fit.1.b = fit.function(5)
+fit.2.4 = fit.function(6)
+fit.2.8 = fit.function(7)
+fit.2.m = fit.function(8)
+fit.2.b = fit.function(9)
+fit.4.8 = fit.function(10)
+fit.4.m = fit.function(11)
+fit.4.b = fit.function(12)
+fit.8.m = fit.function(13)
+fit.8.b = fit.function(14)
+fit.m.b = fit.function(15)
+```
+  
+  
+```{r create a function to perform SEA on every fit table}
+SEA.function = function(x){
+    enrich_kegg = kegga(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
+    topKEGG(enrich_kegg)
+  }
+  
+SEA.1.2 = SEA.function(fit.1.2)
+# No DE genes
+SEA.1.4 = SEA.function(fit.1.4)
+SEA.1.8 = SEA.function(fit.1.8)
+SEA.1.m = SEA.function(fit.1.m)
+SEA.1.b = SEA.function(fit.1.b)
+SEA.2.4 = SEA.function(fit.2.4)
+SEA.2.8 = SEA.function(fit.2.8)
+SEA.2.m = SEA.function(fit.2.m)
+SEA.2.b = SEA.function(fit.2.b)
+SEA.4.8 = SEA.function(fit.4.8)
+SEA.4.m = SEA.function(fit.4.m)
+SEA.4.b = SEA.function(fit.4.b)
+SEA.8.m = SEA.function(fit.8.m)
+SEA.8.b = SEA.function(fit.8.b)
+SEA.m.b = SEA.function(fit.m.b)
+```
+
+  
