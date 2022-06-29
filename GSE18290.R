@@ -1195,9 +1195,54 @@ SEA.m.b = SEA.function(fit.m.b)
 
 
 
+## 5.7) Venn Diagramm
 
+#1.8.tra Upregulated
+tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
+#8.m.tra Upregulated
+tra.8.m.up=annotated.limma.8.m.tra[which(annotated.limma.8.m.tra$logFC>0),]$ensembl.transcript
+#m.b.tra Upregulated
+tra.m.b.up=annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC>0),]$ensembl.transcript
 
+list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 
+display_venn <- function(x){
+  library(VennDiagram)
+  grid.newpage()
+  venn_object <- venn.diagram(x, category.names=c("upregulated TRAs between 1-cell and 8-cell stage","upregulated TRAs between 8-cell and morula stage","upregulated TRAs between morula and blastocyst stage"),filename = NULL)
+  grid.draw(venn_object)
+}
 
+display_venn(list_venn.up)
 
+Intersect <- function (x) {  
+  # Multiple set version of intersect
+  # x is a list
+  if (length(x) == 1) {
+    unlist(x)
+  } else if (length(x) == 2) {
+    intersect(x[[1]], x[[2]])
+  } else if (length(x) > 2){
+    intersect(x[[1]], Intersect(x[-1]))
+  }
+}
+
+intersect.tra.genes.up=Intersect(list_venn.up)
+
+View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes,])
+
+#1.8.tra downregulated
+tra.1.8.down=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC<0),]$ensembl.transcript
+#8.m.tra downregulated
+tra.8.m.down=annotated.limma.8.m.tra[which(annotated.limma.8.m.tra$logFC<0),]$ensembl.transcript
+#m.b.tra downregulated
+tra.m.b.down=annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC<0),]$ensembl.transcript
+
+list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
+
+display_venn(list_venn.down)
+
+intersect.tra.genes.down=Intersect(list_venn.down)
+
+View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 

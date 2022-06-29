@@ -878,18 +878,8 @@ create Volcanoplots to visualize the DE genes
 using Enhancedvolcanoplot with input from limma tables that contain all genes
 
 we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
-<<<<<<< HEAD
+
 ```{r}
-n_occur = data.frame(table(ensembl.data$Transcript.stable.ID))
-n_occur = arrange(n_occur,desc(n_occur$Freq))
-a = sum(n_occur$Freq>1)
-duplicate.ensembl = n_occur$Var1[1:40]
-j = which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
-ensembl.duplicate = ensembl.data[j,]
-Nth.delete = function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
-ensembl.duplicate.genes = Nth.delete(ensembl.duplicate, 2)
-ensembl.unique = rbind(ensembl.data[-j,],ensembl.duplicate.genes)
-#=======
 n_occur=data.frame(table(ensembl.data$Transcript.stable.ID))
 n_occur=arrange(n_occur,desc(n_occur$Freq))
 a=sum(n_occur$Freq>1)
@@ -900,7 +890,6 @@ ensembl.duplicate=arrange(ensembl.duplicate,ensembl.duplicate$Transcript.stable.
 Nth.delete<-function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
 ensembl.duplicate.genes=Nth.delete(ensembl.duplicate, 2)
 ensembl.unique=rbind(ensembl.data[-j,],ensembl.duplicate.genes)
-#>>>>>>> 9427e0e939b9b20f7c40d4bc68dbaf42c6dc5e8a
 ```
 
 
