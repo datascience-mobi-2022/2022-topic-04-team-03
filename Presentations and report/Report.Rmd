@@ -238,6 +238,7 @@ dim(human.vsnrma.df2)
 rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
 
 # read in TRA data for human
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 dim(tra.data)
 #60131    10
@@ -841,7 +842,7 @@ n_occur1.8=data.frame(table(annotated.limma.1.8.tra$max.tissue))
 tissue.vector1.8=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur1.8$Var1[i])
   tissue.vector1.8[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
 }
 
@@ -850,7 +851,7 @@ n_occur1.m=data.frame(table(annotated.limma.1.m.tra$max.tissue))
 tissue.vector1.m=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur1.m$Var1[i])
   tissue.vector1.m[[i]]= mean(c(annotated.limma.1.m.tra[tissue.genes,2]))
 }
 
@@ -858,13 +859,13 @@ n_occur1.b=data.frame(table(annotated.limma.1.b.tra$max.tissue))
 tissue.vector1.b=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur1.b$Var1[i])
   tissue.vector1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
 }
 
 #Erstellen Plot Data
 tissue.matrix = cbind(tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
-rownames(tissue.matrix) = n_occur$Var1[1:53] 
+rownames(tissue.matrix) = n_occur1.8$Var1[1:53] 
 as_tibble(tissue.matrix)
 
 #plot# Fragggeee???
