@@ -4,7 +4,13 @@ date: "Data Analysis Project SS22"\
 supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = FALSE, #unsicher ob wir das brauchen
+  fig.align =  'centre',
+  out.width = "90%",
+  warning = FALSE, #prevent warnings in the output
+  tidy = FALSE, #show code like we wrote
+  )
 knitr::opts_knit$set(root.dir = "")
 getwd()
 ```
@@ -22,7 +28,12 @@ library(pheatmap)
 library(dplyr)
 library(tidyverse)
 library(hexbin)
-
+library(cluster)
+library(factoextra)
+library(EnhancedVolcano)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(VennDiagram)
 ```
 
 \newpage
@@ -312,7 +323,6 @@ tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tiss
 
 ```{r}
 # Create a barplot
-library(RColorBrewer)
 coul <- brewer.pal(5, "Set2")
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
@@ -421,10 +431,7 @@ model$cluster
 
 Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 
-```{r Plot the Siloutte plot}
-library(cluster)
-library(factoextra)
-```
+Plot the Siloutte plo
 
 ```{r Use map_dbl to run many models with varying value of k}
 sil_width <- map_dbl(2:10,  function(k){
@@ -497,11 +504,8 @@ model$cluster
 
 Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 
-```{r}
-###Plot the Siloutte plot
-library(cluster)
-library(factoextra)
-```
+
+Plot the Siloutte plot
 
 ```{r}
 # Use map_dbl to run many models with varying value of k
@@ -946,8 +950,6 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 ```
 
 ```{r volcano plots}
-library(EnhancedVolcano)
-
 EnhancedVolcano(annotated.limma.table.vollst.1.8[,1:6],lab = annotated.limma.table.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
                 FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
 
@@ -1086,7 +1088,7 @@ annotated.human.vsnrma.df2 = cbind(human.vsnrma.df2.new, ensembl.new$Gene.stable
 ```
 
 ```{r Convert Ensembl Gene IDs to Entrez IDs}
-library("org.Hs.eg.db")
+
 #columns(org.Hs.eg.db) # returns list of available keytypes
 annotated.human.vsnrma.df2$entrez = mapIds(org.Hs.eg.db,
                                              keys = annotated.human.vsnrma.df2$`ensembl.new$Gene.stable.ID`, #Column containing Ensembl gene ids
@@ -1147,7 +1149,7 @@ SEA.m.b = SEA.function(fit.m.b)
 ```
 
 ### Venn Diagramm
-```{r}
+```{r Venn Diagramm }
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
 #8.m.tra Upregulated
@@ -1158,7 +1160,6 @@ tra.m.b.up=annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC>0),]$ense
 list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 
 display_venn <- function(x){
-  library(VennDiagram)
   grid.newpage()
   venn_object <- venn.diagram(x, category.names=c("upregulated TRAs between 1-cell and 8-cell stage","upregulated TRAs between 8-cell and morula stage","upregulated TRAs between morula and blastocyst stage"),filename = NULL)
   grid.draw(venn_object)
