@@ -249,7 +249,7 @@ n_occur1.8=data.frame(table(annotated.limma.1.8.tra$max.tissue))
 tissue.vector1.8=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur1.8$Var1[i])
   tissue.vector1.8[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
 }
 
@@ -258,7 +258,7 @@ n_occur1.m=data.frame(table(annotated.limma.1.m.tra$max.tissue))
 tissue.vector1.m=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur1.m$Var1[i])
   tissue.vector1.m[[i]]= mean(c(annotated.limma.1.m.tra[tissue.genes,2]))
 }
 
@@ -266,17 +266,17 @@ n_occur1.b=data.frame(table(annotated.limma.1.b.tra$max.tissue))
 tissue.vector1.b=c()
 for (i in 1:53) {
 
-  tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur$Var1[i])
+  tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur1.b$Var1[i])
   tissue.vector1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
 }
 
 #Erstellen Plot Data
 tissue.matrix = cbind(tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
-rownames(tissue.matrix) = n_occur$Var1[1:53] 
+rownames(tissue.matrix) = n_occur1.8$Var1[1:53] 
 as_tibble(tissue.matrix)
 
 #plot# Fragggeee???
-ggplot(tissue.matrix, aes(x = colnames(tissue.matrix), y= tissue.matrix[,1:3], color= row.names(tissue.matrix)) + geom_line() +
+ggplot(tissue.matrix, aes(x = stages, y= tissue.matrix[,1:3], color= row.names(tissue.matrix)) + geom_line() +
            geom_point()) 
 
 ```
