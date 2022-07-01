@@ -870,11 +870,14 @@ for (i in 1:53) {
 #Erstellen Plot Data
 tissue.matrix = cbind(tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
 rownames(tissue.matrix) = n_occur1.8$Var1[1:53] 
-as_tibble(tissue.matrix)
+tissue.matrix= cbind(rownames(tissue.matrix),tissue.matrix)
+tissue.matrix= as_tibble(tissue.matrix)
+
+tissue.matrix=pivot_longer(tissue.matrix, cols=tissue.vector1.8:tissue.vector1.b, names_to = "stages" ,values_to="logFc")
 
 #plot# Fragggeee???
-ggplot(tissue.matrix, aes(x = colnames(tissue.matrix), y= tissue.matrix[,1:3], color= row.names(tissue.matrix)) + geom_line() +
-           geom_point()) 
+ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1)))  + geom_line(aes(color=as.character(V1))) +
+           geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(fill = "Tissues")
 
 ```
 
