@@ -862,18 +862,21 @@ for (i in 1:53) {
   tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur1.b$Var1[i])
   tissue.vector1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
 }
-
+tissue.vector1.2=c()
+tissue.vector1.2[1:53] =0
+tissue.vector1.4=c()
+tissue.vector1.4[1:53] =0
 #Erstellen Plot Data
-tissue.matrix = cbind(tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
+tissue.matrix = cbind(tissue.vector1.2,tissue.vector1.4,tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
 rownames(tissue.matrix) = n_occur1.8$Var1[1:53] 
 tissue.matrix= cbind(rownames(tissue.matrix),tissue.matrix)
 tissue.matrix= as_tibble(tissue.matrix)
 
-tissue.matrix=pivot_longer(tissue.matrix, cols=tissue.vector1.8:tissue.vector1.b, names_to = "stages" ,values_to="logFc")
+tissue.matrix=pivot_longer(tissue.matrix, cols=tissue.vector1.2:tissue.vector1.b, names_to = "stages" ,values_to="logFc")
 
 #plot# Fragggeee???
 ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1)))  + geom_line(aes(color=as.character(V1))) +
-           geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(fill = "Tissues")
+           geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(colour = "tissues")
 
 ```
 
