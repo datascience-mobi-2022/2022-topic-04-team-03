@@ -4,20 +4,14 @@ date: "Data Analysis Project SS22"\
 supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE, #unsicher ob wir das brauchen
-  fig.align =  'centre',
-  out.width = "90%",
-  warning = FALSE, #prevent warnings in the output
-  tidy = FALSE, #show code like we wrote
-  )
+knitr::opts_chunk$set(echo = FALSE, fig.align = 'centre', message=FALSE)
 knitr::opts_knit$set(root.dir = "")
 getwd()
 ```
 
 ###load library
 
-```{r load packages, eval=TRUE, include=FALSE, echo=FALSE, message=FALSE, comment=FALSE}
+```{r load packages, eval=TRUE, include=FALSE, comment=FALSE}
 library(affy)
 library(vsn)
 library(AnnotationDbi)
@@ -68,7 +62,7 @@ for (i in 1:18){
 
 ### Normalization
 
-```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide"}
+```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 human.vsnrma <- vsnrma(data.human)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
