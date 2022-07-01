@@ -833,61 +833,49 @@ annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.tr
 
 ```
 
-### tissue plot
-```{r,tissue plot}
+
+```{r tissue plot}
 #Erstellen Means pro stage pro tissue
 n_occur1.8=data.frame(table(annotated.limma.1.8.tra$max.tissue))
-Δ1.8=c()
+tissue.vector1.8=c()
 for (i in 1:53) {
 
   tissue.genes=which(annotated.limma.1.8.tra$max.tissue %in% n_occur1.8$Var1[i])
-  Δ1.8[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
+  tissue.vector1.8[[i]]= mean(c(annotated.limma.1.8.tra[tissue.genes,2]))
 }
 
 
 n_occur1.m=data.frame(table(annotated.limma.1.m.tra$max.tissue))
-Δ1.m=c()
+tissue.vector1.m=c()
 for (i in 1:53) {
 
   tissue.genes=which(annotated.limma.1.m.tra$max.tissue %in% n_occur1.m$Var1[i])
-  Δ1.m[[i]]= mean(c(annotated.limma.1.m.tra[tissue.genes,2]))
+  tissue.vector1.m[[i]]= mean(c(annotated.limma.1.m.tra[tissue.genes,2]))
 }
 
 n_occur1.b=data.frame(table(annotated.limma.1.b.tra$max.tissue))
-Δ1.b=c()
+tissue.vector1.b=c()
 for (i in 1:53) {
 
   tissue.genes=which(annotated.limma.1.b.tra$max.tissue %in% n_occur1.b$Var1[i])
- Δ1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
+  tissue.vector1.b[[i]]= mean(c(annotated.limma.1.b.tra[tissue.genes,2]))
 }
-Δ1.2=c()
-Δ1.2[1:53] =0
-Δ1.4=c()
-Δ1.4[1:53] =0
+tissue.vector1.2=c()
+tissue.vector1.2[1:53] =0
+tissue.vector1.4=c()
+tissue.vector1.4[1:53] =0
 #Erstellen Plot Data
-tissue.matrix = cbind(Δ1.2,Δ1.4,Δ1.8,Δ1.m,Δ1.b)
+tissue.matrix = cbind(tissue.vector1.2,tissue.vector1.4,tissue.vector1.8,tissue.vector1.m,tissue.vector1.b)
 rownames(tissue.matrix) = n_occur1.8$Var1[1:53] 
 tissue.matrix= cbind(rownames(tissue.matrix),tissue.matrix)
 tissue.matrix= as_tibble(tissue.matrix)
 
-tissue.matrix=pivot_longer(tissue.matrix, cols=Δ1.2:Δ1.b, names_to = "stages" ,values_to="logFc")
+tissue.matrix=pivot_longer(tissue.matrix, cols=tissue.vector1.2:tissue.vector1.b, names_to = "stages" ,values_to="logFc")
 
-#plot
+#plot# Fragggeee???
 ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1)))  + geom_line(aes(color=as.character(V1))) +
            geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(colour = "tissues")
 
-
-```
-###tissue plot facetting
-
-```{r}
-tissue.max.vector = c(rep("Adipose",10),rep("Adrenal Gland",5),rep("Artery",15),rep("Bladder",5),rep("Brain",65),rep("Breast",5),rep("Cells",10),rep("Cervix",10),rep("Colon",10),rep("Esophagus", 15),rep("Follopian Tube",5),rep("Heart",10),rep("Kidney",5),rep("Liver",5),rep("Lung",5),rep("Minor Salivary Gland",5),rep("Muscle",5),rep("Nerve",5),rep("Ovary",5),rep("Pancreas",5),rep("Pituitary",5),rep("Prostate",5),rep("Skin",10),rep("Small Intestine",5), rep("Spleen",5), rep("Stomach",5),rep("Testis",5),rep("Thyroid",5),rep("Uterus",5),rep("Vagina",5),rep("Whole Blood",5))
-
-tissue.fac= cbind(tissue.matrix,tissue.max.vector)
-ggplot(tissue.fac, aes(x = stages, y= as.numeric(logFc),group=as.character(V1)))  + geom_line(aes(color=as.character(V1))) +
-           geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(colour = "tissues") +facet_wrap(~tissue.max.vector)#+ theme(legend.position = "none")
-
-#uncomment last component to remove legend 
 ```
 
 ### filter DE genes
@@ -1161,7 +1149,9 @@ SEA.m.b = SEA.function(fit.m.b)
 ```
 
 ### Venn Diagramm
+
 ```{r Venn Diagramm }
+##creating demo data
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
 #8.m.tra Upregulated
@@ -1171,12 +1161,14 @@ tra.m.b.up=annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC>0),]$ense
 
 list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 
-display_venn <- function(x){
+# Helper function to display Venn diagram.up
+display_venn.up <- function(x){
   grid.newpage()
-  venn_object <- venn.diagram(x, category.names=c("upregulated TRAs between 1-cell and 8-cell stage","upregulated TRAs between 8-cell and morula stage","upregulated TRAs between morula and blastocyst stage"),filename = NULL)
+  venn_object <- venn.diagram(x,main=("upregulated TRAS between diffrent stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), col.main= "red", filename = NULL)
   grid.draw(venn_object)
 }
 
+#venn plot up
 display_venn(list_venn.up)
 
 Intersect <- function (x) {  
@@ -1193,7 +1185,8 @@ Intersect <- function (x) {
 
 intersect.tra.genes.up=Intersect(list_venn.up)
 
-View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes,])
+View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.up,])
+
 
 #1.8.tra downregulated
 tra.1.8.down=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC<0),]$ensembl.transcript
@@ -1204,7 +1197,13 @@ tra.m.b.down=annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC<0),]$en
 
 list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 
-display_venn(list_venn.down)
+# Helper function to display Venn diagram.down
+display_venn.down <- function(x){
+  grid.newpage()
+  venn_object.down <- venn.diagram(x, main=("downregulated TRAS between diffrent stages"), cex.main=2, font.main=4, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename = NULL)
+  grid.draw(venn_object.down)
+}
+display_venn.down(list_venn.down)
 
 intersect.tra.genes.down=Intersect(list_venn.down)
 
