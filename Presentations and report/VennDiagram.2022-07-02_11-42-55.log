@@ -1,0 +1,24 @@
+INFO [2022-07-02 11:42:55] [[1]]
+INFO [2022-07-02 11:42:55] x
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $main
+INFO [2022-07-02 11:42:55] ("downregulated TRAS between diffrent stages")
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $cex.main
+INFO [2022-07-02 11:42:55] [1] 2
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $font.main
+INFO [2022-07-02 11:42:55] [1] 4
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $col.main
+INFO [2022-07-02 11:42:55] [1] "red"
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $category.names
+INFO [2022-07-02 11:42:55] c("1-cell and 8-cell stage", " 8-cell and morula stage", "morula and blastocyst stage")
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $fill
+INFO [2022-07-02 11:42:55] c("#009E73", "#E69F00", "#56B4E9")
+INFO [2022-07-02 11:42:55] 
+INFO [2022-07-02 11:42:55] $filename
+INFO [2022-07-02 11:42:55] NULL
+INFO [2022-07-02 11:42:55] 
