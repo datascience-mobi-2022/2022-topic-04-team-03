@@ -1,7 +1,0 @@
-INFO [2022-06-29 16:03:20] [[1]]
-INFO [2022-06-29 16:03:20] x
-INFO [2022-06-29 16:03:20] 
-INFO [2022-06-29 16:03:20] $filename
-INFO [2022-06-29 16:03:20] NULL
-INFO [2022-06-29 16:03:20] 
-ERROR [2022-06-29 16:03:20] Unexpected parameter length for "category"
