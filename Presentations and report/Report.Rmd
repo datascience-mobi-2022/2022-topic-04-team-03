@@ -1211,7 +1211,7 @@ list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 # Helper function to display Venn diagram.up
 display_venn.up <- function(x){
   grid.newpage()
-  venn_object <- venn.diagram(x,main=("upregulated TRAS between diffrent stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), col.main= "red", filename = NULL)
+  venn_object <- venn.diagram(x, main=("upregulated TRAS between diffrent stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL)
   grid.draw(venn_object)
 }
 
@@ -1251,7 +1251,7 @@ list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 # Helper function to display Venn diagram.down
 display_venn.down <- function(x){
   grid.newpage()
-  venn_object.down <- venn.diagram(x, main=("downregulated TRAS between diffrent stages"), cex.main=2, font.main=4, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename = NULL)
+  venn_object.down <- venn.diagram(x, main=("downregulated TRAS between diffrent stages"), cex.main=2, font.main=4, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
   grid.draw(venn_object.down)
 }
 display_venn.down(list_venn.down)
