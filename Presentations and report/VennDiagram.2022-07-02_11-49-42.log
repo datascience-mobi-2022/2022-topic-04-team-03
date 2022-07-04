@@ -1,0 +1,42 @@
+INFO [2022-07-02 11:49:42] [[1]]
+INFO [2022-07-02 11:49:42] x
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $main
+INFO [2022-07-02 11:49:42] ("upregulated TRAS between diffrent stages")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $category.names
+INFO [2022-07-02 11:49:42] c("1-cell and 8-cell stage", " 8-cell and morula stage", "morula and blastocyst stage")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $fill
+INFO [2022-07-02 11:49:42] c("#009E73", "#E69F00", "#56B4E9")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $col.main
+INFO [2022-07-02 11:49:42] [1] "red"
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $filename
+INFO [2022-07-02 11:49:42] NULL
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] [[1]]
+INFO [2022-07-02 11:49:42] x
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $main
+INFO [2022-07-02 11:49:42] ("downregulated TRAS between diffrent stages")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $cex.main
+INFO [2022-07-02 11:49:42] [1] 2
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $font.main
+INFO [2022-07-02 11:49:42] [1] 4
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $col.main
+INFO [2022-07-02 11:49:42] [1] "red"
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $category.names
+INFO [2022-07-02 11:49:42] c("1-cell and 8-cell stage", " 8-cell and morula stage", "morula and blastocyst stage")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $fill
+INFO [2022-07-02 11:49:42] c("#009E73", "#E69F00", "#56B4E9")
+INFO [2022-07-02 11:49:42] 
+INFO [2022-07-02 11:49:42] $filename
+INFO [2022-07-02 11:49:42] NULL
+INFO [2022-07-02 11:49:42] 

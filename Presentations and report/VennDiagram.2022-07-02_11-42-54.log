@@ -1,0 +1,18 @@
+INFO [2022-07-02 11:42:54] [[1]]
+INFO [2022-07-02 11:42:54] x
+INFO [2022-07-02 11:42:54] 
+INFO [2022-07-02 11:42:54] $main
+INFO [2022-07-02 11:42:54] ("upregulated TRAS between diffrent stages")
+INFO [2022-07-02 11:42:54] 
+INFO [2022-07-02 11:42:54] $category.names
+INFO [2022-07-02 11:42:54] c("1-cell and 8-cell stage", " 8-cell and morula stage", "morula and blastocyst stage")
+INFO [2022-07-02 11:42:54] 
+INFO [2022-07-02 11:42:54] $fill
+INFO [2022-07-02 11:42:54] c("#009E73", "#E69F00", "#56B4E9")
+INFO [2022-07-02 11:42:54] 
+INFO [2022-07-02 11:42:54] $col.main
+INFO [2022-07-02 11:42:54] [1] "red"
+INFO [2022-07-02 11:42:54] 
+INFO [2022-07-02 11:42:54] $filename
+INFO [2022-07-02 11:42:54] NULL
+INFO [2022-07-02 11:42:54] 

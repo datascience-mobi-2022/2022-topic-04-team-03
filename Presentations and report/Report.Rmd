@@ -68,7 +68,6 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
 expression.data <- exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-#save.image(file="normalized_human_data_18290.rda")#
 
 ```
 
@@ -104,7 +103,6 @@ dev.copy2eps(file="boxplot_rawdata_18290.eps")
 boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization")
 
 dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
-dev.off() # what does this function do?
 ```
 
 ### Density Plots
@@ -139,7 +137,6 @@ plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
 title(sub="human embryogenesis rawdata - shifted")
 
 dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
-#dev.off()
 ```
 
 ### Scatter Plot
@@ -162,22 +159,24 @@ for(i in 1:17){
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
   dev.copy2pdf(file = file.name)
-  dev.off()
 }
 ```
 
 ### Data Clean-up
 
 ```{r data clean-up}
+# Create a data frame out of the expression data from the normalized data
+human.vsnrma.df = data.frame(exprs(human.vsnrma))
+
 # Are there any NAs in our dataset?
 sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #> No
 
 ```
 
-## 3.2 Data Analysis
+## 3.2 Annotation
 
-### Annotation
+We want to annotate all the TRA genes in our chips with TRA and ensembl gene information
 
 ```{r }
 # read in ensembl table with following attributes: "Gene stable ID", 
@@ -201,39 +200,23 @@ ensembl.symbols = ensembl.data[,9]
 ```
 
 ```{r}
-# Create a data frame out of the expression data from the normalized data
-human.vsnrma.df = data.frame(exprs(human.vsnrma))
-```
-
-```{r}
 #rename the colnames to the stages
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456643.CEL'] <- '1-cell stage.rep.1'
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456644.CEL'] <- '1-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456645.CEL'] <- '1-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456646.CEL'] <- '2-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456647.CEL'] <- '2-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456648.CEL'] <- '2-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456649.CEL'] <- '4-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456650.CEL'] <- '4-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456651.CEL'] <- '4-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456652.CEL'] <- '8-cell stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456653.CEL'] <- '8-cell stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456654.CEL'] <- '8-cell stage.rep.3' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456655.CEL'] <- 'morula stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456656.CEL'] <- 'morula stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456657.CEL'] <- 'morula stage.rep.3'
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456658.CEL'] <- 'blastocyst stage.rep.1' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456659.CEL'] <- 'blastocyst stage.rep.2' 
-names(human.vsnrma.df)[names(human.vsnrma.df) == 'GSM456660.CEL'] <- 'blastocyst stage.rep.3' 
+names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
+          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
+          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
+          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
+          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
+          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
+colnames(human.vsnrma.df) = names
 ```
 
 ```{r}
 # Check dimensions
 dim(human.vsnrma.df)
 #95,721    18
+
 # exclude Affymetrix control genes which begin with "AFFX"
 human.vsnrma.df2 = human.vsnrma.df[63:95721,]
-
 dim(human.vsnrma.df2)
 # 95,659    18
 ```
@@ -244,6 +227,7 @@ rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
 
 # read in TRA data for human
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+
 tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 dim(tra.data)
 #60131    10
@@ -256,32 +240,38 @@ dim(tra.data)
 j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
 tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
 human.vsnrma.only.tra = human.vsnrma.df2[j,]
-#dim(24783,18)
+dim(human.vsnrma.only.tra)
+#24783 18 
 
 k = which(tra.data$ensembl.transcript %in% tra.extracted)
 tra.expressed.in.chips = tra.data[k,] #24,783 
-#dim(24783,10)
+dim(tra.expressed.in.chips)
+#24783 10
 ```
 
-150 genes weniger als bei anderen zwei Tabellen
+
 
 ```{r}
+#we want to now extract the genes from Ensembl table that are present in the TRAs expressed in our chips
 c = which(ensembl.transcripts %in% tra.extracted)
 ensembl.only.tra = ensembl.data[c,]
-#dim(24623,9)
+dim(ensembl.only.tra)
+#24623 9
 ```
+
+There are 160 genes which are in the TRA table but not in Ensembl table. We downloaded and checked the Ensembl table again, which did not help.
+
 
 ```{r}
 #reorder the rows of ensembl.only.tra and tra.expressed.in.chips
 tra.expressed.in.chips = arrange(tra.expressed.in.chips,ensembl.transcript)
 ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
 
-#fusion of two tables! tra.expressed.in.chips and human.vsnrma.only.tra
+#fusion of two tables: tra.expressed.in.chips and human.vsnrma.only.tra
 fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
 colnames(fusion.tra.expression.tra.table)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
 
-
-# fusion of fusion.tra.expression.tra.table and ensembl.only.tra because ensembl.new contains less rows than the other two tables
+# fusion of fusion.tra.expression.tra.table and ensembl.only.tra (aware that ensembl.only.tra table contains less rows than the other two tables due to the 160 missing genes)
 p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
 fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
 fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
@@ -295,35 +285,41 @@ write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expres
 
 ```
 
-### Exploratory data analysis
+### 3.3 Exploratory data analysis
+
+We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
 ```{r}
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
-tissue = c("Brain","Esophagus","Heart","Liver","Cervix","Muscle","Ovary","Colon","Breast","Kidney","Pituitary","Testis","Whole Blood","Cells - Transformed fibroblasts", "Cells - EBV-transformed lymphocytes", "Spleen","Lung","Stomach","Pancreas","Small Intestine","Skin","Artery","Adrenal","Gland","Pituitary","Nerve","Minor","Salivary","Bladder","Adipose","Thyroid","Prostate","Vagina")
+tissue=data.frame(table(tra.data$max.tissue))$Var1
+length(tissue) #53
 tissue.number = c()
 
-for (i in 1:33) {
+for (i in 1:53) {
   tissue.number[[i]] = nrow(fusion.tra.expression.tra.table.ensembl.table %>% filter(grepl(tissue[i],fusion.tra.expression.tra.table.ensembl.table[,21])))
 }
 print(tissue.number)
-tissue.distribution = cbind(tissue,tissue.number)
+tissue.distribution = cbind(as.vector(tissue),tissue.number)
+names(tissue.distribution)=c("max.tissue","tissue.number")
 tissue.distribution = as.data.frame(tissue.distribution)
 ```
 
 ```{r}
-# Arranging the list according to the descending TRAs number
+# Arranging the list according to the descending TRA number
 tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
 ```
 
 ```{r}
-# Create a barplot
+# Create a barplot to present the TRA distribution of our chips
 coul <- brewer.pal(5, "Set2")
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$tissue[1:10],cex.names=0.8,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.5,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
 dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 ```
+
+shitty heatamp, do we want to keep it?
 
 ```{r}
 # Create a heatmap of the TRA genes in our dataset
@@ -344,11 +340,13 @@ dev.copy2pdf(file="heatmap.pdf")
 
 ```
 
-### Principal component analysis
+## 3.4 Data analysis
+### 3.4.1 Principle Component Analysis
 
-```{r code von Carl}
-###Using PCA to analyse our 18 chips, to see whether there are any outlier chip and whether the different replicates cluster with each other.
+Using PCA to analyse our 18 chips, to see whether there are any outlier-chip and whether the replicates from different stages cluster with each other.
 
+```{r PCA}
+#conducting PCA
 topVar = apply(human.vsnrma.df2, 1, var)
 q75 = quantile(topVar, probs = 0.75)
 i.topvar = which(topVar >= q75)
@@ -360,6 +358,7 @@ print(pca)
 ```
 
 ```{r show how much variance each PC explains}
+#show how much variance each PC explains
 plot(pca$sdev)
 variance = (pca$sdev)^2
 prop.variance = variance/sum(variance)
@@ -425,7 +424,8 @@ model$cluster
 
 Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 
-Plot the Siloutte plo
+
+Plot the Siloutte plot
 
 ```{r Use map_dbl to run many models with varying value of k}
 sil_width <- map_dbl(2:10,  function(k){
@@ -462,6 +462,7 @@ pam_k4$clustering
 ```
 
 Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
+
 
 Using Kmeans based on the original expression data (human.vsnrma.df2) to cluster and compare the results with the Kmeans results based on 4PCs
 
@@ -648,7 +649,9 @@ k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_
 fusion.tra.expression.tra.table.ensembl.table[k,]
 ```
 
-### Limma analysis
+### 3.4.2 Limma analysis
+
+Using Limma analysis, we want to find out differential expressed genes (DEGs) between different stages. We will conduct the test among every two stages but only look at the results of the stages between different clusters (showed in PCA): stage 1 cell-8 cell, stage 8 cell - morula, stage morula - blastocyst
 
 ```{r limma Analysis}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
@@ -702,6 +705,7 @@ pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
 # 0
 
 ```
+*creating fit tables between every two stages*
 
 ```{r fitFunction}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
@@ -730,6 +734,8 @@ fit.8.b = fit.function(14)
 fit.m.b = fit.function(15)
 ```
 
+*using toptable function to create limma table (only significant DEGs!) for every two stages*
+
 ```{r topTable function}
 top.table = function(i){
   fit.table = contrasts.fit(fit, contrasts = cm[,i])
@@ -757,6 +763,8 @@ limma.table.8.m = top.table(13)
 limma.table.8.b = top.table(14)
 limma.table.m.b = top.table(15)
 ```
+
+*we annotate the limma table (only significant DEGs) with ensembl*
 
 ```{r annotation function}
 limma.annotation = function(x){
@@ -791,6 +799,8 @@ annotated.limma.8.m = limma.annotation(limma.table.8.m)
 annotated.limma.8.b = limma.annotation(limma.table.8.b)
 annotated.limma.m.b = limma.annotation(limma.table.m.b)
 ```
+
+*we extract the TRAs from ensembl annotated limma table (only significant DEGs) and annotate these significant differentially expressed TRAs with TRA information*
 
 ```{r limma TRAs}
 #annotated limma tables mit TRAs annotaten
@@ -833,6 +843,9 @@ annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.tr
 
 ```
 
+#### Tissue plot
+
+we want to visualize the expression of TRAs among the different stages
 
 ```{r tissue plot}
 #Erstellen Means pro stage pro tissue
@@ -878,13 +891,14 @@ ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1
 
 ```
 
-### filter DE genes
-create Volcanoplots to visualize the DE genes
-using Enhancedvolcanoplot with input from limma tables that contain all genes
+#### filter DE genes & volcanoplots
 
-we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
+we create volcanoplots to visualize the DEGs
+
+so far, our limma table only contains significant DEGs. To demonstrate other genes that do not show differential expression we need to create a limma table with all genes. By doing that we found that the ensembl table has some transcripts that repeats itself, so we only select the unique transcripts from the ensembl data
 
 ```{r}
+#find out repeating transcripts in ensembl.data
 n_occur=data.frame(table(ensembl.data$Transcript.stable.ID))
 n_occur=arrange(n_occur,desc(n_occur$Freq))
 a=sum(n_occur$Freq>1)
@@ -892,13 +906,16 @@ duplicate.ensembl=n_occur$Var1[1:40]
 j=which(ensembl.data$Transcript.stable.ID%in%duplicate.ensembl)  
 ensembl.duplicate=ensembl.data[j,]
 ensembl.duplicate=arrange(ensembl.duplicate,ensembl.duplicate$Transcript.stable.ID)
+
+#delete the repeating transcripts
 Nth.delete<-function(dataframe, n)dataframe[-(seq(n,to=nrow(dataframe),by=n)),]
 ensembl.duplicate.genes=Nth.delete(ensembl.duplicate, 2)
 ensembl.unique=rbind(ensembl.data[-j,],ensembl.duplicate.genes)
 ```
 
 
-generate a function with the output of limma tables (complete) with sig. genes and non sig. genes
+generate a function with the output of limma tables with sig. genes and non sig. genes
+
 ```{r limma tables with sig & non sig. genes}
 generate.limma.table.vollst = function(fit,n){
   fit.1 = contrasts.fit(fit, contrasts = cm[,n])
@@ -925,8 +942,6 @@ limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
 
 anotation of the limma table (complete) with emsembl information
 ```{r}
-ensembl.limma.annotation = function(x){}
-#=======
 
 ensembl.limma.annotation <- function(x){
   a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
@@ -949,122 +964,144 @@ annotated.limma.table.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8
 annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
 ```
 
+we want to plot three volcanoplots (between 1-cell and 8-cell stage, 8-cell stage and morula stage, morula stage and blastocyst stage). We decided to highlight 10 highst up-regulated TRAs and 10 highst down-regulated TRAs.
+
 ```{r volcano plots}
-EnhancedVolcano(annotated.limma.table.vollst.1.8[,1:6],lab = annotated.limma.table.vollst.1.8[,7],title = "1-cell stadium vs. 8-cell stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)',pCutoff = 0.01,
-                FCcutoff = 4, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
 
-EnhancedVolcano(annotated.limma.table.vollst.8.m[,1:6],lab = annotated.limma.table.vollst.8.m[,7],title = "8-cell stadium vs. morula stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val', ylab = '-log(adj.P.Val)', pCutoff = 0.01,
-                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+#for the stage between 1-cell and 8-cell stage
+annotated.limma.table.vollst.1.8 <- annotated.limma.table.vollst.1.8 %>% 
+  mutate(
+    Expression = case_when(logFC > 2 & adj.P.Val < 0.01 ~ "Up-regulated",
+                           logFC < -2 & adj.P.Val < 0.01 ~ "Down-regulated",
+                           TRUE ~ "Unchanged"))
 
-EnhancedVolcano(annotated.limma.table.vollst.m.b[,1:6],lab = annotated.limma.table.vollst.m.b[,7],title = "morula stadium vs. blastocyst stadium",x = 'logFC',xlab = 'logFC',y = 'adj.P.Val',ylab = '-log(adj.P.Val)', pCutoff = 0.01,
-                FCcutoff = 3, pointSize = 1.5,labSize = 2.5, legendLabels = c('Not sig.','LogFC','adj.P.value','p-value & LogFC'))
+
+#extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
+
+top <- 10
+top_genes_tra.1.8 <- bind_rows(
+  annotated.limma.1.8.tra %>% 
+    filter(logFC >2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC))) %>% 
+    head(top),
+  annotated.limma.1.8.tra %>% 
+    filter(logFC< -2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC)))
+  %>%head(top)
+  )
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+write.csv(top_genes_tra.1.8, file="top_genes_tra.1.8.csv")
+
+#create a volcanoplot
+p1 <- ggplot(annotated.limma.table.vollst.1.8, aes(logFC, -log(adj.P.Val,10)))+
+  geom_point(aes(color = Expression),size = 2/5)+  
+  ggtitle("Volcanoplot 1-cell stage between 8-cell stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  xlab(expression("log"[10]*"FC")) + 
+  ylab(expression("-log"[10]*"(adj.P.Val)"))+
+  geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
+  geom_hline(yintercept=-log10(0.01), col="black",linetype = "dashed")
+
+#label the 20 most interesting differencially expressed TRA genes
+p1 <-  p1 +
+  geom_label_repel(data = top_genes_tra.1.8,
+                   mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
+                   size = 1.75)
+
 ```
+Repeating the same procedure with the other three stages
+```{r}
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot
+annotated.limma.table.vollst.8.m <- annotated.limma.table.vollst.8.m %>% 
+  mutate(
+    Expression = case_when(logFC >= 2 & adj.P.Val < 0.01 ~ "Up-regulated",
+                           logFC <= -2 & adj.P.Val < 0.01 ~ "Down-regulated",
+                           TRUE ~ "Unchanged"))
 
-annotate the tra genes in limma tables (only sig. genes) with tra information
+
+#extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
+
+top <- 10
+top_genes_tra.8.m <- bind_rows(
+  annotated.limma.8.m.tra %>% 
+    filter(logFC >2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC))) %>% 
+    head(top),
+  annotated.limma.8.m.tra %>% 
+    filter(logFC< -2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC)))
+  %>%head(top)
+)
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+write.csv(top_genes_tra.8.m, file="top_genes_tra.8.m.csv")
+
+
+#create a volcanoplot
+p1 <- ggplot(annotated.limma.table.vollst.8.m, aes(logFC, -log(adj.P.Val,10)))+
+  geom_point(aes(color = Expression),size = 2/5)+  
+  ggtitle("Volcanoplot 8-cell stage between morula stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  xlab(expression("log"[10]*"FC")) + 
+  ylab(expression("-log"[10]*"(adj.P.Val)"))+
+  geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
+  geom_hline(yintercept=-log10(0.01), col="black",linetype = "dashed")
+
+#label the 20 most interesting differentially expressed TRA genes
+p1 <-  p1 +
+  geom_label_repel(data = top_genes_tra.8.m,
+                   mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
+                   size = 1.5)
+
+```
 
 ```{r}
-fuse.tra.limma <- function(x){
-  
-  x = arrange(x,rownames(x))
-  j = which(rownames(x) %in% tra.data$ensembl.transcript) 
-  
-  tra.extracted.stages = rownames(x)[j] 
-  
-  tra.stages = x[j,]
-  
-  k = which(tra.data$ensembl.transcript %in% tra.extracted.stages)
-  tra.data.stages = tra.data[k,]
-  tra.data.stages = arrange(tra.data.stages,tra.data.stages$ensembl.transcript)
-  
-  tra.limma.stages = cbind(tra.stages,tra.data.stages$ensembl.gene,tra.data.stages$tiss.number,tra.data.stages$tissues,tra.data.stages$max.tissue)
-  colnames(tra.limma.stages)[10:13]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
-  
-  
-  x = cbind(x,"ensembl.gene","tissue.number","tissues","max.tissue")
-  x[,10:13] = "NA"
-  colnames(x)[10:13] = c("ensembl.gene","tissue.number","tissues","max.tissue")
-  annotated.tra.limma.stages = rbind(tra.limma.stages,x[-j,])
-  annotated.tra.limma.stages = arrange(annotated.tra.limma.stages,desc(annotated.tra.limma.stages$logFC))
-  return(annotated.tra.limma.stages)
-}
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot
+annotated.limma.table.vollst.m.b <- annotated.limma.table.vollst.m.b %>% 
+  mutate(
+    Expression = case_when(logFC >= 2 & adj.P.Val < 0.01 ~ "Up-regulated",
+                           logFC <= -2 & adj.P.Val < 0.01 ~ "Down-regulated",
+                           TRUE ~ "Unchanged"))
+
+
+#extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
+
+top <- 10
+top_genes_tra.m.b <- bind_rows(
+  annotated.limma.m.b.tra %>% 
+    filter(logFC >2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC))) %>% 
+    head(top),
+  annotated.limma.m.b.tra %>% 
+    filter(logFC < -2) %>% 
+    arrange(adj.P.Val,desc(abs(logFC)))
+  %>%head(top)
+)
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+write.csv(top_genes_tra.m.b, file="top_genes_tra.m.b.csv")
+
+
+#create a volcanoplot
+p1 <- ggplot(annotated.limma.table.vollst.m.b, aes(logFC, -log(adj.P.Val,10)))+
+  geom_point(aes(color = Expression),size = 2/5)+  
+  ggtitle("Volcanoplot morula stage between blastocyst stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  xlab(expression("log"[10]*"FC")) + 
+  ylab(expression("-log"[10]*"(adj.P.Val)"))+
+  geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
+  geom_hline(yintercept=-log10(0.01), col="black",linetype = "dashed")
+
+#label the 20 most interesting differentially expressed TRA genes
+p1 <-  p1 +
+  geom_label_repel(data = top_genes_tra.m.b,
+                   mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
+                   size = 1.75)
 
 ```
 
-```{r}
-###1.8-stadium
-annotated.tra.limma.1.8 = fuse.tra.limma(annotated.limma.1.8)
-###8.m-stadium  
-annotated.tra.limma.8.m = fuse.tra.limma(annotated.limma.8.m) 
-###m.b-stadium
-annotated.tra.limma.m.b = fuse.tra.limma(annotated.limma.m.b)
 
-View(annotated.tra.limma.1.8)
-```
+### 3.4.3 Set enrichment analysis
 
-filter the top 20 DE upregulated genes for diffrent stages:
-```{r 1 cell & 8 cell}
-  #abline(v=mean(abs(limma.table.1.8$logFC)))#
-  #c=which(limma.table.1.8$logFC< 0)
-  #limma.1.8.down=limma.table.1.8[c,]
-  #limma.1.8.down.sig=rownames(annotated.limma.1.8.down[which(annotated.limma.1.8.down$P.Value < 0.05),])
-  #limma.table.1.8.arranged=arrange(limma.table.1.8,desc(abs(logFC)))
-  #limma.1.8.down.sig=arrange(limma.1.8.down.sig,)
- hist(annotated.limma.1.8$logFC)
-c=which(annotated.limma.1.8$logFC > 2)
-limma.table.1.8.up=annotated.limma.1.8[c,]
-limma.1.8.up.sig=limma.table.1.8.up[which(limma.table.1.8.up$P.Value < 0.05),]
-limma.1.8.up.sig=arrange(limma.1.8.up.sig,desc(limma.1.8.up.sig$logFC))  
-interesting_genes.1.8=rownames(limma.1.8.up.sig[1:20,])
-
-k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.1.8)
-  View(fusion.tra.expression.tra.table.ensembl.table[k,])
-  
-j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.1.8 )
-  View(ensembl.data[j,])
-```
-
-```{r between 8 cell & m}
-hist(limma.table.8.m$logFC)
-
-  
-  #c=which(limma.table.8.m$logFC< -3)
-  #limma.table.8.m.down=limma.table.8.m[c,]
-  #limma.8.m.down.sig=rownames(limma.table.8.m.down[which(limma.table.1.8.down$P.Value < 0.05),])
-  #c=which(limma.table.8.m$logFC > 4)
-  
-  c=which(annotated.limma.8.m$logFC > 2)
-  limma.table.8.m.up=annotated.limma.8.m[c,]
-  limma.8.m.up.sig=limma.table.8.m.up[which(limma.table.8.m.up$P.Value < 0.05),]
-  limma.8.m.up.sig=arrange(limma.8.m.up.sig,desc(limma.8.m.up.sig$logFC))  
-  
-  #Transcript of Top 20 genes
-  interesting_genes.8.m=rownames(limma.8.m.up.sig[1:20,])
-  #Name of Top 20 genes
-  limma.8.m.up.sig[1:20,]$`ensembl.new$Gene.name`
-  
-  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.8.m)
-  View(fusion.tra.expression.tra.table.ensembl.table[k,])
-  
-  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.8.m )
-  View(ensembl.data[j,])
-```
-
-```{r between m - b stadium}
-  c=which(annotated.limma.m.b$logFC > 2)
-  limma.table.m.b.up=annotated.limma.m.b[c,]
-  limma.m.b.up.sig=limma.table.m.b.up[which(limma.table.m.b.up$P.Value < 0.05),]
-  limma.m.b.up.sig=arrange(limma.m.b.up.sig,desc(limma.m.b.up.sig$logFC))  
-  interesting_genes.m.b=rownames(limma.m.b.up.sig[1:20,])
-  
-  k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% interesting_genes.m.b)
-  View(fusion.tra.expression.tra.table.ensembl.table[k,])
-  
-  j = which(ensembl.data$Transcript.stable.ID%in%interesting_genes.m.b)
-  View(ensembl.data[j,])
-```
-
-
-### Set enrichment analysis
 
 ```{r}
 # Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for SEA-code
@@ -1148,10 +1185,12 @@ SEA.8.b = SEA.function(fit.8.b)
 SEA.m.b = SEA.function(fit.m.b)
 ```
 
-### Venn Diagramm
+### 3.4.4 Venn diagram
 
-```{r Venn Diagramm }
-##creating demo data
+Using Venn diagram, we want to find out which genes are continuously up/down-regulated during every stage. They could be important for the embryogenesis.
+
+```{r Venn diagram }
+#creating demo data for Venn diagram
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
 #8.m.tra Upregulated
@@ -1169,8 +1208,9 @@ display_venn.up <- function(x){
 }
 
 #venn plot up
-display_venn(list_venn.up)
+display_venn.up(list_venn.up)
 
+#create a function to give the name of the genes in the intersection of three stages
 Intersect <- function (x) {  
   # Multiple set version of intersect
   # x is a list
@@ -1184,6 +1224,9 @@ Intersect <- function (x) {
 }
 
 intersect.tra.genes.up=Intersect(list_venn.up)
+#9 genes are continuously up-regulated from 1-cell stage to blastocyst stage
+
+
 
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.up,])
 
@@ -1206,7 +1249,7 @@ display_venn.down <- function(x){
 display_venn.down(list_venn.down)
 
 intersect.tra.genes.down=Intersect(list_venn.down)
+#5 genes are continuously down-regulated from 1-cell stage to blastocyst stage
 
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 ```
-
