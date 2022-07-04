@@ -1193,6 +1193,13 @@ SEA.8.b = SEA.function(fit.8.b)
 SEA.m.b = SEA.function(fit.m.b)
 ```
 
+```{r GO}
+SEA.function.GO = function(x){
+  enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
+  topGO(enrich_go)
+}
+```
+
 ### 3.4.4 Venn diagram
 
 Using Venn diagram, we want to find out which genes are continuously up/down-regulated during every stage. They could be important for the embryogenesis.
