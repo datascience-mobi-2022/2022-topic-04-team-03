@@ -403,6 +403,7 @@ Now we want to use Kmeans on the first 4 PCs (which explain 90% of the Variance)
 
 ```{r run models with varying value of k}
 #Use map_dbl to run many models with varying value of k (centers)
+#calculate the total within-cluster sum of square
 tot_withinss <- map_dbl(1:10,  function(k){
   model <- kmeans(x = pca$x[,1:4], centers = k,nstart=30)
   model$tot.withinss
@@ -410,7 +411,7 @@ tot_withinss <- map_dbl(1:10,  function(k){
 ```
 
 ```{r data frame with k & tot_withinns}
-# Generate a data frame containing both k and tot_withinss
+# Generate a data frame containing both k and total within-cluster sum of square
 elbow_df <- data.frame(
   k = 1:10 ,
   tot_withinss = tot_withinss
@@ -1261,3 +1262,70 @@ intersect.tra.genes.down=Intersect(list_venn.down)
 
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 ```
+
+### 3.5 chemokine extraction
+
+```{r}
+#extract chemokine genes that are TRAs
+extract.chemokine.tra <- function(x){
+x.chemokine.tra=x[which(rownames(x) %in% chemokine.tra.list$Transcript.stable.ID),]
+  return(x.chemokine.tra)
+}
+
+annotated.limma.1.8.chemokine.tra=extract.chemokine.tra(annotated.limma.1.8)
+dim(annotated.limma.1.8.chemokine.tra)
+#0 9
+annotated.limma.8.m.chemokine.tra=extract.chemokine.tra(annotated.limma.8.m)
+dim(annotated.limma.8.m.chemokine.tra)
+#0 9
+annotated.limma.m.b.chemokine.tra=extract.chemokine.tra(annotated.limma.m.b)
+dim(annotated.limma.m.b.chemokine.tra)
+#0 9
+
+#no TRA chemokines found in limma tables
+#looking for non-TRA chemokines in limma tables
+
+extract.chemokine <- function(x){
+  x.chemokine=x[which(rownames(x) %in% chemokine.list$Transcript.stable.ID),]
+  return(x.chemokine)
+}
+
+annotated.limma.1.8.chemokine=extract.chemokine(annotated.limma.1.8)
+dim(annotated.limma.1.8.chemokine)
+#6 9
+
+unique(annotated.limma.1.8.chemokine$gene.name)
+#"CCR3" Up-regulated  "CXCL14" Down-regulated
+
+annotated.limma.8.m.chemokine=extract.chemokine(annotated.limma.8.m)
+dim(annotated.limma.8.m.chemokine)
+#4 9
+
+unique(annotated.limma.8.m.chemokine$gene.name)
+#"CCL15" Down-regulated
+
+
+
+annotated.limma.m.b.chemokine=extract.chemokine(annotated.limma.m.b)
+dim(annotated.limma.m.b.chemokine)
+#4 9
+
+
+
+unique(annotated.limma.m.b.chemokine$gene.name)
+#"CCL15" Up-regulated
+
+human.vsnrma.df2$ensembl.transcripts=rownames(human.vsnrma.df2)
+colnames(ensembl.data)[3]<- c("ensembl.transcripts")
+
+human.ensembl=merge(x=human.vsnrma.df2,y=ensembl.data, all.x = TRUE,by="ensembl.transcripts")
+
+human.ensembl.1.8.chemokine=human.ensembl[which(human.ensembl$ensembl.transcripts %in% rownames(annotated.limma.1.8.chemokine)),]
+
+a=c("CCL15","CCR3","CXCL14")
+human.ensembl.tra=human.ensembl[which(human.ensembl[,23] %in% a),]
+human.ensembl.tra.mat=as.matrix(human.ensembl.tra[,2:19])
+heatmap=pheatmap(human.ensembl.tra.mat, cluster_cols=FALSE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5)
+
+```
+
