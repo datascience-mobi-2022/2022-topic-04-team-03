@@ -10,6 +10,12 @@ library(pheatmap)
 library(dplyr)
 library(tidyverse)
 library(hexbin)
+library(cluster)
+library(factoextra)
+library(EnhancedVolcano)
+library(org.Hs.eg.db)
+library(RColorBrewer)
+library(VennDiagram)
 
 
 # 2) Read in .CEL files
