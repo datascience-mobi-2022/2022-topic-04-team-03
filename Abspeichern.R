@@ -16,6 +16,7 @@ library(EnhancedVolcano)
 library(org.Hs.eg.db)
 library(RColorBrewer)
 library(VennDiagram)
+library(GO.db)
 
 
 # 2) Read in .CEL files
