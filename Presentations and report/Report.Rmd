@@ -376,9 +376,17 @@ abline(h=0.9)
 4 PCs are enough to show more than 90%
 
 ```{r Plot PC1 and PC2}
-color = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
+
+par(mar=c(5, 4, 4, 10), xpd=TRUE)
 
 plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+
+color2= c("red","orange","yellow","green","blue","purple")
+
+legend(x = 190,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
+
+
 ```
 
 We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
@@ -412,7 +420,7 @@ elbow_df <- data.frame(
 ```{r plot with elbow plot}
 ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
   geom_line() +
-  scale_x_continuous(breaks = 1:10)
+  scale_x_continuous(breaks = 1:10) 
 ```
 
 seems like k=2 is the best
@@ -446,7 +454,7 @@ sil_df <- data.frame(
 # Plot the relationship between k and sil_width
 ggplot(sil_df, aes(x = k, y = sil_width)) +
   geom_line() +
-  scale_x_continuous(breaks = 2:10)
+  scale_x_continuous(breaks = 2:10) + labs(y= "Silhouette Width")
 ```
 
 it seems like that k=4 is a good choice
@@ -996,8 +1004,8 @@ write.csv(top_genes_tra.1.8, file="top_genes_tra.1.8.csv")
 #create a volcanoplot
 p1 <- ggplot(annotated.limma.table.vollst.1.8, aes(logFC, -log(adj.P.Val,10)))+
   geom_point(aes(color = Expression),size = 2/5)+  
-  ggtitle("Volcanoplot 1-cell stage between 8-cell stage")+
-  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  ggtitle("Volcanoplot between 1-cell stage and 8-cell stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=20))+
   xlab(expression("log"[10]*"FC")) + 
   ylab(expression("-log"[10]*"(adj.P.Val)"))+
   geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
