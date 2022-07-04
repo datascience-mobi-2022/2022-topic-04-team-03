@@ -1192,6 +1192,17 @@ SEA.4.b = SEA.function(fit.4.b)
 SEA.8.m = SEA.function(fit.8.m)
 SEA.8.b = SEA.function(fit.8.b)
 SEA.m.b = SEA.function(fit.m.b)
+
+enrich_go = kegga(fit.8.m, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
+  a=topKEGG(enrich_go, ontology ="BP")
+
+SEA.function.GO = function(x){
+  enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
+  topGO(enrich_go, ontology ="ALL")
+}
+
+a=SEA.function.GO(fit.8.m)
+
 ```
 
 
@@ -1200,6 +1211,9 @@ SEA.function.GO = function(x){
   enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
   topGO(enrich_go, ontology ="BP")
 }
+
+a=SEA.function.GO(fit.8.m)
+b=SEA.function.GO(fit.m.b)
 ```
 
 ### 3.4.4 Venn diagram
