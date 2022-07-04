@@ -681,11 +681,11 @@ stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastoc
 design = model.matrix(~0 + stage)
             
 # Create a contrast matrix which compares all the stages with one another 
-cm = makeContrasts(stage1.2 = stage1-stage2, stage1.4 = stage1-stage4, stage1.8 = stage1-stage8, stage1.morula = stage1-stagemorula, stage1.blastocyst = stage1-stageblastocyst,
-                   stage2.4 = stage2-stage4, stage2.8 = stage2-stage8, stage2.morula = stage2-stagemorula,  stage2.blastocyst = stage2-stageblastocyst,
-                   stage4.8 = stage4-stage8, stage4.morula = stage4-stagemorula,  stage4.blastocyst = stage4-stageblastocyst,
-                   stage8.morula = stage8-stagemorula, stage8.blastocyst = stage8-stageblastocyst,
-                   stagemorula.blastocyst = stagemorula-stageblastocyst, 
+cm = makeContrasts(stage1.2 = stage2-stage1, stage1.4 = stage4-stage1, stage1.8 = stage8-stage1, stage1.morula = stagemorula-stage1, stage1.blastocyst = stageblastocyst-stage1,
+                   stage2.4 = stage4-stage2, stage2.8 = stage8-stage2, stage2.morula = stagemorula-stage2,  stage2.blastocyst = stageblastocyst-stage2,
+                   stage4.8 = stage8-stage4, stage4.morula = stagemorula-stage4,  stage4.blastocyst = stageblastocyst-stage4,
+                   stage8.morula = stagemorula-stage8, stage8.blastocyst = stageblastocyst-stage8,
+                   stagemorula.blastocyst = stageblastocyst-stagemorula, 
                    levels = design)
 
 # Fit the coefficients of the model
@@ -949,7 +949,7 @@ limma.table.vollst.8.b=generate.limma.table.vollst(fit,14)
 limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
 ```
 
-anotation of the limma table (complete) with emsembl information
+annotation of the limma table (complete) with emsembl information
 ```{r}
 
 ensembl.limma.annotation <- function(x){
@@ -1233,7 +1233,7 @@ Intersect <- function (x) {
 }
 
 intersect.tra.genes.up=Intersect(list_venn.up)
-#9 genes are continuously up-regulated from 1-cell stage to blastocyst stage
+#5 genes are continuously up-regulated from 1-cell stage to blastocyst stage
 
 
 
@@ -1258,7 +1258,7 @@ display_venn.down <- function(x){
 display_venn.down(list_venn.down)
 
 intersect.tra.genes.down=Intersect(list_venn.down)
-#5 genes are continuously down-regulated from 1-cell stage to blastocyst stage
+#9 genes are continuously down-regulated from 1-cell stage to blastocyst stage
 
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 ```
@@ -1267,6 +1267,17 @@ View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expressio
 
 ```{r}
 #extract chemokine genes that are TRAs
+chemokine.tra.list=fusion.tra.expression.tra.table.ensembl.table[which(grepl("motif chemokine",fusion.tra.expression.tra.table.ensembl.table[,24])),]
+dim(chemokine.tra.list)
+n_occur=data.frame(table(chemokine.tra.list$Chromosome.scaffold.name))
+print(n_occur)
+#62 25
+chemokine.list=ensembl.data[which(grepl("motif chemokine",ensembl.data[,8])),]
+dim(chemokine.list)
+# 280 9
+
+
+
 extract.chemokine.tra <- function(x){
 x.chemokine.tra=x[which(rownames(x) %in% chemokine.tra.list$Transcript.stable.ID),]
   return(x.chemokine.tra)
@@ -1274,13 +1285,13 @@ x.chemokine.tra=x[which(rownames(x) %in% chemokine.tra.list$Transcript.stable.ID
 
 annotated.limma.1.8.chemokine.tra=extract.chemokine.tra(annotated.limma.1.8)
 dim(annotated.limma.1.8.chemokine.tra)
-#0 9
+#0 11
 annotated.limma.8.m.chemokine.tra=extract.chemokine.tra(annotated.limma.8.m)
 dim(annotated.limma.8.m.chemokine.tra)
-#0 9
+#0 11
 annotated.limma.m.b.chemokine.tra=extract.chemokine.tra(annotated.limma.m.b)
 dim(annotated.limma.m.b.chemokine.tra)
-#0 9
+#0 11
 
 #no TRA chemokines found in limma tables
 #looking for non-TRA chemokines in limma tables
@@ -1292,17 +1303,17 @@ extract.chemokine <- function(x){
 
 annotated.limma.1.8.chemokine=extract.chemokine(annotated.limma.1.8)
 dim(annotated.limma.1.8.chemokine)
-#6 9
+#6 11
 
 unique(annotated.limma.1.8.chemokine$gene.name)
-#"CCR3" Up-regulated  "CXCL14" Down-regulated
+#"CCR3" Down-regulated  "CXCL14" Up-regulated
 
 annotated.limma.8.m.chemokine=extract.chemokine(annotated.limma.8.m)
 dim(annotated.limma.8.m.chemokine)
 #4 9
 
 unique(annotated.limma.8.m.chemokine$gene.name)
-#"CCL15" Down-regulated
+#"CCL15" Up-regulated
 
 
 
@@ -1313,7 +1324,7 @@ dim(annotated.limma.m.b.chemokine)
 
 
 unique(annotated.limma.m.b.chemokine$gene.name)
-#"CCL15" Up-regulated
+#"CCL15" Down-regulated
 
 human.vsnrma.df2$ensembl.transcripts=rownames(human.vsnrma.df2)
 colnames(ensembl.data)[3]<- c("ensembl.transcripts")
