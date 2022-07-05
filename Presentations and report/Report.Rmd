@@ -1211,6 +1211,7 @@ SEA.function.GO = function(x){
   enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
   topGO(enrich_go, ontology ="BP")
 }
+#gene.pathway als Argument oder zb getGeneKEGGLinks(species.KEGG).
 
 a=SEA.function.GO(fit.8.m)
 b=SEA.function.GO(fit.m.b)
@@ -1285,7 +1286,7 @@ intersect.tra.genes.down=Intersect(list_venn.down)
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 ```
 
-```{r}
+```{r chemokine analysis}
 #extract chemokine
 chemokine.tra.list=fusion.tra.expression.tra.table.ensembl.table[which(grepl("motif chemokine",fusion.tra.expression.tra.table.ensembl.table[,24])),]
 dim(chemokine.tra.list)
