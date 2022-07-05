@@ -681,11 +681,11 @@ stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastoc
 design = model.matrix(~0 + stage)
             
 # Create a contrast matrix which compares all the stages with one another 
-cm = makeContrasts(stage1.2 = stage1-stage2, stage1.4 = stage1-stage4, stage1.8 = stage1-stage8, stage1.morula = stage1-stagemorula, stage1.blastocyst = stage1-stageblastocyst,
-                   stage2.4 = stage2-stage4, stage2.8 = stage2-stage8, stage2.morula = stage2-stagemorula,  stage2.blastocyst = stage2-stageblastocyst,
-                   stage4.8 = stage4-stage8, stage4.morula = stage4-stagemorula,  stage4.blastocyst = stage4-stageblastocyst,
-                   stage8.morula = stage8-stagemorula, stage8.blastocyst = stage8-stageblastocyst,
-                   stagemorula.blastocyst = stagemorula-stageblastocyst, 
+cm = makeContrasts(stage1.2 = stage2-stage1, stage1.4 = stage4-stage1, stage1.8 = stage8-stage1, stage1.morula = stagemorula-stage1, stage1.blastocyst =stageblastocyst-stage1,
+                   stage2.4 = stage4-stage2, stage2.8 = stage8-stage2, stage2.morula = stagemorula-stage2,  stage2.blastocyst = stageblastocyst-stage2,
+                   stage4.8 = stage8-stage4, stage4.morula = stagemorula-stage4,  stage4.blastocyst = stageblastocyst-stage4,
+                   stage8.morula = stagemorula-stage8, stage8.blastocyst = stageblastocyst-stage8,
+                   stagemorula.blastocyst =stageblastocyst -stagemorula, 
                    levels = design)
 
 # Fit the coefficients of the model
@@ -988,7 +988,7 @@ annotated.limma.table.vollst.1.8 <- annotated.limma.table.vollst.1.8 %>%
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
 
-top <- 10
+top <- 20
 top_genes_tra.1.8 <- bind_rows(
   annotated.limma.1.8.tra %>% 
     filter(logFC >2) %>% 
