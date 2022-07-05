@@ -1215,10 +1215,12 @@ enrich_go = kegga(fit.8.m, geneid = annotated.human.vsnrma.df2$entrez, species =
 
 SEA.function.GO = function(x){
   enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
-  topGO(enrich_go, ontology ="ALL")
+  topGO(enrich_go, ontology ="BP",number=Inf)
 }
 
-a=SEA.function.GO(fit.8.m)
+SEA.GO.1.8=SEA.function.GO(fit.1.8)
+SEA.GO.8.m=SEA.function.GO(fit.8.m)
+SEA.GO.m.b=SEA.function.GO(fit.m.b)
 
 ```
 
