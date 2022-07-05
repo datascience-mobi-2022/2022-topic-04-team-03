@@ -4,7 +4,7 @@ date: "Data Analysis Project SS22"\
 supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.align = 'centre', message=FALSE)
+knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE)
 knitr::opts_knit$set(root.dir = "")
 getwd()
 ```
@@ -322,7 +322,7 @@ dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 
 shitty heatamp, do we want to keep it?
 
-```{r}
+```{r heatmap, eval =FALSE}
 # Create a heatmap of the TRA genes in our dataset
 ## What does unlist mean? -> Transforms list into matrix
 human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 6, nrow = 24783)
