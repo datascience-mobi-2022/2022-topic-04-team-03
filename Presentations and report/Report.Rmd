@@ -1219,9 +1219,12 @@ SEA.function.GO = function(x){
 }
 
 SEA.GO.1.8=SEA.function.GO(fit.1.8)
+setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+write.csv(SEA.GO.1.8, file="SEA.GO.1.8.csv")
 SEA.GO.8.m=SEA.function.GO(fit.8.m)
+write.csv(SEA.GO.8.m, file="SEA.GO.8.m.csv")
 SEA.GO.m.b=SEA.function.GO(fit.m.b)
-
+write.csv(SEA.GO.m.b, file="SEA.GO.m.b.csv")
 ```
 
 
