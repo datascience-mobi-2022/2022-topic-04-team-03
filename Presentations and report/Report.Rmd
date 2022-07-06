@@ -1308,6 +1308,7 @@ intersect.tra.genes.down=Intersect(list_venn.down)
 View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
 ```
 
+### chemokine
 ```{r chemokine analysis}
 #extract chemokine
 chemokine.tra.list=fusion.tra.expression.tra.table.ensembl.table[which(grepl("motif chemokine",fusion.tra.expression.tra.table.ensembl.table[,24])),]
