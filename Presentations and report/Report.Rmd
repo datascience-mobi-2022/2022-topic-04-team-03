@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 title: 'Data Science project: XXX '\
 author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "\
 date: "Data Analysis Project SS22"\
@@ -6,12 +11,26 @@ supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE)
 knitr::opts_knit$set(root.dir = "")
-getwd()
+```
+
+```{r}
+projectPath <- dirname(rstudioapi::getSourceEditorContext()$path)
 ```
 
 # Table of contents
 1 [Abstract](#abstarct) 
 
+\newpage
+
+# 1.Abstract
+
+\newpage
+
+# 2.Introduction
+
+\newpage
+
+# 3.Methods and Results
 
 ###load library
 
@@ -35,23 +54,28 @@ library(VennDiagram)
 library(GO.db)
 ```
 
-\newpage
-
-# 1.Abstract
-
-\newpage
-
-# 2.Introduction
-
-\newpage
-
-# 3.Methods and Results
+During our analysis we used the following R and Biocunductor packages
+\Begin{table}[htb]
+\caption{List of all packages used in R for obtaining, processing and analysis of data.}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lllll}
+\hline
+affy & vsn & AnnotationDbi \\
+hgu133plus2hsenstcdf & hgu133plus2hsenstprobe & limma\\
+pheatmap & dplyr & tidyverse \\
+hexbin & cluster & factoextra\\
+EnhancedVolcano & org.Hs.eg.db & RColorBrewer\\
+VennDiagram & GO.db \\
+\hline
+\end{tabular}}
+\end{table}
+Over the course of the analysis an array of packages was used which are listed in Table 1. 
 
 ## 3.1 Quality Control and Normalization of the Data
 
 ### setting working directory and loading
 
-```{r set working directory}
+```{r set working directory or read in .CEL files}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
@@ -59,30 +83,28 @@ data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 ```
 
 ### Single chip control: reading in the microarray chips
-
+First step of the Quality Control is the single-chip analysis by which major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities  . Therefore we looked at the images of each microarray chip. 
 ```{r chips pictures}
 for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
 ```
-
+In our date set 
 ### Normalization
 
-```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
+```{r normalization & meanSdPlot, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
+#Normalization
 human.vsnrma <- vsnrma(data.human)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
 expression.data <- exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
-```
-
-### Plots meanSdPlot
-
-```{r meanSdPlot}
+#meanSdPlot
 meanSdPlot(human.vsnrma)
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+##The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
 ```
 
 ### Boxplots
@@ -167,6 +189,7 @@ for(i in 1:17){
 }
 ```
 
+
 ### Data Clean-up
 
 ```{r data clean-up}
@@ -227,7 +250,7 @@ dim(human.vsnrma.df2)
 ```
 
 ```{r}
-# remove ".xx_at" from the rownames
+# remove ".xx_at" suffix
 rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
 
 # read in TRA data for human
