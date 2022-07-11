@@ -9,7 +9,7 @@ date: "Data Analysis Project SS22"\
 supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE)
+knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE, cache = TRUE)
 knitr::opts_knit$set(root.dir = "")
 ```
 
@@ -928,7 +928,7 @@ ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1
 
 ```
 
-###tissue plot facetting
+###tissue plot vifacetting
 
 ```{r facetting}
 tissue.max.vector = c(rep("Adipose",10),rep("Adrenal Gland",5),rep("Artery",15),rep("Bladder",5),rep("Brain",65),rep("Breast",5),rep("Cells",10),rep("Cervix",10),rep("Colon",10),rep("Esophagus", 15),rep("Follopian Tube",5),rep("Heart",10),rep("Kidney",5),rep("Liver",5),rep("Lung",5),rep("Minor Salivary Gland",5),rep("Muscle",5),rep("Nerve",5),rep("Ovary",5),rep("Pancreas",5),rep("Pituitary",5),rep("Prostate",5),rep("Skin",10),rep("Small Intestine",5), rep("Spleen",5), rep("Stomach",5),rep("Testis",5),rep("Thyroid",5),rep("Uterus",5),rep("Vagina",5),rep("Whole Blood",5))
