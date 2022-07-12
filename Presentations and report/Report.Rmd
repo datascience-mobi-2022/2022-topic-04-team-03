@@ -1,16 +1,53 @@
 ---
+title: "Final Report "
+date: "18.07.2022"
 output:
   pdf_document: default
-  html_document: default
+  html_document:
+    df_print: paged
+header-includes:
+   - \usepackage{float}
+   - \usepackage{caption}
+   - \captionsetup[figure]{font=footnotesize}
 ---
-title: 'Data Science project: XXX '\
-author: "Yaxin Chen, Alewtina Towara, Clara Certa, Linda Kaupp "\
-date: "Data Analysis Project SS22"\
-supervisors: Dr. Carl Herrmann, Dr. Maria Dinkelacker, Ian Fichter' output: pdf_document
+\thispagestyle{empty}
+\hrule
+\vspace{0.3cm}
+\begin{center}
+	\vspace{1cm}
+  \large
+	\begin{tabular}[c]{l}
+	 \\
+
+Clara Certa, Yaxin Chen, Linda Kaupp, Alewtina Towara \\
+\\
+	 \\
+	Supervisor:
+	Dr. Maria Dinkelacker, Dr. Carl Herrmann \\
+	 \\
+	Tutor:
+	Ian Dirk Fichter \\
+	 \\
+	 \\
+	Data Analysis for students of Molecular Biotechnology \\
+	\\
+	Heidelberg University 
+	\vspace{0.3cm} \\
+	\end{tabular}
+	\end{center}
+
+---
+
+\pagenumbering{gobble}
+\pagebreak
+\tableofcontents
+\pagebreak
+\pagenumbering{arabic}
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE, cache = TRUE)
-knitr::opts_knit$set(root.dir = "")
+knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 ```
 
 ```{r}
@@ -52,6 +89,7 @@ library(org.Hs.eg.db)
 library(RColorBrewer)
 library(VennDiagram)
 library(GO.db)
+library(tinytex)
 ```
 
 During our analysis we used the following R and Biocunductor packages
@@ -76,7 +114,7 @@ Over the course of the analysis an array of packages was used which are listed i
 ### setting working directory and loading
 
 ```{r set working directory or read in .CEL files}
-setwd("~//documents//GitHub//2022-topic-04-team-03//Data//rawData")
+setwd("~//Documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
@@ -84,7 +122,7 @@ data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
 ### Single chip control: reading in the microarray chips
 First step of the Quality Control is the single-chip analysis by which major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities  . Therefore we looked at the images of each microarray chip. 
-```{r chips pictures}
+```{r chips pictures, eval =FALSE}
 for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
 ```
@@ -100,10 +138,10 @@ expression.data <- exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 #meanSdPlot
-meanSdPlot(human.vsnrma)
+#meanSdPlot(human.vsnrma)
 
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+#dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 ##The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
 ```
 
