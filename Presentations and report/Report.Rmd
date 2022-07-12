@@ -147,7 +147,7 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 ### Boxplots
 
-```{r boxplots}
+```{r boxplots, eval =FALSE}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
           "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
@@ -172,7 +172,7 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 ### Density Plots
 
-```{r density plots}
+```{r density plots, eval =FALSE}
 # Before Normalization:
 hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
 
@@ -191,7 +191,7 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 
 ### RNA Degradation Plot
 
-```{r RNA Degradation Plot}
+```{r RNA Degradation Plot, eval =FALSE}
 par(mfrow = c(2,1))
 rnadeg.raw = AffyRNAdeg(data.human)
 
@@ -206,7 +206,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 
 ### Scatter Plot
 
-```{r scatter plot}
+```{r scatter plot, eval =FALSE}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 expression.data <- exprs(human.vsnrma)
 
@@ -446,7 +446,7 @@ color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue
 
 par(mar=c(5, 4, 4, 10), xpd=TRUE)
 
-plot(pca$x[,1], pca$x[,2],col=color, pch=19,xlab='PC1',ylab='PC2')
+plot(pca$x[,1], pca$x[,2],col=color1, pch=19,xlab='PC1',ylab='PC2')
 
 color2= c("red","orange","yellow","green","blue","purple")
 
@@ -457,12 +457,12 @@ legend(x = 190,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "
 
 We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
 
-```{r plots PC2/3 and PC3/4}
+```{r plots PC2/3 and PC3/4, eval=FALSE}
 #Plot PC2 and PC3
-plot(pca$x[,2], pca$x[,3],col=color, pch=19,xlab='PC2',ylab='PC3')
+plot(pca$x[,2], pca$x[,3],col=color1, pch=19,xlab='PC2',ylab='PC3')
 
 #Plot PC3 and PC4
-plot(pca$x[,3], pca$x[,4],col=color, pch=19,xlab='PC3',ylab='PC4')
+plot(pca$x[,3], pca$x[,4],col=color1, pch=19,xlab='PC3',ylab='PC4')
 ```
 
 Now we want to use Kmeans on the first 4 PCs (which explain 90% of the Variance) to find potential clusters and compare it with the cluster that we have observed in PCA just now
