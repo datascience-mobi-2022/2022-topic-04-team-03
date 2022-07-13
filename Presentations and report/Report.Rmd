@@ -1190,7 +1190,104 @@ p3 <-  p3 +
 p3
 ```
 
+#### Expression plots interesting genes
 
+```{r Expression plot STMN1}
+names1 = c("1 cell stage", 
+          "2 cell stage",
+          "4 cell stage",
+          "8 cell stage",
+          "morula stage",
+          "blastocyst stage")
+
+
+annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
+
+colnames(annotated.tra.mean)[2:7]=names1
+
+o = c(which(annotated.tra.mean[,12] %in% "STMN1"))
+
+annotated.tra.mean.1=pivot_longer(annotated.tra.mean[o,], cols=2:7, names_to = "Stages" ,values_to="expression")
+
+colnames(annotated.tra.mean.1)[1]= "transcript"
+
+ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(transcript))) +
+  geom_line(aes(color=transcript)) + scale_x_discrete(limits=names1) +
+  labs(y=("Expression")) +
+    ggtitle("Expression STMN1")
+```
+```{r Expression plot SLC2A3}
+names1 = c("1 cell stage", 
+          "2 cell stage",
+          "4 cell stage",
+          "8 cell stage",
+          "morula stage",
+          "blastocyst stage")
+
+
+annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
+
+colnames(annotated.tra.mean)[2:7]=names1
+
+o = c(which(annotated.tra.mean[,12] %in% "SLC2A3"))
+
+annotated.tra.mean.1=pivot_longer(annotated.tra.mean[o,], cols=2:7, names_to = "Stages" ,values_to="expression")
+
+colnames(annotated.tra.mean.1)[1]= "transcript"
+
+ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(transcript))) +
+  geom_line(aes(color=transcript)) + scale_x_discrete(limits=names1) +
+  labs(y=("Expression")) +
+    ggtitle("Expression SLC2A3")
+```
+```{r Expression plot TEAD4}
+names1 = c("1 cell stage", 
+          "2 cell stage",
+          "4 cell stage",
+          "8 cell stage",
+          "morula stage",
+          "blastocyst stage")
+
+
+annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
+
+colnames(annotated.tra.mean)[2:7]=names1
+
+o = c(which(annotated.tra.mean[,12] %in% "TEAD4"))
+
+annotated.tra.mean.1=pivot_longer(annotated.tra.mean[o,], cols=2:7, names_to = "Stages" ,values_to="expression")
+
+colnames(annotated.tra.mean.1)[1]= "transcript"
+
+ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(transcript))) +
+  geom_line(aes(color=transcript)) + scale_x_discrete(limits=names1) +
+  labs(y=("Expression")) +
+    ggtitle("Expression TEAD4")
+```
+```{r Expression plot NQO1}
+names1 = c("1 cell stage", 
+          "2 cell stage",
+          "4 cell stage",
+          "8 cell stage",
+          "morula stage",
+          "blastocyst stage")
+
+
+annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
+
+colnames(annotated.tra.mean)[2:7]=names1
+
+o = c(which(annotated.tra.mean[,12] %in% "NQO1"))
+
+annotated.tra.mean.1=pivot_longer(annotated.tra.mean[o,], cols=2:7, names_to = "Stages" ,values_to="expression")
+
+colnames(annotated.tra.mean.1)[1]= "transcript"
+
+ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(transcript))) +
+  geom_line(aes(color=transcript)) + scale_x_discrete(limits=names1) +
+  labs(y=("Expression")) +
+    ggtitle("Expression NQO1")
+```
 ### 3.4.3 Gene set enrichment analysis
 
 
