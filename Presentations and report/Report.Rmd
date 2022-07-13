@@ -208,7 +208,6 @@ dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 ### Scatter Plot
 
 ```{r scatter plot, eval =FALSE}
-setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplott"))
 expression.data <- exprs(human.vsnrma)
 
 for(i in 1:17){
@@ -220,10 +219,11 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
+  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplot", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
+
   dev.copy2pdf(file = file.name)
 }
 ```

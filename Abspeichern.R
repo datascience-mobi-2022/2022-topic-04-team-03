@@ -17,6 +17,10 @@ library(org.Hs.eg.db)
 library(RColorBrewer)
 library(VennDiagram)
 library(GO.db)
+library(tinytex)
+library(clusterProfiler)
+library(enrichplot)
+library(ggplot2)
 
 
 # 2) Read in .CEL files
