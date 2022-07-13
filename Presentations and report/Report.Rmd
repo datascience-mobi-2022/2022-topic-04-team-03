@@ -727,16 +727,6 @@ fusion.tra.expression.tra.table.ensembl.table[k,]
 Using Limma analysis, we want to find out differential expressed genes (DEGs) between different stages. We will conduct the test among every two stages but only look at the results of the stages between different clusters (showed in PCA): stage 1 cell-8 cell, stage 8 cell - morula, stage morula - blastocyst
 
 ```{r limma Analysis}
-names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
-          "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
-          "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
-          "8 cell stage, rep 1", "8 cell stage, rep 2", "8 cell stage, rep 3",
-          "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
-          "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
-
-
-# Rename colnames of our dataset: "x stage, rep y" for a better overview
-colnames(human.vsnrma.df2) = names
 
 # Define the different stages of the chips in a vector
 stage = factor(x= c(1,1,1,2,2,2,4,4,4,8,8,8,"morula","morula","morula", "blastocyst", "blastocyst", "blastocyst"),levels= c(1,2,4,8,"morula","blastocyst"))
@@ -766,17 +756,6 @@ summary(results)
 # Number of differentially expressed genes (p-value = 0.01)
 results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
-
-# Create fits for every contrast and then create tables with the results of Limma analysis
-# Stage 1-2
-fit.1.2 = contrasts.fit(fit, contrasts = cm[,1])
-fit.1.2 = eBayes(fit.1.2)
-
-pvalue01 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.01)
-# 0
-pvalue05 = sum(p.adjust(fit.1.2$p.value, "BH") < 0.05)
-# 0
-
 ```
 *creating fit tables between every two stages*
 
@@ -1186,11 +1165,11 @@ p1 <-  p1 +
 ```
 
 
-### 3.4.3 Set enrichment analysis
+### 3.4.3 Gene set enrichment analysis
 
 
 ```{r}
-# Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for SEA-code
+# Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for GSEA-code
 # Extract unique transcripts in ensembl data
 ensembl.unique = unique(ensembl.data$Transcript.stable.ID)
   
@@ -1248,6 +1227,7 @@ fit.m.b = fit.function(15)
   
   
 ```{r create a function to perform SEA on every fit table}
+# GSEA with KEGG database
 SEA.function = function(x){
     enrich_kegg = kegga(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
     topKEGG(enrich_kegg)
@@ -1270,34 +1250,21 @@ SEA.8.m = SEA.function(fit.8.m)
 SEA.8.b = SEA.function(fit.8.b)
 SEA.m.b = SEA.function(fit.m.b)
 
-enrich_go = kegga(fit.8.m, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
-  a=topKEGG(enrich_go, ontology ="BP")
-
+# GSEA with GO database
 SEA.function.GO = function(x){
   enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
   topGO(enrich_go, ontology ="BP",number=Inf)
 }
 
-SEA.GO.1.8=SEA.function.GO(fit.1.8)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+SEA.GO.1.8 = SEA.function.GO(fit.1.8)
 write.csv(SEA.GO.1.8, file="SEA.GO.1.8.csv")
-SEA.GO.8.m=SEA.function.GO(fit.8.m)
+SEA.GO.8.m = SEA.function.GO(fit.8.m)
 write.csv(SEA.GO.8.m, file="SEA.GO.8.m.csv")
-SEA.GO.m.b=SEA.function.GO(fit.m.b)
+SEA.GO.m.b = SEA.function.GO(fit.m.b)
 write.csv(SEA.GO.m.b, file="SEA.GO.m.b.csv")
 ```
 
-
-```{r GO}
-SEA.function.GO = function(x){
-  enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
-  topGO(enrich_go, ontology ="BP")
-}
-#gene.pathway als Argument oder zb getGeneKEGGLinks(species.KEGG).
-
-a=SEA.function.GO(fit.8.m)
-b=SEA.function.GO(fit.m.b)
-```
 
 ### 3.4.4 Venn diagram
 
