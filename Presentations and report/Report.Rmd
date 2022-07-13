@@ -1307,7 +1307,7 @@ list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 # Helper function to display Venn diagram.up
 display_venn.up <- function(x){
   grid.newpage()
-  venn_object <- venn.diagram(x, main=("upregulated TRAS between diffrent stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL)
+  venn_object <- venn.diagram(x, main=("Upregulated TRAS between different stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL)
   grid.draw(venn_object)
 }
 
@@ -1332,7 +1332,7 @@ intersect.tra.genes.up=Intersect(list_venn.up)
 
 
 
-View(annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,])
+annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,]
 
 
 #1.8.tra downregulated
@@ -1347,7 +1347,7 @@ list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 # Helper function to display Venn diagram.down
 display_venn.down <- function(x){
   grid.newpage()
-  venn_object.down <- venn.diagram(x, main=("downregulated TRAS between diffrent stages"), cex.main=2, font.main=4, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
+  venn_object.down <- venn.diagram(x, main=("Downregulated TRAS between different stages"), cex.main=2, font.main=1, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
   grid.draw(venn_object.down)
 }
 display_venn.down(list_venn.down)
@@ -1355,7 +1355,7 @@ display_venn.down(list_venn.down)
 intersect.tra.genes.down=Intersect(list_venn.down)
 #5 genes are continuously down-regulated from 1-cell stage to blastocyst stage
 
-View(annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,])
+annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,]
 ```
 
 ### chemokine
