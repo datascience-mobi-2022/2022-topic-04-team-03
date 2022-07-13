@@ -678,7 +678,7 @@ top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
 
 #Variance genes 8-cell stage and morula stage
 j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-View(ensembl.data[j,])
+
 
 #Variance TRA genes 8-cell stage and morula stage
 k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
