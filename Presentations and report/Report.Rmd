@@ -95,22 +95,7 @@ library(enrichplot)
 library(ggplot2)
 ```
 
-During our analysis we used the following R and Biocunductor packages
-\Begin{table}[htb]
-\caption{List of all packages used in R for obtaining, processing and analysis of data.}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{lllll}
-\hline
-affy & vsn & AnnotationDbi \\
-hgu133plus2hsenstcdf & hgu133plus2hsenstprobe & limma\\
-pheatmap & dplyr & tidyverse \\
-hexbin & cluster & factoextra\\
-EnhancedVolcano & org.Hs.eg.db & RColorBrewer\\
-VennDiagram & GO.db \\
-\hline
-\end{tabular}}
-\end{table}
-Over the course of the analysis an array of packages was used which are listed in Table 1. 
+
 
 ## 3.1 Quality Control and Normalization of the Data
 
@@ -223,7 +208,6 @@ dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 ### Scatter Plot
 
 ```{r scatter plot, eval =FALSE}
-setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplott"))
 expression.data <- exprs(human.vsnrma)
 
 for(i in 1:17){
@@ -235,10 +219,11 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Plots", 
+  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplot", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
+
   dev.copy2pdf(file = file.name)
 }
 ```
