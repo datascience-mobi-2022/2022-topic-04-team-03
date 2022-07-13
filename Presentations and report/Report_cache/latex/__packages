@@ -29,3 +29,6 @@ futile.logger
 VennDiagram
 GO.db
 tinytex
+clusterProfiler
+enrichplot
+DOSE

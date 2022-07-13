@@ -95,22 +95,7 @@ library(enrichplot)
 library(ggplot2)
 ```
 
-During our analysis we used the following R and Biocunductor packages
-\Begin{table}[htb]
-\caption{List of all packages used in R for obtaining, processing and analysis of data.}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{lllll}
-\hline
-affy & vsn & AnnotationDbi \\
-hgu133plus2hsenstcdf & hgu133plus2hsenstprobe & limma\\
-pheatmap & dplyr & tidyverse \\
-hexbin & cluster & factoextra\\
-EnhancedVolcano & org.Hs.eg.db & RColorBrewer\\
-VennDiagram & GO.db \\
-\hline
-\end{tabular}}
-\end{table}
-Over the course of the analysis an array of packages was used which are listed in Table 1. 
+
 
 ## 3.1 Quality Control and Normalization of the Data
 
