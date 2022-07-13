@@ -90,6 +90,9 @@ library(RColorBrewer)
 library(VennDiagram)
 library(GO.db)
 library(tinytex)
+library(clusterProfiler)
+library(enrichplot)
+library(ggplot2)
 ```
 
 During our analysis we used the following R and Biocunductor packages
@@ -381,7 +384,7 @@ tissue.distribution = as.data.frame(tissue.distribution)
 tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
 
 # Create a barplot to present the TRA distribution of our chips
-
+par(mar=c(5,9,4,1)+.1)
 barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.5,col=rainbow(10), main="Frequency of TRAs in our data", xlab="Frequency",las=2, horiz= TRUE, cex.lab=0.5, cex.axis= 0.5)
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
@@ -394,10 +397,9 @@ shitty heatamp, do we want to keep it?
 ```{r heatmap, eval =FALSE}
 # Create a heatmap of the TRA genes in our dataset
 ## What does unlist mean? -> Transforms list into matrix
-human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 6, nrow = 24783)
+human.vsnrma.only.tra.matrix = matrix(unlist(human.vsnrma.only.tra), ncol = 18, nrow = 24783)
 
-colnames(human.vsnrma.only.tra.matrix) = c("1 cell stage", "2 cell stage", "4 cell stage", "8 cell stage", "morula stage", "blastocyst stage")
-
+colnames(human.vsnrma.only.tra.matrix) = names
 heatmap = pheatmap(human.vsnrma.only.tra.matrix, 
                    cluster_cols=FALSE, 
                    show_rownames = TRUE, 
@@ -424,20 +426,18 @@ human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
 dim(human.vsnrma.df2.topVar)
 
 pca = prcomp(t(human.vsnrma.df2.topVar), center = T, scale. = T)
-print(pca)
+
 ```
 
 ```{r show how much variance each PC explains}
 #show how much variance each PC explains
-plot(pca$sdev)
+
 variance = (pca$sdev)^2
 prop.variance = variance/sum(variance)
-```
 
-```{r}
 # Plot cumulative proportion of variance explained
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
+plot(cumsum(prop.variance), xlab = "Principal component",
+     ylab = "Cumulative proportion of variance explained",cex.lab=0.7,
      ylim = c(0, 1), type = "b")
 
 abline(h=0.9)
@@ -445,12 +445,12 @@ abline(h=0.9)
 
 4 PCs are enough to show more than 90%
 
-```{r Plot PC1 and PC2}
+```{r Plot PC1 and PC2, echo=TRUE}
 color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 par(mar=c(5, 4, 4, 10), xpd=TRUE)
 
-plot(pca$x[,1], pca$x[,2],col=color1, pch=19,xlab='PC1',ylab='PC2')
+plot(pca$x[,1], pca$x[,2],col=color1, pch=19,xlab='PC1',ylab='PC2',main="Principal component analysis")
 
 color2= c("red","orange","yellow","green","blue","purple")
 
@@ -463,10 +463,23 @@ We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1
 
 ```{r plots PC2/3 and PC3/4, eval=FALSE}
 #Plot PC2 and PC3
-plot(pca$x[,2], pca$x[,3],col=color1, pch=19,xlab='PC2',ylab='PC3')
+
+par(mar=c(5, 4, 4, 10), xpd=TRUE)
+
+plot(pca$x[,2], pca$x[,3],col=color1, pch=19,xlab='PC2',ylab='PC3',main="Principal component analysis")
+
+legend(x = 140,y=92,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
 
 #Plot PC3 and PC4
-plot(pca$x[,3], pca$x[,4],col=color1, pch=19,xlab='PC3',ylab='PC4')
+par(mar=c(5, 4, 4, 10), xpd=TRUE)
+
+plot(pca$x[,3], pca$x[,4],col=color1, pch=19,xlab='PC3',ylab='PC4',main="Principal component analysis")
+
+color2= c("red","orange","yellow","green","blue","purple")
+
+legend(x = 100,y=48,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
+
+
 ```
 
 Now we want to use Kmeans on the first 4 PCs (which explain 90% of the Variance) to find potential clusters and compare it with the cluster that we have observed in PCA just now
@@ -487,17 +500,19 @@ elbow_df <- data.frame(
 )
 ```
 
-```{r plot with elbow plot}
+```{r plot with elbow plot, echo=TRUE}
 ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
   geom_line() +
-  scale_x_continuous(breaks = 1:10) 
+  scale_x_continuous(breaks = 1:10) + labs(y= "Total within sum of squares")+ ggtitle("Elbow plot")
 ```
 
 seems like k=2 is the best
 
-```{r show cluster}
+```{r show cluster, echo=TRUE}
 model <- kmeans(x = pca$x[,1:4], centers = 2,nstart=30)
-model$cluster
+b<- as.data.frame(model$cluster)
+colnames(b) <- "Cluster"
+b
 ```
 
 Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
@@ -512,31 +527,30 @@ sil_width <- map_dbl(2:10,  function(k){
 })
 ```
 
-```{r}
+```{r Silhouette plot, echo =TRUE}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
   k = 2:10,
   sil_width = sil_width
 )
-```
 
-```{r}
 # Plot the relationship between k and sil_width
 ggplot(sil_df, aes(x = k, y = sil_width)) +
   geom_line() +
-  scale_x_continuous(breaks = 2:10) + labs(y= "Silhouette Width")
+  scale_x_continuous(breaks = 2:10) + labs(y= "Silhouette Width")+ ggtitle("Silhouette plot")
 ```
 
 it seems like that k=4 is a good choice
 
-```{r}
-# Generate a k-means model using the pam() function with a k = 4
-pam_k4 <- pam(pca$x[,1:13],k=4)
-```
 
-```{r}
+```{r Cluster silhouette plot, echo=TRUE }
+# Generate a k-means model using the pam() function with a k = 4
+pam_k4 <- pam(pca$x[,1:4],k=4)
+
 # Show the clustering
-pam_k4$clustering
+a <-as.data.frame(pam_k4$clustering)
+colnames(a)= "Cluster"
+a
 ```
 
 Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
@@ -544,7 +558,7 @@ Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cl
 
 Using Kmeans based on the original expression data (human.vsnrma.df2) to cluster and compare the results with the Kmeans results based on 4PCs
 
-```{r}
+```{r kmeans on whole data}
 # Use map_dbl to run many models with varying value of k (centers)
 tot_withinss <- map_dbl(1:10,  function(k){
     model <- kmeans(x = t(human.vsnrma.df2), centers = k,nstart=30)
@@ -552,19 +566,17 @@ tot_withinss <- map_dbl(1:10,  function(k){
 })
 ```
 
-```{r}
+```{r Elbow plot}
 # Generate a data frame containing both k and tot_withinss
 elbow_df <- data.frame(
     k = 1:10 ,
     tot_withinss = tot_withinss
 )
-```
 
-```{r}
 # Plot the elbow plot
 ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
     geom_line() +
-    scale_x_continuous(breaks = 1:10)
+    scale_x_continuous(breaks = 1:10)+ labs(y= "Total within sum of squares")+ ggtitle("Elbow plot")
 ```
 
 seems like k=2 is the best
@@ -572,35 +584,33 @@ seems like k=2 is the best
 ```{r}
 #show cluster
 model <- kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
-model$cluster
+c<-as.data.frame(model$cluster)
+colnames(c)="Cluster"
+c
 ```
 
 Elbow plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 
 
-Plot the Siloutte plot
+Plot the Silhoutte plot
 
-```{r}
+```{r Silhoutte plot whole data}
 # Use map_dbl to run many models with varying value of k
 sil_width <- map_dbl(2:10,  function(k){
     model <- pam(t(human.vsnrma.df2), k = k)
     model$silinfo$avg.width
 })
-```
 
-```{r}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
     k = 2:10,
     sil_width = sil_width
 )
-```
 
-```{r}
 # Plot the relationship between k and sil_width
 ggplot(sil_df, aes(x = k, y = sil_width)) +
     geom_line() +
-    scale_x_continuous(breaks = 2:10)
+    scale_x_continuous(breaks = 2:10)+ labs(y= "Silhouette Width")+ ggtitle("Silhouette plot")
 ```
 
 it seems like that k=2 is a good choice
@@ -610,7 +620,9 @@ it seems like that k=2 is a good choice
 pam_k2 <- pam(t(human.vsnrma.df2),k=2)
   
 # Show the clustering
-pam_k2$clustering
+d<- as.data.frame(pam_k2$clustering)
+colnames(d) <- "Cluster"
+d
 ```
 
 Silouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
@@ -861,41 +873,43 @@ annotated.limma.m.b = limma.annotation(limma.table.m.b)
 ```{r limma TRAs}
 #annotated limma tables mit TRAs annotaten
 #1.4 und 1.2 sind 00
+nr<-c(1,9,10)
+
 annotated.limma.1.8$ensembl.transcript = rownames(annotated.limma.1.8)
-annotated.limma.1.8.tra <- merge(annotated.limma.1.8, tra.data, by = 'ensembl.transcript')
+annotated.limma.1.8.tra <- merge(annotated.limma.1.8, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.1.m$ensembl.transcript = rownames(annotated.limma.1.m)
-annotated.limma.1.m.tra <- merge(annotated.limma.1.m, tra.data, by = 'ensembl.transcript')
+annotated.limma.1.m.tra <- merge(annotated.limma.1.m, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.1.b$ensembl.transcript = rownames(annotated.limma.1.b)
-annotated.limma.1.b.tra <- merge(annotated.limma.1.b, tra.data, by = 'ensembl.transcript')
+annotated.limma.1.b.tra <- merge(annotated.limma.1.b, tra.data[,nr], by = 'ensembl.transcript')
 #2.4. ist 00
 annotated.limma.2.8$ensembl.transcript = rownames(annotated.limma.2.8)
-annotated.limma.2.8.tra <- merge(annotated.limma.2.8, tra.data, by = 'ensembl.transcript')
+annotated.limma.2.8.tra <- merge(annotated.limma.2.8, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.2.m$ensembl.transcript = rownames(annotated.limma.2.m)
-annotated.limma.2.m.tra <- merge(annotated.limma.2.m, tra.data, by = 'ensembl.transcript')
+annotated.limma.2.m.tra <- merge(annotated.limma.2.m, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.2.b$ensembl.transcript = rownames(annotated.limma.2.b)
-annotated.limma.2.b.tra <- merge(annotated.limma.2.b, tra.data, by = 'ensembl.transcript')
+annotated.limma.2.b.tra <- merge(annotated.limma.2.b, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.4.8$ensembl.transcript = rownames(annotated.limma.4.8)
-annotated.limma.4.8.tra <- merge(annotated.limma.4.8, tra.data, by = 'ensembl.transcript')
+annotated.limma.4.8.tra <- merge(annotated.limma.4.8, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.4.m$ensembl.transcript = rownames(annotated.limma.4.m)
-annotated.limma.4.m.tra <- merge(annotated.limma.4.m, tra.data, by = 'ensembl.transcript')
+annotated.limma.4.m.tra <- merge(annotated.limma.4.m, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.4.b$ensembl.transcript = rownames(annotated.limma.4.b)
-annotated.limma.4.b.tra <- merge(annotated.limma.4.b, tra.data, by = 'ensembl.transcript')
+annotated.limma.4.b.tra <- merge(annotated.limma.4.b, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.8.m$ensembl.transcript = rownames(annotated.limma.8.m)
-annotated.limma.8.m.tra <- merge(annotated.limma.8.m, tra.data, by = 'ensembl.transcript')
+annotated.limma.8.m.tra <- merge(annotated.limma.8.m, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.8.b$ensembl.transcript = rownames(annotated.limma.8.b)
-annotated.limma.8.b.tra <- merge(annotated.limma.8.b, tra.data, by = 'ensembl.transcript')
+annotated.limma.8.b.tra <- merge(annotated.limma.8.b, tra.data[,nr], by = 'ensembl.transcript')
 
 annotated.limma.m.b$ensembl.transcript = rownames(annotated.limma.m.b)
-annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data, by = 'ensembl.transcript')
+annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data[,nr], by = 'ensembl.transcript')
 
 ```
 
@@ -948,7 +962,7 @@ ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1
 
 ```
 
-###tissue plot vifacetting
+###tissue plot facetting
 
 ```{r facetting}
 tissue.max.vector = c(rep("Adipose",10),rep("Adrenal Gland",5),rep("Artery",15),rep("Bladder",5),rep("Brain",65),rep("Breast",5),rep("Cells",10),rep("Cervix",10),rep("Colon",10),rep("Esophagus", 15),rep("Follopian Tube",5),rep("Heart",10),rep("Kidney",5),rep("Liver",5),rep("Lung",5),rep("Minor Salivary Gland",5),rep("Muscle",5),rep("Nerve",5),rep("Ovary",5),rep("Pancreas",5),rep("Pituitary",5),rep("Prostate",5),rep("Skin",10),rep("Small Intestine",5), rep("Spleen",5), rep("Stomach",5),rep("Testis",5),rep("Thyroid",5),rep("Uterus",5),rep("Vagina",5),rep("Whole Blood",5))
@@ -956,7 +970,7 @@ tissue.max.vector = c(rep("Adipose",10),rep("Adrenal Gland",5),rep("Artery",15),
 tissue.fac= cbind(tissue.matrix,tissue.max.vector)
 plot.tissue.fac <- ggplot(tissue.fac, aes(x = stages, y= as.numeric(logFc),group=as.character(V1)))  + geom_line(aes(color=as.character(V1))) +
            geom_point(aes(color=as.character(V1))) + labs(y=("logFC")) + labs(colour = "tissues") +facet_wrap(~tissue.max.vector)#+ theme(legend.position = "none")
-
+plot.tissue.fac
 #uncomment last component to remove legend 
 ```
 
@@ -1010,7 +1024,7 @@ limma.table.vollst.m.b=generate.limma.table.vollst(fit,15)
 ```
 
 anotation of the limma table (complete) with emsembl information
-```{r}
+```{r Annotation of limma including all genes}
 
 ensembl.limma.annotation <- function(x){
   a = which(ensembl.unique$Transcript.stable.ID %in% rownames(x))
@@ -1035,15 +1049,15 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 
 we want to plot three volcanoplots (between 1-cell and 8-cell stage, 8-cell stage and morula stage, morula stage and blastocyst stage). We decided to highlight 10 highst up-regulated TRAs and 10 highst down-regulated TRAs.
 
-```{r volcano plots}
-#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
+```{r volcano plots 1.8, echo=TRUE}
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
 
 #for the stage between 1-cell and 8-cell stage
 annotated.limma.table.vollst.1.8 <- annotated.limma.table.vollst.1.8 %>% 
   mutate(
     Expression = case_when(logFC > 2 & adj.P.Val < 0.01 ~ "Up-regulated",
                            logFC < -2 & adj.P.Val < 0.01 ~ "Down-regulated",
-                           TRUE ~ "Unchanged"))
+                           TRUE ~ "not significantly changed"))
 
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
@@ -1059,14 +1073,15 @@ top_genes_tra.1.8 <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
   )
+top_genes_tra.1.8
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(top_genes_tra.1.8, file="top_genes_tra.1.8.csv")
 
-#create a volcanoplot
+#create a volcano plot
 p1 <- ggplot(annotated.limma.table.vollst.1.8, aes(logFC, -log(adj.P.Val,10)))+
   geom_point(aes(color = Expression),size = 2/5)+  
-  ggtitle("Volcanoplot between 1-cell stage and 8-cell stage")+
-  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=20))+
+  ggtitle("Volcano plot between 1-cell stage and 8-cell stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=14))+
   xlab(expression("log"[10]*"FC")) + 
   ylab(expression("-log"[10]*"(adj.P.Val)"))+
   geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
@@ -1076,17 +1091,17 @@ p1 <- ggplot(annotated.limma.table.vollst.1.8, aes(logFC, -log(adj.P.Val,10)))+
 p1 <-  p1 +
   geom_label_repel(data = top_genes_tra.1.8,
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
-                   size = 1.75)
-
+                   size = 1.5)
+p1
 ```
 Repeating the same procedure with the other three stages
-```{r}
-#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot
+```{r Volcano plot 8.m, echo=TRUE}
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.8.m <- annotated.limma.table.vollst.8.m %>% 
   mutate(
     Expression = case_when(logFC >= 2 & adj.P.Val < 0.01 ~ "Up-regulated",
                            logFC <= -2 & adj.P.Val < 0.01 ~ "Down-regulated",
-                           TRUE ~ "Unchanged"))
+                           TRUE ~ "not significantly changed"))
 
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
@@ -1102,35 +1117,36 @@ top_genes_tra.8.m <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
 )
+top_genes_tra.8.m
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(top_genes_tra.8.m, file="top_genes_tra.8.m.csv")
 
 
 #create a volcanoplot
-p1 <- ggplot(annotated.limma.table.vollst.8.m, aes(logFC, -log(adj.P.Val,10)))+
+p2 <- ggplot(annotated.limma.table.vollst.8.m, aes(logFC, -log(adj.P.Val,10)))+
   geom_point(aes(color = Expression),size = 2/5)+  
-  ggtitle("Volcanoplot 8-cell stage between morula stage")+
-  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  ggtitle("Volcano plot between 8-cell stage and morula stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=10))+
   xlab(expression("log"[10]*"FC")) + 
   ylab(expression("-log"[10]*"(adj.P.Val)"))+
   geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
   geom_hline(yintercept=-log10(0.01), col="black",linetype = "dashed")
 
 #label the 20 most interesting differentially expressed TRA genes
-p1 <-  p1 +
+p2 <-  p2 +
   geom_label_repel(data = top_genes_tra.8.m,
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
-
+p2
 ```
 
-```{r}
-#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcanoplot
+```{r Volcano plot m.b ,echo=TRUE}
+#group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.m.b <- annotated.limma.table.vollst.m.b %>% 
   mutate(
     Expression = case_when(logFC >= 2 & adj.P.Val < 0.01 ~ "Up-regulated",
                            logFC <= -2 & adj.P.Val < 0.01 ~ "Down-regulated",
-                           TRUE ~ "Unchanged"))
+                           TRUE ~ "not significantly changed"))
 
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
@@ -1146,40 +1162,39 @@ top_genes_tra.m.b <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
 )
+top_genes_tra.m.b
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(top_genes_tra.m.b, file="top_genes_tra.m.b.csv")
 
 
 #create a volcanoplot
-p1 <- ggplot(annotated.limma.table.vollst.m.b, aes(logFC, -log(adj.P.Val,10)))+
+p3 <- ggplot(annotated.limma.table.vollst.m.b, aes(logFC, -log(adj.P.Val,10)))+
   geom_point(aes(color = Expression),size = 2/5)+  
-  ggtitle("Volcanoplot morula stage between blastocyst stage")+
-  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=22))+
+  ggtitle("Volcanoplot between morula stage and blastocyst stage")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold",size=10))+
   xlab(expression("log"[10]*"FC")) + 
   ylab(expression("-log"[10]*"(adj.P.Val)"))+
   geom_vline(xintercept=c(-2, 2), col="black",linetype = "dashed") +
   geom_hline(yintercept=-log10(0.01), col="black",linetype = "dashed")
 
 #label the 20 most interesting differentially expressed TRA genes
-p1 <-  p1 +
+p3 <-  p3 +
   geom_label_repel(data = top_genes_tra.m.b,
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
-                   size = 1.75)
-
+                   size = 1.5)
+p3
 ```
 
 
 ### 3.4.3 Gene set enrichment analysis
 
 
-```{r}
+
+```{r Annotate Expression set with Entrez Gene IDs}
 # Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for GSEA-code
 # Extract unique transcripts in ensembl data
 ensembl.unique = unique(ensembl.data$Transcript.stable.ID)
   
-```
-
-```{r Annotate Expression set with Ensembl Gene IDs}
 a = which(ensembl.unique %in% rownames(human.vsnrma.df2))
 ensembl.new = ensembl.data[a,]
   
@@ -1231,29 +1246,6 @@ fit.m.b = fit.function(15)
   
   
 ```{r create a function to perform SEA on every fit table}
-# GSEA with KEGG database
-SEA.function = function(x){
-    enrich_kegg = kegga(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
-    topKEGG(enrich_kegg)
-  }
-  
-SEA.1.2 = SEA.function(fit.1.2)
-# No DE genes
-SEA.1.4 = SEA.function(fit.1.4)
-SEA.1.8 = SEA.function(fit.1.8)
-SEA.1.m = SEA.function(fit.1.m)
-SEA.1.b = SEA.function(fit.1.b)
-SEA.2.4 = SEA.function(fit.2.4)
-SEA.2.8 = SEA.function(fit.2.8)
-SEA.2.m = SEA.function(fit.2.m)
-SEA.2.b = SEA.function(fit.2.b)
-SEA.4.8 = SEA.function(fit.4.8)
-SEA.4.m = SEA.function(fit.4.m)
-SEA.4.b = SEA.function(fit.4.b)
-SEA.8.m = SEA.function(fit.8.m)
-SEA.8.b = SEA.function(fit.8.b)
-SEA.m.b = SEA.function(fit.m.b)
-
 # GSEA with GO database
 SEA.function.GO = function(x){
   enrich_go = goana(x, geneid = annotated.human.vsnrma.df2$entrez, species = "Hs")
@@ -1267,6 +1259,33 @@ SEA.GO.8.m = SEA.function.GO(fit.8.m)
 write.csv(SEA.GO.8.m, file="SEA.GO.8.m.csv")
 SEA.GO.m.b = SEA.function.GO(fit.m.b)
 write.csv(SEA.GO.m.b, file="SEA.GO.m.b.csv")
+```
+
+```{r}
+organism = "org.Hs.eg.db"
+
+# we want the log2 fold change 
+GO.1.8.genes<- annotated.limma.1.8$logFC
+
+# name the vector
+names(GO.1.8.genes) <- annotated.limma.1.8$Gene.stable.ID
+
+
+# sort the list in decreasing order (required for clusterProfiler)
+gene_list = sort(GO.1.8.genes, decreasing = TRUE)
+
+gse <- gseGO(geneList=gene_list, 
+             ont ="BP", 
+             keyType = "ENSEMBL", 
+             minGSSize = 3, 
+             maxGSSize = 800, 
+             pvalueCutoff = 0.05, 
+             verbose = TRUE, 
+             OrgDb = organism, 
+             pAdjustMethod = "none")
+require(DOSE)
+dotplot(gse, showCategory=10, split=".sign") + facet_grid(.~.sign)
+
 ```
 
 
