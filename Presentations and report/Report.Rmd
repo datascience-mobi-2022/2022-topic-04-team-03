@@ -118,30 +118,36 @@ setwd("~//Documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
+
 ```
 
 ### Single chip control: reading in the microarray chips
 First step of the Quality Control is the single-chip analysis by which major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities  . Therefore we looked at the images of each microarray chip. 
 ```{r chips pictures, eval =FALSE}
 for (i in 1:18){
-   image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1])}
+   image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[i],1,9)) }
+
 ```
 In our date set 
 ### Normalization
 
-```{r normalization & meanSdPlot, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
+```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
+
 human.vsnrma <- vsnrma(data.human)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-
+colnames(human.vsnrma)= substr(colnames(human.vsnrma), 1,9)
 expression.data <- exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+```
 
-#meanSdPlot
-#meanSdPlot(human.vsnrma)
 
-#setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-#dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+```{r meanSdPlot, echo=FALSE, message=FALSE, comment=FALSE, results="hide", eval=FALSE}
+meanSdPlot
+meanSdPlot(human.vsnrma)
+
+setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
 ##The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
 ```
 
@@ -161,12 +167,13 @@ par(las=2)
 mmi=c(1,0.7,1.0477939,0.5366749)
 par(mai=mmi)
 boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", names =names,las=2)
+title(ylab="relative expression", line=2)
 
 dev.copy2eps(file="boxplot_rawdata_18290.eps")
 
 # After Normalization:
 boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization",names =names,las=2)
-
+title(ylab="relative expression", line=2)
 dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 ```
 
@@ -192,12 +199,15 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 ### RNA Degradation Plot
 
 ```{r RNA Degradation Plot, eval =FALSE}
-par(mfrow = c(2,1))
+
 rnadeg.raw = AffyRNAdeg(data.human)
 
 plotAffyRNAdeg(rnadeg.raw, col=rainbow(35))
 title(sub="human embroyogenesis rawdata")
+```
 
+
+```{r RNA Degradation Plot, eval =FALSE}
 plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
 title(sub="human embryogenesis rawdata - shifted")
 
@@ -244,7 +254,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 
 We want to annotate all the TRA genes in our chips with TRA and ensembl gene information
 
-```{r }
+```{r Ensembl data}
 # read in ensembl table with following attributes: "Gene stable ID", 
 #"Gene stable ID version", "Transcript stable ID", "Transscript stable ID version", 
 #"Gene.name", "Transcript name", "Chromosome.scaffold.name", "Gene.description", "HGNC.symbol"
@@ -254,9 +264,7 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ensembl.data <- read.csv("ensembl.human.txt")
 dim(ensembl.data)
 ##268341      9
-```
 
-```{r}
 # create variables that contain gene ID, transcript ID, 
 #the chromosome name and the gene symbol
 ensembl.genes = ensembl.data[,1]
@@ -265,7 +273,9 @@ ensembl.chromosome = ensembl.data[,7]
 ensembl.symbols = ensembl.data[,9]
 ```
 
-```{r}
+
+
+```{r clean human.vsnrma.df}
 #rename the colnames to the stages
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
@@ -274,9 +284,7 @@ names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "morula stage, rep 1", "morula stage, rep 2", "morula stage, rep 3",
           "blastocyst stage, rep 1", "blastocyst stage, rep 2", "blastocyst stage, rep 3")
 colnames(human.vsnrma.df) = names
-```
 
-```{r}
 # Check dimensions
 dim(human.vsnrma.df)
 #95,721    18
@@ -285,39 +293,39 @@ dim(human.vsnrma.df)
 human.vsnrma.df2 = human.vsnrma.df[63:95721,]
 dim(human.vsnrma.df2)
 # 95,659    18
-```
 
-```{r}
 # remove ".xx_at" suffix
 rownames(human.vsnrma.df2) = substr(rownames(human.vsnrma.df2), 1,15)
+```
 
+
+```{r TRA data}
 # read in TRA data for human
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 tra.data <- read.table("tra.2017.human.gtex.5x.table.tsv",header=TRUE)
 dim(tra.data)
 #60131    10
-```
 
-```{r}
 # find the index of rownames of our dataset that contain transcript Ids from the tra dataset
 # We extracted the TRA genes out of the three tables(human.vsnrma, tra, ensembl)
-
+#TRAs in our dataset
 j = which(rownames(human.vsnrma.df2) %in% tra.data$ensembl.transcript) 
 tra.extracted = rownames(human.vsnrma.df2)[j] #24,783
 human.vsnrma.only.tra = human.vsnrma.df2[j,]
 dim(human.vsnrma.only.tra)
 #24783 18 
 
+#exclude TRAs which are not expressed in our dataset
 k = which(tra.data$ensembl.transcript %in% tra.extracted)
-tra.expressed.in.chips = tra.data[k,] #24,783 
-dim(tra.expressed.in.chips)
+tra.chips = tra.data[k,] #24,783 
+dim(tra.chips)
 #24783 10
 ```
 
 
 
-```{r}
+```{r Extract TRAs in Ensembl }
 #we want to now extract the genes from Ensembl table that are present in the TRAs expressed in our chips
 c = which(ensembl.transcripts %in% tra.extracted)
 ensembl.only.tra = ensembl.data[c,]
@@ -328,26 +336,26 @@ dim(ensembl.only.tra)
 There are 160 genes which are in the TRA table but not in Ensembl table. We downloaded and checked the Ensembl table again, which did not help.
 
 
-```{r}
-#reorder the rows of ensembl.only.tra and tra.expressed.in.chips
-tra.expressed.in.chips = arrange(tra.expressed.in.chips,ensembl.transcript)
+```{r TRA Annotation}
+#reorder the rows of ensembl.only.tra and tra.chips
+tra.chips = arrange(tra.chips,ensembl.transcript)
 ensembl.only.tra = arrange(ensembl.only.tra,Transcript.stable.ID)
 
-#fusion of two tables: tra.expressed.in.chips and human.vsnrma.only.tra
-fusion.tra.expression.tra.table = cbind(human.vsnrma.only.tra,tra.expressed.in.chips$ensembl.gene,tra.expressed.in.chips$tiss.number,tra.expressed.in.chips$tissues,tra.expressed.in.chips$max.tissue)
-colnames(fusion.tra.expression.tra.table)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
+#fusion of two tables: tra.chips and human.vsnrma.only.tra
+fusion.tra.chips = cbind(human.vsnrma.only.tra,tra.chips$ensembl.gene,tra.chips$tiss.number,tra.chips$tissues,tra.chips$max.tissue)
+colnames(fusion.tra.chips)[19:22]<-c("ensembl.gene","tissue.number","tissues","max.tissue")
 
-# fusion of fusion.tra.expression.tra.table and ensembl.only.tra (aware that ensembl.only.tra table contains less rows than the other two tables due to the 160 missing genes)
-p = which(rownames(fusion.tra.expression.tra.table) %in% ensembl.transcripts)
-fusion.tra.expression.tra.table.extracted = fusion.tra.expression.tra.table[p,]
-fusion.tra.expression.tra.table.ensembl.table = cbind(fusion.tra.expression.tra.table.extracted,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
+# fusion of fusion.tra.chips and ensembl.only.tra (aware that ensembl.only.tra table contains less rows than the other two tables due to the 160 missing genes)
+p = which(rownames(fusion.tra.chips) %in% ensembl.transcripts)
+tra.ensembl = fusion.tra.chips[p,]
+annotated.tra = cbind(tra.ensembl,ensembl.only.tra$Gene.name,ensembl.only.tra$Gene.description,ensembl.only.tra$Chromosome.scaffold.name)
 
 #rename colnames
-colnames(fusion.tra.expression.tra.table.ensembl.table)[23:25]<-c("Gene.name","Gene.description","Chromosome.scaffold.name")
+colnames(annotated.tra)[23:25]<-c("Gene.name","Gene.description","Chromosome.scaffold.name")
 
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expression.tra.table.ensembl.table.csv")
+write.csv(annotated.tra, file="annotated.tra.csv")
 
 ```
 
@@ -355,30 +363,26 @@ write.csv(fusion.tra.expression.tra.table.ensembl.table, file="fusion.tra.expres
 
 We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
-```{r}
+```{r Tissue distribution plot}
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue=data.frame(table(tra.data$max.tissue))$Var1
 length(tissue) #53
 tissue.number = c()
 
 for (i in 1:53) {
-  tissue.number[[i]] = nrow(fusion.tra.expression.tra.table.ensembl.table %>% filter(grepl(tissue[i],fusion.tra.expression.tra.table.ensembl.table[,21])))
+  tissue.number[[i]] = nrow(annotated.tra %>% filter(grepl(tissue[i],annotated.tra[,21])))
 }
-print(tissue.number)
-tissue.distribution = cbind(as.vector(tissue),tissue.number)
-names(tissue.distribution)=c("max.tissue","tissue.number")
-tissue.distribution = as.data.frame(tissue.distribution)
-```
 
-```{r}
+tissue.distribution = cbind(as.vector(tissue),tissue.number)
+colnames(tissue.distribution)=c("max.tissue","tissue.number")
+tissue.distribution = as.data.frame(tissue.distribution)
+
 # Arranging the list according to the descending TRA number
 tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
-```
 
-```{r}
 # Create a barplot to present the TRA distribution of our chips
-coul <- brewer.pal(5, "Set2")
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.5,col=coul, main="Frequency of TRAs in our data", ylab="Frequency")
+
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.5,col=rainbow(10), main="Frequency of TRAs in our data", xlab="Frequency",las=2, horiz= TRUE, cex.lab=0.5, cex.axis= 0.5)
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
@@ -645,8 +649,8 @@ top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
 j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
 
 #Variance TRA genes 1-cell stage and 8-cell stage
-k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
-fusion.tra.expression.tra.table.ensembl.table[k,]
+k = which(rownames(annotated.tra)%in% top_genes_pca1)
+annotated.tra[k,]
 ```
 
 ```{r}
@@ -681,8 +685,8 @@ j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
 
 
 #Variance TRA genes 8-cell stage and morula stage
-k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
-fusion.tra.expression.tra.table.ensembl.table[k,]
+k = which(rownames(annotated.tra)%in% top_genes_pca1)
+annotated.tra[k,]
 ```
 
 *Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
@@ -718,8 +722,8 @@ j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
 ensembl.data[j,]
 
 #Variance tra genes morula stage and blastocyst stage
-k = which(rownames(fusion.tra.expression.tra.table.ensembl.table)%in% top_genes_pca1)
-fusion.tra.expression.tra.table.ensembl.table[k,]
+k = which(rownames(annotated.tra)%in% top_genes_pca1)
+annotated.tra[k,]
 ```
 
 ### 3.4.2 Limma analysis
@@ -1309,7 +1313,7 @@ intersect.tra.genes.up=Intersect(list_venn.up)
 
 
 
-View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.up,])
+View(annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,])
 
 
 #1.8.tra downregulated
@@ -1332,13 +1336,13 @@ display_venn.down(list_venn.down)
 intersect.tra.genes.down=Intersect(list_venn.down)
 #5 genes are continuously down-regulated from 1-cell stage to blastocyst stage
 
-View(fusion.tra.expression.tra.table.ensembl.table[rownames(fusion.tra.expression.tra.table.ensembl.table) %in% intersect.tra.genes.down,])
+View(annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,])
 ```
 
 ### chemokine
 ```{r chemokine analysis}
 #extract chemokine
-chemokine.tra.list=fusion.tra.expression.tra.table.ensembl.table[which(grepl("motif chemokine",fusion.tra.expression.tra.table.ensembl.table[,24])),]
+chemokine.tra.list=annotated.tra[which(grepl("motif chemokine",annotated.tra[,24])),]
 dim(chemokine.tra.list)
 n_occur=data.frame(table(chemokine.tra.list$Chromosome.scaffold.name))
 print(n_occur)
