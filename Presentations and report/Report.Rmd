@@ -6,9 +6,10 @@ output:
   html_document:
     df_print: paged
 header-includes:
-   - \usepackage{float}
-   - \usepackage{caption}
-   - \captionsetup[figure]{font=footnotesize}
+    \usepackage{float}
+    \floatplacement{figure}{H}
+    \usepackage{caption}
+    \captionsetup[figure]{font=footnotesize}
 ---
 \thispagestyle{empty}
 \hrule
@@ -123,7 +124,7 @@ data.human=ReadAffy()
 data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
 ```
-
+\newpage
 ### 3.2.1 Single chip control
 The first step of QC is the single-chip analysis where major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities can be detected by a visual inspection of the microarray images. After looking at our chips we presupposed that the GSM456645 chip could be of bad quality due to a smudge on the bottom edge.
 
@@ -132,7 +133,7 @@ for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[i],1,9)) }
 ```
 
-```{r only chip GSM456645,  include=TRUE, fig.cap="Figure 1: Single chip image of chip GSM456645"}
+```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=4, fig.width=3.6,fig.align="center"}
 image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[3],1,9))
 ```
  
@@ -170,13 +171,15 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
 
 The red line in this meanSdplot is not an approximately horizontal as it should be, Mathemaitsche Begründung Fehlt noch
-```{r meanSdPlot, include=TRUE, fig.cap="Figure 4: MeanSd plot"}
+
+```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=3,fig.width=4.5,fig.align='center'}
 meanSdPlot(human.vsnrma)
 
-setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//MeanSdPlot")
-dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
-##The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
+#setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//MeanSdPlot")
+#dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
+###The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
 ```
+
 
 ### Boxplots
 Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated. 
@@ -399,10 +402,10 @@ write.csv(annotated.tra, file="annotated.tra.csv")
 
 We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
-```{r Tissue distribution plot, include=TRUE, fig.cap= "Figure 5: Tissue distribution plot",fig.height=100, fig.width=150}
+```{r Tissue distribution plot, include=TRUE, fig.cap= "Tissue distribution plot",fig.height=3, fig.width=7, fig.align='center'}
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue=data.frame(table(tra.data$max.tissue))$Var1
-length(tissue) #53
+
 tissue.number = c()
 
 for (i in 1:53) {
@@ -419,15 +422,14 @@ tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tiss
 # Create a barplot to present the TRA distribution of our chips
 
 par(mar=c(5,9,4,1)+.1)
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.5,col=rainbow(10), main="Frequency of TRAs in our data", xlab="Frequency",las=2, horiz= TRUE, cex.lab=0.5, cex.axis= 0.5)
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRAs in our data", xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
 
 
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 
-dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
+#dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
 ```
 
-### Heatmap?
 
 ```{r heatmap, eval =FALSE}
 # Create a heatmap of the TRA genes in our dataset
@@ -452,15 +454,15 @@ dev.copy2pdf(file="heatmap.pdf")
 ## 5.1 Principle Component Analysis
 In order to verify that the variance in our dataset results from the biological background more than from the technical process we performed a principal component analysis. Moreover, we thereby achieved a greater insight in possible interesting stages to examine. 
 
-```{r PCA, include=TRUE, fig.cap="Figure 6: Principal component analysis"}
+```{r PCA}
 #conducting PCA
 topVar = apply(human.vsnrma.df2, 1, var)
 q75 = quantile(topVar, probs = 0.75)
 i.topvar = which(topVar >= q75)
 human.vsnrma.df2.topVar = human.vsnrma.df2[i.topvar,]
-dim(human.vsnrma.df2.topVar)
 
 pca = prcomp(t(human.vsnrma.df2.topVar), center = T, scale. = T)
+
 
 ```
 
@@ -476,11 +478,12 @@ plot(cumsum(prop.variance), xlab = "Principal component",
      ylim = c(0, 1), type = "b")
 
 abline(h=0.9)
+#4 PCs are enough to show more than 90%
 ```
 
-4 PCs are enough to show more than 90%
 
-```{r Plot PC1 and PC2, echo=TRUE}
+
+```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis",fig.height=3, fig.width=7, fig.align='center'}
 color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 par(mar=c(5, 4, 4, 10), xpd=TRUE)
@@ -489,7 +492,7 @@ plot(pca$x[,1], pca$x[,2],col=color1, pch=19,xlab='PC1',ylab='PC2',main="Princip
 
 color2= c("red","orange","yellow","green","blue","purple")
 
-legend(x = 190,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
+legend(x = 180,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
 
 
 ```
@@ -567,7 +570,7 @@ sil_width <- map_dbl(2:10,  function(k){
 })
 ```
 
-```{r Silhouette plot,  include=TRUE, fig.cap= "Figure 7: Silhouette plot"}
+```{r Silhouette plot,  include=TRUE, fig.cap= "Silhouette plot",fig.height=3, fig.width=7, fig.align='center'}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
   k = 2:10,
@@ -1063,7 +1066,7 @@ We found three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated
 ### 5.2.2 Volcano plot
 After looking that TRA genes that are important for all stages, we then focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly differential genes with a p-value cutoff of 0.01 and a fold10change cutoff of 2. To extract the most biologically significant genes, we then identified the top 10 up/down-regulated TRA transcripts that are most significantly expressed and have the largest fold changes. These genes are labeled in the volcano plots.
 
-```{r volcano plots 1.8, echo=TRUE, include= TRUE, fig.cap= "Figure 8: Volcano plot comparing the 1-cell and 8-cell stage"}
+```{r volcano plots 1.8, include= TRUE, fig.cap= "Volcano plot comparing the 1-cell and 8-cell stage",fig.height=4, fig.width=8, fig.align='center' }
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
 
 #for the stage between 1-cell and 8-cell stage
@@ -1087,9 +1090,11 @@ top_genes_tra.1.8 <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
   )
-top_genes_tra.1.8
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-write.csv(top_genes_tra.1.8, file="top_genes_tra.1.8.csv")
+
+#top_genes_tra.1.8
+
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+#write.csv(top_genes_tra.1.8, file="top_genes_tra.1.8.csv")
 
 #create a volcano plot
 p1 <- ggplot(annotated.limma.table.vollst.1.8, aes(logFC, -log(adj.P.Val,10)))+
@@ -1107,9 +1112,14 @@ p1 <-  p1 +
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
 p1
+
+#Top table
+f<-c(2,8)
+top_genes_tra.1.8[,f]
 ```
 
-```{r Volcano plot 8.m, echo=TRUE, include= TRUE, fig.cap= "Figure 9: Volcano plot comparing the 8-cell and morula stage"}
+
+```{r Volcano plot 8.m, include= TRUE, fig.cap= "Volcano plot comparing the 8-cell and morula stage",fig.height=4, fig.width=8, fig.align='center'}
 #Repeating the same procedure with the other three stages
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.8.m <- annotated.limma.table.vollst.8.m %>% 
@@ -1132,9 +1142,9 @@ top_genes_tra.8.m <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
 )
-top_genes_tra.8.m
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-write.csv(top_genes_tra.8.m, file="top_genes_tra.8.m.csv")
+#top_genes_tra.8.m
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+#write.csv(top_genes_tra.8.m, file="top_genes_tra.8.m.csv")
 
 
 #create a volcanoplot
@@ -1153,9 +1163,13 @@ p2 <-  p2 +
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
 p2
+
+#Top table
+f<-c(2,8)
+top_genes_tra.8.m[,f]
 ```
 
-```{r Volcano plot m.b ,echo=TRUE, include= TRUE, fig.cap= "Figure 10: Volcano plot comparing the morula and blastocyst stage"}
+```{r Volcano plot m.b, include= TRUE, fig.cap= " Volcano plot comparing the morula and blastocyst stage",fig.height=4, fig.width=8, fig.align='center'}
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.m.b <- annotated.limma.table.vollst.m.b %>% 
   mutate(
@@ -1177,9 +1191,9 @@ top_genes_tra.m.b <- bind_rows(
     arrange(adj.P.Val,desc(abs(logFC)))
   %>%head(top)
 )
-top_genes_tra.m.b
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-write.csv(top_genes_tra.m.b, file="top_genes_tra.m.b.csv")
+#top_genes_tra.m.b
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
+#write.csv(top_genes_tra.m.b, file="top_genes_tra.m.b.csv")
 
 
 #create a volcanoplot
@@ -1198,7 +1212,12 @@ p3 <-  p3 +
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
 p3
+
+#Top table
+f<-c(2,8)
+top_genes_tra.m.b[,f]
 ```
+
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
 
 ### 5.2.3 Compare our top TRA genes and PCA Variance genes
