@@ -67,7 +67,12 @@ projectPath <- dirname(rstudioapi::getSourceEditorContext()$path)
 
 \newpage
 
-# 3.Methods and Results
+# 3.Data sets
+\newpage
+
+# 4. Methods
+
+## 4.1 used packages
 
 ###load library
 
@@ -97,7 +102,22 @@ library(ggplot2)
 
 
 
-## 3.1 Quality Control and Normalization of the Data
+## 4.2 Quality Control and Normalization of the Data
+
+Before the analysis of the microarrays, it is important to determine the quality of the used raw data. This is done by the procedure called Quality Control (QC) where potential mistakes in the experiment can be identified. First step of the QC is the single-chip analysis where major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities can be detected by a visual inspection of the microarray images. After looking at our chips we presupposed that the GSM456645 chip could be of bad quality due to a smudge on the bottom edge.
+
+In the next step we analysed the RNA degradation that is an indicator for a bad quality RNA. Due to the start of the RNA degradation at the 5´ sequence end the intestines of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected. 
+     
+By performing the variance stabilization normalization (vsnrma) (Huber et al.) the data is corrected for biases from non-biological sources, like labelling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. The red line in this meanSdplot is not an approximately horizontal as it should be,  
+ 
+ 
+Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated.  
+In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization the distribution of all curves in the plot showed a vicinity.  
+The box plots visualize the variation of the gene expression for each chip. After the normalization no boxes were significantly elevated or more spread out than other arrays. 
+For the control of the normalization the scatter plots, that compare the log fold intensity change between an array and a reference array, were made. 
+ 
+ 
+As a consequence of our Quality Control we decided to keep all chips for further analysis, because no serious outliers after the normalization were found.
 
 ### setting working directory and loading
 
@@ -1380,7 +1400,7 @@ dotplot(gse, showCategory=10, split=".sign") + facet_grid(.~.sign)
 
 Using Venn diagram, we want to find out which genes are continuously up/down-regulated during every stage. They could be important for the embryogenesis.
 
-```{r Venn diagram }
+```{r Venn diagram, include=TRUE}
 #creating demo data for Venn diagram
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
@@ -1471,6 +1491,7 @@ dim(annotated.limma.8.m.chemokine.tra)
 annotated.limma.m.b.chemokine.tra=extract.chemokine.tra(annotated.limma.m.b)
 dim(annotated.limma.m.b.chemokine.tra)
 #0 9
+
 
 extract.chemokine <- function(x){
   x.chemokine=x[which(rownames(x) %in% chemokine.list$Transcript.stable.ID),]
