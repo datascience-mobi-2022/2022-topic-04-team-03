@@ -1203,8 +1203,129 @@ p3
 ```
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
 
+###5.2.3 Compare our top TRA genes and PCA Variance genes
 
-### 5.2.3 Gene set enrichment analysis
+#Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages.
+
+
+Finding TRA genes which explain the variance by looking at TRA genes with the highest loading in PCs
+
+#Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
+
+```{r Extracting TRA genes explaining variance (1-8)}
+#Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
+a=c(1,2,3,10,11,12)
+pca.1.8=prcomp(t(human.vsnrma.df2[,a]))
+
+# Plot cumulative proportion of variance explained
+variance = (pca.1.8$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+#two PCs are enough to show 90% variance, we will just focus on PC1
+
+#Looking for TRA genes which explain the variance of PC1 between 1-cell stage and 8-cell stage
+pc1=pca.1.8$rotation[,1]
+top_genes_pca1.1.8 = names(sort(abs(pc1), decreasing = T))[1:70]
+
+#extract 20 top TRA genes that explains the variance between 1-cell stage and 8-cell stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.1.8)
+top_tra_pca1.1.8=annotated.tra[k,]
+dim(top_tra_pca1.1.8)
+#20 25
+
+length(unique(top_genes_tra.1.8$gene.name))
+# 15
+intersect(top_genes_tra.1.8$gene.name,top_tra_pca1.1.8$Gene.name)
+# 7 of our top TRA genes (1.8) are present in the variance explaining genes 
+#"KDM5B"   "IMPDH1"  "KHDC1L"  "IER3"    "ZNF280A" "C4orf47" "ZNF571"
+# 7/15 = 46.67%
+```
+
+#Use PCA to plot 3 replicates of 8-cell stage and morula stage
+
+```{r Extracting TRA genes explaining variance (8-m)}
+#Use PCA to plot 3 replicates of 8-cell stage and morula stage
+pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
+
+# Plot cumulative proportion of variance explained
+plot(pca.8.m$sdev)
+variance = (pca.8.m$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+
+#three PCs are enough to show 90% variance, we will just focus on PC1
+
+#Looking for TRA genes which explain the variance of PC1 between 8-cell stage and morula stage
+pc1=pca.8.m$rotation[,1]
+top_genes_pca1.8.m = names(sort(abs(pc1), decreasing = T)[1:35])
+
+#extract 20 top TRA genes that explains the variance between 8-cell stage and morula stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.8.m)
+top_tra_pca1.8.m=annotated.tra[k,]
+dim(top_tra_pca1.8.m)
+#20 25
+
+length(unique(top_genes_tra.8.m$gene.name))
+# 9
+intersect(top_genes_tra.8.m$gene.name,top_tra_pca1.8.m$Gene.name)
+# 3 of our top TRA genes (8.m) are present in the variance explaining genes 
+# "SLC2A3" "PCP4L1" "RIIAD1"
+# 3/9 = 33.33%
+```
+
+*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
+
+Use PCA to plot 3 replicates of morula stage and blastocyst stage
+
+```{r}
+#Use PCA to plot 3 replicates of morula stage and blastocyst stage
+pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
+
+# Plot cumulative proportion of variance explained
+plot(pca.m.b$sdev)
+variance = (pca.m.b$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+#four PCs are enough to show 90% variance, we will just focus on PC1
+
+#Looking for TRA genes which explain the variance of PC1 between morula stage and blastocyst stage
+pc1=pca.m.b$rotation[,1]
+top_genes_pca1.m.b = names(sort(abs(pc1), decreasing = T)[1:55])
+
+#extract 20 top TRA genes that explains the variance between 8-cell stage and morula stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.m.b)
+top_tra_pca1.m.b=annotated.tra[k,]
+dim(top_tra_pca1.m.b)
+#20 25
+
+length(unique(top_genes_tra.m.b$gene.name))
+# 11
+intersect(top_genes_tra.m.b$gene.name,top_tra_pca1.m.b$Gene.name)
+# 5 of our top TRA genes (m.b) are present in the variance explaining genes 
+# "ABCG2"    "NQO1"     "ATP6V0A4" "ZNF280A"  "ELL3"    
+# 5/11 = 45.45%
+```
+
+
+### 5.2.4 Gene set enrichment analysis
 After extracting the top up/down-regulated DEGs and understanding their biological relevance in embryo as well as their presence in possible pathways, we decided to perform GSEA to find out if our DEGs were generally enriched in certain gene sets of biological pathways. (Therefore, we compared the DEGs with gene sets of the Gene Ontology (GO) database using the limma function goana(). Then, we generated topTables with the results of GSEA that contain the significantly enriched or depleted biological pathways. In addition, these tables provide information about the pathway ID and name, the number of genes in the set, the number of up- and downregulated genes, and the p-value for enrichment of up- and downregulated genes.)
  
 (eher Methode?)
@@ -1311,9 +1432,9 @@ dotplot(gse, showCategory=10, split=".sign") + facet_grid(.~.sign)
 
 
 
-##5.3 chemokine
+##5.3 Chemokine
 ```{r chemokine analysis}
-#extract chemokine
+#extract chemokine in our annotated tra table
 chemokine.tra.list=annotated.tra[which(grepl("motif chemokine",annotated.tra[,24])),]
 dim(chemokine.tra.list)
 n_occur=data.frame(table(chemokine.tra.list$Chromosome.scaffold.name))
@@ -1321,8 +1442,9 @@ print(n_occur)
 #62 25
 chemokine.list=ensembl.data[which(grepl("motif chemokine",ensembl.data[,8])),]
 dim(chemokine.list)
-# 280 9
+#280 9
 
+#create a function to extract differentially expressed TRA chemokines from limma table
 extract.chemokine.tra <- function(x){
 x.chemokine.tra=x[which(rownames(x) %in% chemokine.tra.list$Transcript.stable.ID),]
   return(x.chemokine.tra)
@@ -1338,6 +1460,9 @@ annotated.limma.m.b.chemokine.tra=extract.chemokine.tra(annotated.limma.m.b)
 dim(annotated.limma.m.b.chemokine.tra)
 #0 9
 
+#no TRA chemokines found 
+
+#create a function to extract differentially expressed chemokines (non TRA) from limma table
 extract.chemokine <- function(x){
   x.chemokine=x[which(rownames(x) %in% chemokine.list$Transcript.stable.ID),]
   return(x.chemokine)
@@ -1358,27 +1483,28 @@ unique(annotated.limma.8.m.chemokine$gene.name)
 #"CCL15" Up
 
 
-
 annotated.limma.m.b.chemokine=extract.chemokine(annotated.limma.m.b)
 dim(annotated.limma.m.b.chemokine)
 #4 11
 
 
-
 unique(annotated.limma.m.b.chemokine$gene.name)
 #"CCL15" Down
 
-human.vsnrma.df2$ensembl.transcripts=rownames(human.vsnrma.df2)
-colnames(ensembl.data)[3]<- c("ensembl.transcripts")
+```
 
-human.ensembl=merge(x=human.vsnrma.df2,y=ensembl.data, all.x = TRUE,by="ensembl.transcripts")
+```{r chemokine heatmap}
+#so far we only have a table with tra genes that are annotated ensemble and tra information, 
+chemokine.transkript=c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine))
 
-human.ensembl.1.8.chemokine=human.ensembl[which(human.ensembl$ensembl.transcripts %in% rownames(annotated.limma.1.8.chemokine)),]
+chemokine.expression=human.vsnrma.df2[which(rownames(human.vsnrma.df2) %in% chemokine.transkript),]
 
-a=c("CCL15","CCR3","CXCL14")
-human.ensembl.tra=human.ensembl[which(human.ensembl[,23] %in% a),]
-human.ensembl.tra.mat=as.matrix(human.ensembl.tra[,2:19])
-heatmap=pheatmap(human.ensembl.tra.mat, cluster_cols=FALSE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5)
+chemokine.gene.name=ensembl.data$Gene.name[which(ensembl.data$ensembl.transcripts%in%rownames(chemokine.expression))]
+
+annotated.chemokine.expression=cbind(chemokine.expression,chemokine.gene.name)
+annotation_row=cbind(rownames(annotated.chemokine.expression),annotated.chemokine.expression$chemokine.gene.name)
+
+heatmap=pheatmap(as.matrix(annotated.chemokine.expression[,1:18]), cluster_cols=FALSE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5,annotation_row=annotation_row)
 
 ```
 #6. Discussion
