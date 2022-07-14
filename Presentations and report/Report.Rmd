@@ -483,7 +483,7 @@ abline(h=0.9)
 
 
 
-```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis",fig.height=3, fig.width=7, fig.align='center'}
+```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis",fig.height=4, fig.width=7, fig.align='center'}
 color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 par(mar=c(5, 4, 4, 10), xpd=TRUE)
@@ -492,7 +492,7 @@ plot(pca$x[,1], pca$x[,2],col=color1, pch=19,xlab='PC1',ylab='PC2',main="Princip
 
 color2= c("red","orange","yellow","green","blue","purple")
 
-legend(x = 180,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
+legend(x = 170,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
 
 
 ```
@@ -592,7 +592,9 @@ pam_k4 <- pam(pca$x[,1:4],k=4)
 # Show the clustering
 a <-as.data.frame(pam_k4$clustering)
 colnames(a)= "Cluster"
-a
+
+knitr::kable(a,format = "simple",caption ="Clusters silhouette plot")
+
 ```
 
 Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
