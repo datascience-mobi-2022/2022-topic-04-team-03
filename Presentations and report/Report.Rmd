@@ -1432,7 +1432,14 @@ dotplot(gse, showCategory=10, split=".sign") + facet_grid(.~.sign)
 
 
 
-##5.3 Chemokine
+## 5.3 Chemokine
+According to our hypothesis we also examined the expression of chemokines. The result of the filtering of our annotated TRA matrix showed that there are 62 proteins with a chemokine motif. Due to this we looked whether some of the filtered proteins are differentially expressed genes (DEGs) in our four clusters. The result of this is that there are no proteins with a chemokine motif that are TRAs and DEGs. 
+
+Thus, we looked after proteins with a chemokine motif in all of our DEGs including non TRA genes. We got the following results:
+
++ Between the stages 1-cell to 8-cell CXCL14 was unregulated with a log fold change (logFC) of approximately 1 and the chemokine receptor CCR3 was down regulated (logFC= -1.12). 
++ Between the stages 8-cell to morula the expression of  CCL15 was up regulated with a logFC of approximately 2.45 whereas in morula to blastocyst the expression was down regulated with a logFC of -2.66
+
 ```{r chemokine analysis}
 #extract chemokine in our annotated tra table
 chemokine.tra.list=annotated.tra[which(grepl("motif chemokine",annotated.tra[,24])),]
