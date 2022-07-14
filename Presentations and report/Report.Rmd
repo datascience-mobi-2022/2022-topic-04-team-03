@@ -170,6 +170,7 @@ colnames(human.vsnrma)= substr(colnames(human.vsnrma), 1,9)
 expression.data <- exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
+
 The red line in this meanSdplot is not an approximately horizontal as it should be, Mathemaitsche Begründung Fehlt noch
 ```{r meanSdPlot, echo=TRUE, include=TRUE, fig.cap="Figure 4: MeanSd plot"}
 meanSdPlot(human.vsnrma)
@@ -271,6 +272,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #> No
 
 ```
+
 ##3.3 Principal component analysis
 Principal Component Analysis (PCA) is an important method to reduce the dimensionality of a data set by decreasing its number of variables, which do not contribute to the variance of the data. Principal components (PC) are calculated, which are linear combinations of variables that explain a portion of variance among the total variance in the data. By looking at the PCs that explain an accumulative variance of over 90% and plotting them against each other, a better understanding of the data can be achieved, for example, by discovering potential clusters of the data points.
 
@@ -286,7 +288,7 @@ For anaylsis of differential gene expression we conducted limma analysis. Theref
 Gene set enrichment analysis (GSEA) is a method to identify groups of genes in a dataset that are overrepresented more than expected in any known set of genes. These gene sets can be groups of genes that share a common biological function, chromosomal location, or regulation. GSEA uses statistical approaches to find groups of genes that are significantly enriched or depleted. The goal of this method is to better understand the biological function of groups of genes in a data set (Subramanian et al.,2005).  
 
 #4. Exploratory data analysis
-##4.2 Annotation of dataset using TRAs
+##4.1 Annotation of dataset using TRAs
 
 We want to annotate all the TRA genes in our chips with TRA and ensembl gene information
 
@@ -395,7 +397,7 @@ write.csv(annotated.tra, file="annotated.tra.csv")
 
 ```
 
-##4.3 Tissue distribution plot
+##4.2 Tissue distribution plot
 
 We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
@@ -675,129 +677,6 @@ d
 
 
 
-```{r}
-#Finding genes which explain for the variance by looking at genes with the highst loading in PCs
-#Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
-
-a=c(1,2,3,10,11,12)
-pca.1.8=prcomp(t(human.vsnrma.df2[,a]))
-```
-
-```{r}
-# Plot cumulative proportion of variance explained
-variance = (pca.1.8$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-
-#two PCs are enough to show 90% variance
-```
-
-
-
-
-```{r}
-#Finding variance genes which explain the variance of PC1 between 1-cell stage and 8-cell stage
-
-
-pc1=pca.1.8$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes 1-cell stage and 8-cell stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-
-#Variance TRA genes 1-cell stage and 8-cell stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
-
-```{r}
-#Use PCA to plot 3 replicates of 8-cell stage and morula stage
-pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
-```
-
-```{r}
-# Plot cumulative proportion of variance explained
-plot(pca.8.m$sdev)
-variance = (pca.8.m$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-
-#three PCs are enough to show 90% variance
-```
-
-
-
-
-
-```{r}
-#Finding variance genes which explain the variance of PC1 between 8-cell stage and morula stage
-
-pc1=pca.8.m$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes 8-cell stage and morula stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-
-
-#Variance TRA genes 8-cell stage and morula stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
-
-*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
-
-
-
-```{r}
-#Use PCA to plot 3 replicates of morula stage and blastocyst stage
-
-pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
-
-# Plot cumulative proportion of variance explained
-plot(pca.m.b$sdev)
-variance = (pca.m.b$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-
-#four PCs are enough to show 90% variance
-```
-
-
-
-
-```{r}
-#Finding variance genes which explain the variance of PC1 between morula stage and blastocyst stage
-
-
-pc1=pca.m.b$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes morula stage and blastocyst stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-ensembl.data[j,]
-
-#Variance tra genes morula stage and blastocyst stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
 
 ##5.2 Limma analysis
 
@@ -1199,7 +1078,7 @@ annotated.limma.table.vollst.1.8 <- annotated.limma.table.vollst.1.8 %>%
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
 
-top <- 20
+top <- 10
 top_genes_tra.1.8 <- bind_rows(
   annotated.limma.1.8.tra %>% 
     filter(logFC >2) %>% 
@@ -1324,9 +1203,10 @@ p3
 ```
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
 
+
 ### 5.2.3 Gene set enrichment analysis
 After extracting the top up/down-regulated DEGs and understanding their biological relevance in embryo as well as their presence in possible pathways, we decided to perform GSEA to find out if our DEGs were generally enriched in certain gene sets of biological pathways. (Therefore, we compared the DEGs with gene sets of the Gene Ontology (GO) database using the limma function goana(). Then, we generated topTables with the results of GSEA that contain the significantly enriched or depleted biological pathways. In addition, these tables provide information about the pathway ID and name, the number of genes in the set, the number of up- and downregulated genes, and the p-value for enrichment of up- and downregulated genes.)
-
+ 
 (eher Methode?)
 
 
