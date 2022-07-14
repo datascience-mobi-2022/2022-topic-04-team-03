@@ -1541,6 +1541,11 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 ## 6.1	General Embryo development (Clara)
 
 ## 6.2	Meiose, Spermien (Alew)
+In the early stage of embryonic development, the embryo is transcriptionally silent, which means, that the genome activation of the zygote occurs a bit later. Just after the so-called development stage of maternal to zygotic transition (MZT), the newly arranged genom from the sperm and maternal egg is used. Therefore, degradation of maternal mRNA needs to take place (Schier, 2007).
+
+The differentially expressed gene REC114 codes a meiotic recombination protein that plays an essential role in the DNA double-strand breaks (DSBs) formation. Since DSBs induce the meiotic homologous recombination pathway it is important in accurate chromosome segregation (de Massy, 2013). A mutation of this gene results in defects in spermatogenesis and oogenesis indicating its essential role in both processes (Kumer et al., 2018). REC114 mutation is also responsible for early embryonic arrest (Wang et al., 2020). Our result, that between the stages 1-cell to 8-cell REC114 is downregulated, demonstrates two things. First, because of its essential role in oogenesis the protein must be presented in high quantity in the maternal egg and also must be downregulated during the MZT. Secondly, our findings point to the role of REC114 as a TRA-specific to the testis. In the early embryonic development stages, no male organs are developed and therefore it seems logical, that this TRA is not expressed in a high quantity. 
+ 
+
 
 ## 6.3	Glycolyse, oxidative Phosphorylierung, oxidative Stress (Linda)
 
