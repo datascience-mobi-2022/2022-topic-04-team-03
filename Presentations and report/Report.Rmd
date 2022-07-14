@@ -1115,11 +1115,11 @@ p1
 ```
 
 
-```{r toptable, include= TRUE}
+```{r toptable 1.8, include= TRUE}
 #Top table
 f<-c(2,8)
 
-knitr::kable(t(top_genes_tra.1.8[,f]),format = "simple")
+knitr::kable(top_genes_tra.1.8[,f],format = "simple",caption ="Up-/downregulated genes comparing 1-cell and 8-cell stage")
 
 ```
 
@@ -1169,9 +1169,15 @@ p2 <-  p2 +
                    size = 1.5)
 p2
 
+
+```
+
+```{r toptable 8.m, include= TRUE}
 #Top table
 f<-c(2,8)
-top_genes_tra.8.m[,f]
+
+knitr::kable(top_genes_tra.8.m[,f],format = "simple",caption ="Up-/downregulated genes comparing 8-cell and morula stage")
+
 ```
 
 ```{r Volcano plot m.b, include= TRUE, fig.cap= " Volcano plot comparing the morula and blastocyst stage",fig.height=4, fig.width=8, fig.align='center'}
@@ -1217,10 +1223,16 @@ p3 <-  p3 +
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
 p3
+```
 
+
+
+```{r toptable m.b, include= TRUE}
 #Top table
 f<-c(2,8)
-top_genes_tra.m.b[,f]
+
+knitr::kable(top_genes_tra.m.b[,f],format = "simple",caption ="Up-/downregulated genes comparing morula and blastocyst stage")
+
 ```
 
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
