@@ -47,7 +47,7 @@ Clara Certa, Yaxin Chen, Linda Kaupp, Alewtina Towara \\
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE, cache = TRUE)
+knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message=FALSE,warning = FALSE, cache = TRUE)
 knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 ```
 
@@ -1112,10 +1112,15 @@ p1 <-  p1 +
                    mapping = aes(logFC, -log(adj.P.Val,10), label = gene.name),
                    size = 1.5)
 p1
+```
 
+
+```{r toptable, include= TRUE}
 #Top table
 f<-c(2,8)
-top_genes_tra.1.8[,f]
+
+knitr::kable(t(top_genes_tra.1.8[,f]),format = "simple")
+
 ```
 
 
