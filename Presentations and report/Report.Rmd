@@ -615,118 +615,10 @@ colnames(d) <- "Cluster"
 d
 ```
 
-Silouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
-
-Finding genes which explain for the variance by looking at genes with the highst loading in PCs
-
-Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
-
-```{r}
-a=c(1,2,3,10,11,12)
-pca.1.8=prcomp(t(human.vsnrma.df2[,a]))
-```
-
-```{r}
-# Plot cumulative proportion of variance explained
-variance = (pca.1.8$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-```
-
-two PCs are enough to show 90% variance
-
-Finding variance genes which explain the variance of PC1 between 1-cell stage and 8-cell stage
-
-```{r}
-pc1=pca.1.8$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes 1-cell stage and 8-cell stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-
-#Variance TRA genes 1-cell stage and 8-cell stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
-
-```{r}
-#Use PCA to plot 3 replicates of 8-cell stage and morula stage
-pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
-```
-
-```{r}
-# Plot cumulative proportion of variance explained
-plot(pca.8.m$sdev)
-variance = (pca.8.m$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-```
-
-three PCs are enough to show 90% variance
-
-Finding variance genes which explain the variance of PC1 between 8-cell stage and morula stage
-
-```{r}
-pc1=pca.8.m$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes 8-cell stage and morula stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
+Silhouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 
 
-#Variance TRA genes 8-cell stage and morula stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
 
-*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
-
-Use PCA to plot 3 replicates of morula stage and blastocyst stage
-
-```{r}
-pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
-
-# Plot cumulative proportion of variance explained
-plot(pca.m.b$sdev)
-variance = (pca.m.b$sdev)^2
-prop.variance = variance/sum(variance)
-names(prop.variance) = 1:length(prop.variance)
-barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
-plot(cumsum(prop.variance), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-abline(h=0.9)
-```
-
-four PCs are enough to show 90% variance
-
-Finding variance genes which explain the variance of PC1 between morula stage and blastocyst stage
-
-```{r}
-pc1=pca.m.b$rotation[,1]
-top_genes_pca1 = names(sort(abs(pc1), decreasing = T)[1:10])
-
-#Variance genes morula stage and blastocyst stage
-j = which(ensembl.data$Transcript.stable.ID%in% top_genes_pca1)
-ensembl.data[j,]
-
-#Variance tra genes morula stage and blastocyst stage
-k = which(rownames(annotated.tra)%in% top_genes_pca1)
-annotated.tra[k,]
-```
 
 ### 3.4.2 Limma analysis
 
@@ -1052,7 +944,7 @@ annotated.limma.table.vollst.1.8 <- annotated.limma.table.vollst.1.8 %>%
 
 #extract 10 highst up-regulated TRAs and 10 highst down-regulated TRAs arranged by both logFC and adj.P.Value
 
-top <- 20
+top <- 10
 top_genes_tra.1.8 <- bind_rows(
   annotated.limma.1.8.tra %>% 
     filter(logFC >2) %>% 
@@ -1174,6 +1066,124 @@ p3 <-  p3 +
                    size = 1.5)
 p3
 ```
+
+###Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages.
+
+
+Finding TRA genes which explain the variance by looking at TRA genes with the highest loading in PCs
+
+```{r Extracting TRA genes explaining variance (1-8)}
+#Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
+a=c(1,2,3,10,11,12)
+pca.1.8=prcomp(t(human.vsnrma.df2[,a]))
+
+# Plot cumulative proportion of variance explained
+variance = (pca.1.8$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+#two PCs are enough to show 90% variance
+
+#Looking for TRA genes which explain the variance of PC1 between 1-cell stage and 8-cell stage
+pc1=pca.1.8$rotation[,1]
+top_genes_pca1.1.8 = names(sort(abs(pc1), decreasing = T))[1:70]
+
+#extract 20 top TRA genes that explains the variance between 1-cell stage and 8-cell stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.1.8)
+top_tra_pca1.1.8=annotated.tra[k,]
+dim(top_tra_pca1.1.8)
+#20 25
+
+length(unique(top_genes_tra.1.8$gene.name))
+# 15
+intersect(top_genes_tra.1.8$gene.name,top_tra_pca1.1.8$Gene.name)
+# 7 of our top TRA genes (1.8) are present in the variance explaining genes 
+#"KDM5B"   "IMPDH1"  "KHDC1L"  "IER3"    "ZNF280A" "C4orf47" "ZNF571"
+# 7/15 = 46.67%
+```
+
+```{r Extracting TRA genes explaining variance (8-m)}
+#Use PCA to plot 3 replicates of 8-cell stage and morula stage
+pca.8.m=prcomp(t(human.vsnrma.df2[,10:15]))
+
+# Plot cumulative proportion of variance explained
+plot(pca.8.m$sdev)
+variance = (pca.8.m$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+
+#three PCs are enough to show 90% variance
+
+#Looking for TRA genes which explain the variance of PC1 between 8-cell stage and morula stage
+pc1=pca.8.m$rotation[,1]
+top_genes_pca1.8.m = names(sort(abs(pc1), decreasing = T)[1:35])
+
+#extract 20 top TRA genes that explains the variance between 8-cell stage and morula stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.8.m)
+top_tra_pca1.8.m=annotated.tra[k,]
+dim(top_tra_pca1.8.m)
+#20 25
+
+length(unique(top_genes_tra.8.m$gene.name))
+# 9
+intersect(top_genes_tra.8.m$gene.name,top_tra_pca1.8.m$Gene.name)
+# 3 of our top TRA genes (8.m) are present in the variance explaining genes 
+# "SLC2A3" "PCP4L1" "RIIAD1"
+# 3/9 = 33.33%
+```
+
+*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
+
+Use PCA to plot 3 replicates of morula stage and blastocyst stage
+
+```{r}
+#Use PCA to plot 3 replicates of morula stage and blastocyst stage
+pca.m.b=prcomp(t(human.vsnrma.df2[,13:18]))
+
+# Plot cumulative proportion of variance explained
+plot(pca.m.b$sdev)
+variance = (pca.m.b$sdev)^2
+prop.variance = variance/sum(variance)
+names(prop.variance) = 1:length(prop.variance)
+barplot(prop.variance[1:20],ylab='Proportion of variance') # we only plot the first 20 PCs
+plot(cumsum(prop.variance), xlab = "Principal Component",
+     ylab = "Cumulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+abline(h=0.9)
+#four PCs are enough to show 90% variance
+
+#Looking for TRA genes which explain the variance of PC1 between morula stage and blastocyst stage
+pc1=pca.m.b$rotation[,1]
+top_genes_pca1.m.b = names(sort(abs(pc1), decreasing = T)[1:55])
+
+#extract 20 top TRA genes that explains the variance between 8-cell stage and morula stage
+k = which(rownames(annotated.tra)%in% top_genes_pca1.m.b)
+top_tra_pca1.m.b=annotated.tra[k,]
+dim(top_tra_pca1.m.b)
+#20 25
+
+length(unique(top_genes_tra.m.b$gene.name))
+# 11
+intersect(top_genes_tra.m.b$gene.name,top_tra_pca1.m.b$Gene.name)
+# 5 of our top TRA genes (m.b) are present in the variance explaining genes 
+# "ABCG2"    "NQO1"     "ATP6V0A4" "ZNF280A"  "ELL3"    
+# 5/11 = 45.45%
+```
+
+
+
 
 #### Expression plots interesting genes
 
