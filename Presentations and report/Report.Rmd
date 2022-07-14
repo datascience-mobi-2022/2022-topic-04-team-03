@@ -54,14 +54,12 @@ knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 projectPath <- dirname(rstudioapi::getSourceEditorContext()$path)
 ```
 
-# Table of contents
-1 [Abstract](#abstarct) 
 
 \newpage
 
 # 1.Abstract
 Research, especially in the field of early embryogenesis is important in many ways. It is not only required for better understanding of genetic defects of the embryos in an early stage it is also important for improvement of assisted human conception. In this report we are investigating the preimplantation stages of embryo development up to the formation of the blastocyst. As the implantation only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. In contrast we expected expression of chemokines involved in migration and implantation in the uterine endometrium.
-\newpage
+
 
 # 2.Introduction
 After the fertilization the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later important for implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese et al.,1993).
@@ -134,7 +132,7 @@ for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[i],1,9)) }
 ```
 
-```{r only chip GSM456645, echo=TRUE, include=TRUE, fig.cap="Figure 1: Single chip image of chip GSM456645"}
+```{r only chip GSM456645,  include=TRUE, fig.cap="Figure 1: Single chip image of chip GSM456645"}
 image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[3],1,9))
 ```
  
@@ -172,7 +170,7 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
 
 The red line in this meanSdplot is not an approximately horizontal as it should be, Mathemaitsche Begründung Fehlt noch
-```{r meanSdPlot, echo=TRUE, include=TRUE, fig.cap="Figure 4: MeanSd plot"}
+```{r meanSdPlot, include=TRUE, fig.cap="Figure 4: MeanSd plot"}
 meanSdPlot(human.vsnrma)
 
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//MeanSdPlot")
@@ -401,7 +399,7 @@ write.csv(annotated.tra, file="annotated.tra.csv")
 
 We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
-```{r Tissue distribution plot, include=TRUE, fig.cap= "Figure 5: Tissue distribution plot"}
+```{r Tissue distribution plot, include=TRUE, fig.cap= "Figure 5: Tissue distribution plot",fig.height=100, fig.width=150}
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue=data.frame(table(tra.data$max.tissue))$Var1
 length(tissue) #53
@@ -569,7 +567,7 @@ sil_width <- map_dbl(2:10,  function(k){
 })
 ```
 
-```{r Silhouette plot, echo =TRUE, include=TRUE, fig.cap= "Figure 7: Silhouette plot"}
+```{r Silhouette plot,  include=TRUE, fig.cap= "Figure 7: Silhouette plot"}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
   k = 2:10,
@@ -584,7 +582,7 @@ ggplot(sil_df, aes(x = k, y = sil_width)) +
 
 
 
-```{r Cluster silhouette plot, echo=TRUE , include= TRUE, fig.subcap= "Table 2: Clusters determined by silhouette plot"}
+```{r Cluster silhouette plot, include= TRUE, fig.subcap= "Table 2: Clusters determined by silhouette plot"}
 # Generate a k-means model using the pam() function with a k = 4
 pam_k4 <- pam(pca$x[,1:4],k=4)
 
@@ -1501,17 +1499,17 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 ```
 
 ```{r chemokine heatmap}
-#so far we only have a table with tra genes that are annotated ensemble and tra information, 
-chemokine.transkript=c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine))
+##so far we only have a table with tra genes that are annotated ensemble and tra information, 
+#chemokine.transkript=c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine))
 
-chemokine.expression=human.vsnrma.df2[which(rownames(human.vsnrma.df2) %in% chemokine.transkript),]
+#chemokine.expression=human.vsnrma.df2[which(rownames(human.vsnrma.df2) %in% chemokine.transkript),]
 
-chemokine.gene.name=ensembl.data$Gene.name[which(ensembl.data$ensembl.transcripts%in%rownames(chemokine.expression))]
+#chemokine.gene.name=ensembl.data$Gene.name[which(ensembl.data$ensembl.transcripts%in%rownames(chemokine.expression))]
 
-annotated.chemokine.expression=cbind(chemokine.expression,chemokine.gene.name)
-annotation_row=cbind(rownames(annotated.chemokine.expression),annotated.chemokine.expression$chemokine.gene.name)
+#annotated.chemokine.expression=cbind(chemokine.expression,chemokine.gene.name)
+#annotation_row=cbind(rownames(annotated.chemokine.expression),annotated.chemokine.expression$chemokine.gene.name)
 
-heatmap=pheatmap(as.matrix(annotated.chemokine.expression[,1:18]), cluster_cols=FALSE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5,annotation_row=annotation_row)
+#heatmap=pheatmap(as.matrix(annotated.chemokine.expression[,1:18]), cluster_cols=FALSE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5,annotation_row=annotation_row)
 
 ```
 # 6. Discussion
