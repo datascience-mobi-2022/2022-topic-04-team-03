@@ -1562,6 +1562,7 @@ knitr::kable(top_genes_tra.8.m[1:10,f],format = "simple",caption ="Updownregulat
 ```
 
 
+
 ```{r toptable m.b, include= TRUE}
 #Top table
 
