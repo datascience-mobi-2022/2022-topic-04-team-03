@@ -1559,6 +1559,10 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 In the early stage of embryonic development, the embryo is transcriptionally silent, which means, that the genome activation of the zygote occurs a bit later. Just after the so-called development stage of maternal to zygotic transition (MZT), the newly arranged genom from the sperm and maternal egg is used. Therefore, degradation of maternal mRNA needs to take place (Schier, 2007).
 
 The differentially expressed gene REC114 codes a meiotic recombination protein that plays an essential role in the DNA double-strand breaks (DSBs) formation. Since DSBs induce the meiotic homologous recombination pathway it is important in accurate chromosome segregation (de Massy, 2013). A mutation of this gene results in defects in spermatogenesis and oogenesis indicating its essential role in both processes (Kumer et al., 2018). REC114 mutation is also responsible for early embryonic arrest (Wang et al., 2020). Our result, that between the stages 1-cell to 8-cell REC114 is downregulated, demonstrates two things. First, because of its essential role in oogenesis the protein must be presented in high quantity in the maternal egg and also must be downregulated during the MZT. Secondly, our findings point to the role of REC114 as a TRA-specific to the testis. In the early embryonic development stages, no male organs are developed and therefore it seems logical, that this TRA is not expressed in a high quantity. 
+
+From the results, it is clear that in our data the MZT takes place in between stages 1 cell to 8 cell. This can be seen in the differential expression of the proteins like PRPF4B and EIF5. After the transcription the non-coding sequences of the RNA need to be removed by the process called RNA-Splicing. PRPF4B has a regulative role in the pre-mRNA splicing (Corkery et al., 2015).    
+EIF5 plays an important role in the formation of a functional 80 S initiation complex (Si et al., 1996).  Therefore an up regulation of both proteins indicates translation events which also imply that the activation of the zygotic genome took place.  
+ 
  
 
 
