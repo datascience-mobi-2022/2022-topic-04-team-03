@@ -181,9 +181,10 @@ meanSdPlot(human.vsnrma)
 ```
 
 
-### Boxplots
-Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated. 
 
+Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated.
+
+#### 3.2.3.1 Boxplots
 The box plots visualize the variation of the gene expression for each chip. After the normalization no boxes were significantly elevated or more spread out than other arrays.
 ```{r boxplots, eval =FALSE, include=TRUE, fig.cap= "Figure 3: Normalization of raw data"}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
@@ -213,7 +214,7 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 
 
-### Density Plots
+#### 3.2.3.2 Density plots
 In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization the distribution of all curves in the plot showed a vicinity. 
 ```{r density plots, eval =FALSE, include = TRUE, fig.cap= "Figure 4: Density plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Density")
@@ -236,7 +237,7 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 
 
 
-### Scatter Plot
+#### 3.2.3.3 Scatter plots
 For the control of the normalization the scatter plots, that compare the log fold intensity change between an array and a reference array, were made.
 
 ```{r scatter plot, eval =FALSE}
@@ -262,7 +263,7 @@ for(i in 1:17){
 
 As a consequence of our Quality Control we decided to keep all chips for further analysis, because no serious outliers after the normalization were found.
 
-### Data Clean-up
+<!-- Data Clean-up -->
 
 ```{r data clean-up}
 # Create a data frame out of the expression data from the normalized data
@@ -402,7 +403,7 @@ write.csv(annotated.tra, file="annotated.tra.csv")
 
 We want to visualize the distribution of the TRAs in our chips according to their max tissue, using a boxplot.
 
-```{r Tissue distribution plot, include=TRUE, fig.cap= "Tissue distribution plot",fig.height=3, fig.width=7, fig.align='center'}
+```{r Tissue distribution plot, include=TRUE, fig.cap= "Tissue distribution plot",fig.height=3.2, fig.width=7, fig.align='center'}
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue=data.frame(table(tra.data$max.tissue))$Var1
 
@@ -483,7 +484,7 @@ abline(h=0.9)
 
 
 
-```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis",fig.height=4, fig.width=7, fig.align='center'}
+```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis",fig.height=3.5, fig.width=7, fig.align='center'}
 color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
 par(mar=c(5, 4, 4, 10), xpd=TRUE)
@@ -497,7 +498,7 @@ legend(x = 170,y=130,legend = c("1-cell stage", "2-cell stage","4-cell stage", "
 
 ```
 
-We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
+<!-- We cannot observe any outlier replicate and we can see four cluster (Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst) -->
 
 ```{r plots PC2/3 and PC3/4, eval=FALSE}
 #Plot PC2 and PC3
@@ -597,10 +598,11 @@ knitr::kable(a,format = "simple",caption ="Clusters silhouette plot")
 
 ```
 
-Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst)
+
+<!-- Silouette Plot suggests 4 Clusters: Cluster 1:1-cell,2-cell and 4-cell stage, Cluster 2: 8-cell stage, Cluster 3:Morula, Cluster 4:Blastocyst) -->
 
 
-###Using Kmeans based on the original expression data (human.vsnrma.df2) to cluster and compare the results with the Kmeans results based on 4PCs
+<!-- Using Kmeans based on the original expression data (human.vsnrma.df2) to cluster and compare the results with the Kmeans results based on 4PCs -->
 
 ```{r kmeans on whole data}
 # Use map_dbl to run many models with varying value of k (centers)
@@ -716,7 +718,7 @@ summary(results)
 results2 = decideTests(fit2, p.value = 0.01)
 summary(results2)
 ```
-*creating fit tables between every two stages*
+<!-- *creating fit tables between every two stages* -->
 
 ```{r fitFunction}
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
@@ -745,7 +747,7 @@ fit.8.b = fit.function(14)
 fit.m.b = fit.function(15)
 ```
 
-*using toptable function to create limma table (only significant DEGs!) for every two stages*
+<!-- *using toptable function to create limma table (only significant DEGs!) for every two stages* -->
 
 ```{r topTable function}
 top.table = function(i){
@@ -775,7 +777,7 @@ limma.table.8.b = top.table(14)
 limma.table.m.b = top.table(15)
 ```
 
-*we annotate the limma table (only significant DEGs) with ensembl*
+<!-- *we annotate the limma table (only significant DEGs) with ensembl* -->
 
 ```{r annotation function}
 limma.annotation = function(x){
@@ -811,7 +813,7 @@ annotated.limma.8.b = limma.annotation(limma.table.8.b)
 annotated.limma.m.b = limma.annotation(limma.table.m.b)
 ```
 
-*we extract the TRAs from ensembl annotated limma table (only significant DEGs) and annotate these significant differentially expressed TRAs with TRA information*
+<!-- *we extract the TRAs from ensembl annotated limma table (only significant DEGs) and annotate these significant differentially expressed TRAs with TRA information* -->
 
 ```{r limma TRAs}
 #annotated limma tables mit TRAs annotaten
@@ -856,9 +858,9 @@ annotated.limma.m.b.tra <- merge(annotated.limma.m.b, tra.data[,nr], by = 'ensem
 
 ```
 
-#### Tissue plot
+<!-- #### Tissue plot -->
 
-we want to visualize the expression of TRAs among the different stages
+<!-- we want to visualize the expression of TRAs among the different stages -->
 
 ```{r tissue plot}
 #Erstellen Means pro stage pro tissue
@@ -905,7 +907,7 @@ ggplot(tissue.matrix, aes(x = stages, y= as.numeric(logFc),group=as.character(V1
 
 ```
 
-### tissue plot facetting
+<!-- ### tissue plot facetting -->
 
 ```{r facetting}
 tissue.max.vector = c(rep("Adipose",10),rep("Adrenal Gland",5),rep("Artery",15),rep("Bladder",5),rep("Brain",65),rep("Breast",5),rep("Cells",10),rep("Cervix",10),rep("Colon",10),rep("Esophagus", 15),rep("Follopian Tube",5),rep("Heart",10),rep("Kidney",5),rep("Liver",5),rep("Lung",5),rep("Minor Salivary Gland",5),rep("Muscle",5),rep("Nerve",5),rep("Ovary",5),rep("Pancreas",5),rep("Pituitary",5),rep("Prostate",5),rep("Skin",10),rep("Small Intestine",5), rep("Spleen",5), rep("Stomach",5),rep("Testis",5),rep("Thyroid",5),rep("Uterus",5),rep("Vagina",5),rep("Whole Blood",5))
@@ -917,7 +919,7 @@ plot.tissue.fac
 #uncomment last component to remove legend 
 ```
 
-#### filter DE genes & volcanoplots
+<!-- #### filter DE genes & volcanoplots -->
 
 In order to visualize our results based on limma and find out interesting TRA genes that play a significant role in embryogenesis, we decided to use Venn Diagram and Volcano plots to process our results.
 
@@ -1241,12 +1243,12 @@ Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and 
 
 ### 5.2.3 Compare our top TRA genes and PCA Variance genes
 
-#Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages.
+<!-- #Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages. -->
 
 
 Finding TRA genes which explain the variance by looking at TRA genes with the highest loading in PCs
 
-# Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
+<!-- # Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage -->
 
 ```{r Extracting TRA genes explaining variance (1-8)}
 #Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage
@@ -1283,7 +1285,7 @@ intersect(top_genes_tra.1.8$gene.name,top_tra_pca1.1.8$Gene.name)
 # 7/15 = 46.67%
 ```
 
-# Use PCA to plot 3 replicates of 8-cell stage and morula stage
+<!-- # Use PCA to plot 3 replicates of 8-cell stage and morula stage -->
 
 ```{r Extracting TRA genes explaining variance (8-m)}
 #Use PCA to plot 3 replicates of 8-cell stage and morula stage
@@ -1321,9 +1323,8 @@ intersect(top_genes_tra.8.m$gene.name,top_tra_pca1.8.m$Gene.name)
 # 3/9 = 33.33%
 ```
 
-*Use PCA to plot 3 replicates of 8-cell stage and blastocyst stage*
 
-Use PCA to plot 3 replicates of morula stage and blastocyst stage
+<!-- *Use PCA to plot 3 replicates of morula stage and blastocyst stage* -->
 
 ```{r}
 #Use PCA to plot 3 replicates of morula stage and blastocyst stage
