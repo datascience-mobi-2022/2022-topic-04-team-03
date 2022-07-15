@@ -420,7 +420,7 @@ tissue=data.frame(table(tra.data$max.tissue))$Var1
 tissue.number = c()
 
 for (i in 1:53) {
-  tissue.number[[i]] = nrow(annotated.tra %>% filter(grepl(tissue[i],annotated.tra[,21])))
+  tissue.number[[i]] = nrow(annotated.limma.1.8.tra %>% filter(grepl(tissue[i],annotated.limma.1.8.tra[,13])))
 }
 
 tissue.distribution = cbind(as.vector(tissue),tissue.number)
@@ -433,7 +433,7 @@ tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tiss
 # Create a barplot to present the TRA distribution of our chips
 
 par(mar=c(5,9,4,1)+.1)
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRAs in our data", xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA DEGs between 1-cell stage and 8-cell stage", xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
 
 
 #setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
@@ -1356,14 +1356,15 @@ gse.1.8.DEG <- gseGO(geneList=gene_list,
                  keyType = "ENSEMBLTRANS", 
                  minGSSize = 3, 
                  maxGSSize = 800, 
-                 pvalueCutoff = 0.05, 
+                 pvalueCutoff = 0.05,
                  verbose = TRUE, 
                  OrgDb = organism, 
                  pAdjustMethod = "BH")
 
 #visualize the GSEA output
 require(DOSE)
-dotplot(gse.1.8.DEG, showCategory=20, split=".sign",font.size=5) + facet_grid(.~.sign)
+dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~.sign)
+#gse.1.8.DEG@result
 ```
 
 ```{r GSEA for stage 8-m}
@@ -1385,13 +1386,15 @@ gse.8.m.DEG <- gseGO(geneList=gene_list,
                  minGSSize = 3, 
                  maxGSSize = 800, 
                  pvalueCutoff = 0.05, 
+                 eps=0,
                  verbose = TRUE, 
                  OrgDb = organism, 
                  pAdjustMethod = "BH")
 
 #visualize the GSEA output
 require(DOSE)
-dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=7) + facet_grid(.~.sign)
+dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~.sign)
+#gse.8.m.DEG@result
 ```
 
 ```{r GSEA for stage m-b}
@@ -1419,7 +1422,8 @@ gse.m.b.DEG <- gseGO(geneList=gene_list,
 
 #visualize the GSEA output
 require(DOSE)
-dotplot(gse.m.b.DEG, showCategory=10, split=".sign") + facet_grid(.~.sign)
+dotplot(gse.m.b.DEG, showCategory=20, split=".sign",font.size=3) + facet_grid(.~.sign)
+#gse.m.b.DEG@result
 ```
 
 
@@ -1513,7 +1517,7 @@ annotation_row = data.frame(
 
 rownames(annotation_row) = chemokine.deg$Transcript.stable.ID
 
-heatmap=pheatmap(as.matrix(annotated.chemokine.expression[,1:18]), cluster_cols=FALSE,cluster_rows=TRUE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5, annotation_row = annotation_row)
+heatmap=pheatmap(as.matrix(chemokine.expression[,1:18]), cluster_cols=FALSE,cluster_rows=TRUE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5, annotation_row = annotation_row)
 
 ```
 # 5. Discussion
