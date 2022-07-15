@@ -571,7 +571,7 @@ sil_width <- map_dbl(2:10,  function(k){
 })
 ```
 
-```{r Silhouette plot,  include=TRUE, fig.cap= "Silhouette plot",fig.height=3, fig.width=7, fig.align='center'}
+```{r Silhouette plot,  include=TRUE, fig.cap= "Silhouette plot",fig.height=3, fig.width=3, fig.align='left'}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
   k = 2:10,
@@ -585,8 +585,7 @@ ggplot(sil_df, aes(x = k, y = sil_width)) +
 ```
 
 
-
-```{r Cluster silhouette plot, include= TRUE, fig.subcap= "Table 2: Clusters determined by silhouette plot"}
+```{r Cluster silhouette plot, include= TRUE, fig.subcap= "Table 2: Clusters determined by silhouette plot",fig.align='right'}
 # Generate a k-means model using the pam() function with a k = 4
 pam_k4 <- pam(pca$x[,1:4],k=4)
 
@@ -998,7 +997,7 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 
 To gain an overview of TRA genes that are important for all stages, we use a Venn diagram to plot the intersection of differentially expressed TRA genes from 1-cell stage to 8-cell stage, from 8-cell stage to morula stage as well as from morula stage to blastocyst stage. We extracted genes that are continuously up/down-regulated along the three stage transitions we investigated, since they might be important for the embryogenesis.
 
-```{r Venn diagram }
+```{r Venn diagram, include=TRUE, fig.cap=c( "Venn diagram upregulated genes","Venn diagram downregulated genes"),fig.height=4, fig.width=4, fig.align='center' }
 #creating demo data for Venn diagram
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
@@ -1037,7 +1036,7 @@ intersect.tra.genes.up=Intersect(list_venn.up)
 
 
 
-annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,]
+Venn.genes.up<-annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,]
 
 
 #1.8.tra downregulated
@@ -1060,7 +1059,7 @@ display_venn.down(list_venn.down)
 intersect.tra.genes.down=Intersect(list_venn.down)
 #5 genes are continuously down-regulated from 1-cell stage to blastocyst stage
 
-annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,]
+Venn.genes.down<-annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,]
 ```
 We found three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated in all three stage transitions and six TRA genes (OTX2, TENT5C, TPRXL, TUBB7P, THBS4, TCL1A) that are continuously down-regulated in all three stage transitions.
 
@@ -1121,12 +1120,48 @@ p1
 
 ```{r toptable 1.8, include= TRUE}
 #Top table
-f<-c(2,8)
+f<-c(1,2,8)
 
 knitr::kable(top_genes_tra.1.8[,f],format = "simple",caption ="Up-/downregulated genes comparing 1-cell and 8-cell stage")
 
 ```
 
+```{r Try, include=TRUE}
+library(gridExtra)
+library(ggplot2)
+
+par(mfrow=c(1,2))
+
+#<-grid.table(as.matrix(top_genes_tra.1.8[,f]))
+#k
+p1
+p1
+
+
+```
+
+```{r combi, include=TRUE}
+library(gridExtra)
+library(ggplot2)
+
+myTable = tableGrob(top_genes_tra.1.8[,f],theme=ttheme_minimal(base_size = 5))
+myPlot = p1
+lay = rbind(c(1,2), c(1,2))
+
+legend <- cowplot::get_legend(p1)
+#grid.arrange(myTable, p1, layout_matrix = lay)
+grid.arrange(p1 + guides(size = FALSE), # plot without legend
+             legend,                   # then add legend as grob
+             myTable, 
+             layout_matrix = rbind(c(1,1,1,1,3),
+                                   c(1,1,1,1,3),
+                                   c(1,1,1,1,3),
+                                   c(1,1,1,1,3),
+                                   c(1,1,1,1,3),
+                                   c(2,2,2,2,3),
+                                   c(2,2,2,2,3),
+                                   c(2,2,2,2,3)))
+```
 
 ```{r Volcano plot 8.m, include= TRUE, fig.cap= "Volcano plot comparing the 8-cell and morula stage",fig.height=4, fig.width=8, fig.align='center'}
 #Repeating the same procedure with the other three stages
