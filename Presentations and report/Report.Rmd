@@ -124,7 +124,7 @@ library(ggplot2)
 
 
 
-## 3.2 Quality Control and Normalization of the Data
+## 3.3 Quality Control and Normalization of the Data
 
 Before analyzing the microarrays, it is important to determine the quality of the used raw data. This is done by the procedure called Quality Control (QC) where potential mistakes in the experiment can be identified.  
 
@@ -137,7 +137,7 @@ data.human@cdfName <- "HGU133Plus2_Hs_ENST"
 
 ```
 \newpage
-### 3.2.1 Single chip control
+### 3.3.1 Single chip control
 The first step of QC is the single-chip analysis where major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities can be detected by a visual inspection of the microarray images. After looking at our chips we presupposed that the GSM456645 chip could be of bad quality due to a smudge on the bottom edge.
 
 ```{r chips pictures, eval =FALSE}
@@ -149,7 +149,7 @@ for (i in 1:18){
 image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[3],1,9))
 ```
  
-### 3.2.2 RNA Degradation Plot
+### 3.3.2 RNA Degradation Plot
 In the next step we analysed the RNA degradation that is an indicator for a bad quality RNA. Due to the start of the RNA degradation at the 5´ sequence end the intestines of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected.
 
 ```{r RNA Degradation Plot, eval =FALSE, include=TRUE}
@@ -170,7 +170,7 @@ title(sub="human embryogenesis rawdata - shifted")
 dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 ```
 
-### 3.2.3 Normalization
+### 3.3.3 Normalization
 By performing the variance stabilization normalization (vsnrma) (Huber et al.) the data is corrected for biases from non-biological sources, like labelling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
@@ -196,7 +196,7 @@ meanSdPlot(human.vsnrma)
 
 Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated.
 
-<!-- #### 3.2.3.1 Boxplots -->
+<!-- #### 3.3.3.1 Boxplots -->
 The box plots visualize the variation of the gene expression for each chip. After the normalization no boxes were significantly elevated or more spread out than other arrays.
 ```{r boxplots, eval =FALSE, include=TRUE, fig.cap= "Figure 3: Normalization of raw data"}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
@@ -226,7 +226,7 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 
 
-<!-- #### 3.2.3.2 Density plots -->
+<!-- #### 3.3.3.2 Density plots -->
 In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization the distribution of all curves in the plot showed a vicinity. 
 ```{r density plots, eval =FALSE, include = TRUE, fig.cap= "Figure 4: Density plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Density")
@@ -249,7 +249,7 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 
 
 
-<!-- #### 3.2.3.3 Scatter plots -->
+<!-- #### 3.3.3.3 Scatter plots -->
 For the control of the normalization the scatter plots, that compare the log fold intensity change between an array and a reference array, were made.
 
 ```{r scatter plot, eval =FALSE}
@@ -287,18 +287,18 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 
 ```
 
-## 3.3 Principal component analysis
+## 3.4 Principal component analysis
 Principal Component Analysis (PCA) is an important method to reduce the dimensionality of a data set by decreasing its number of variables, which do not contribute to the variance of the data. Principal components (PC) are calculated, which are linear combinations of variables that explain a portion of variance among the total variance in the data. By looking at the PCs that explain an accumulative variance of over 90% and plotting them against each other, a better understanding of the data can be achieved, for example, by discovering potential clusters of the data points.
 
 Quelllee!!!!!!!!!!!!!!
 
-## 3.4 K-means clustering
+## 3.5 K-means clustering
 K-means is a clustering method for which one first must indicate the number of clusters (k). Later the ideal number can be detected by an elbow-plot or silhouette-plot. The algorithm starts by choosing random centroids of the k clusters. Each object is now assigned to the cluster for which the Euclidean distance between centroid and object is the smallest. In the next step the centroids get updated by calculating the mean of each cluster containing the new objects. Those steps are repeated till the cluster assignments of the objects stop changing (Bortz,2010).
 
-## 3.5 Limma analysis
+## 3.6 Limma analysis
 For anaylsis of differential gene expression we conducted limma analysis. Therefore, the 	“Limma” package was employed, which facilitates statistical testing of expression level 		changes of thousands of genes at once. For that, “Limma” uses linear models to calculate 	the test statistic between sample group expression levels (Ritchie et al.,2015).
 
-## 3.6 Gene set enrichment analysis
+## 3.7 Gene set enrichment analysis
 Gene set enrichment analysis (GSEA) is a method to identify groups of genes in a dataset that are overrepresented more than expected in any known set of genes. These gene sets can be groups of genes that share a common biological function, chromosomal location, or regulation. GSEA uses statistical approaches to find groups of genes that are significantly enriched or depleted. The goal of this method is to better understand the biological function of groups of genes in a data set (Subramanian et al.,2005).  
 
 # 4. Results
@@ -512,7 +512,7 @@ legend(x = 100,y=48,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8
 
 
 ```
-We grouped our replicates using k-means clustering on the first 4 principal components which eyplain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters. Due to this result, we focused our project on investigating the difference in gene expression between 4-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
+We grouped our replicates using k-means clustering on the first 4 principal components which eyplain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters.The clusters were composed as follows:Cluster 1(1 cell,2 cell and 4 cell stage), Cluster 2(8 cell stage), Cluster 3 (morula stage) and Cluster 4 (blastocyst stage). Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
 
 
 ```{r run models with varying value of k}
@@ -563,7 +563,7 @@ sil_width <- map_dbl(2:10,  function(k){
 })
 ```
 
-```{r Silhouette plot,  include=TRUE, fig.cap= "Silhouette plot",fig.height=3, fig.width=3, fig.align='left'}
+```{r Silhouette plot, fig.cap= "Silhouette plot",fig.height=3, fig.width=3, fig.align='left'}
 # Generate a data frame containing both k and sil_width
 sil_df <- data.frame(
   k = 2:10,
@@ -577,7 +577,7 @@ ggplot(sil_df, aes(x = k, y = sil_width)) +
 ```
 
 
-```{r Cluster silhouette plot, include= TRUE, fig.subcap= "Table 2: Clusters determined by silhouette plot",fig.align='right'}
+```{r Cluster silhouette plot,  fig.subcap= "Table 2: Clusters determined by silhouette plot",fig.align='right'}
 # Generate a k-means model using the pam() function with a k = 4
 pam_k4 <- pam(pca$x[,1:4],k=4)
 
@@ -989,7 +989,7 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 
 To gain an overview of TRA genes that are important for all stages, we use a Venn diagram to plot the intersection of differentially expressed TRA genes from 1-cell stage to 8-cell stage, from 8-cell stage to morula stage as well as from morula stage to blastocyst stage. We extracted genes that are continuously up/down-regulated along the three stage transitions we investigated, since they might be important for the embryogenesis.
 
-```{r Venn diagram, include=TRUE, fig.cap=c( "Venn diagram upregulated genes","Venn diagram downregulated genes"),fig.height=4, fig.width=4, fig.align='center' }
+```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram upregulated genes",fig.height=3, fig.width=4.5, fig.align='center' }
 #creating demo data for Venn diagram
 #1.8.tra Upregulated
 tra.1.8.up=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC>0),]$ensembl.transcript
@@ -1003,9 +1003,11 @@ list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 # Helper function to display Venn diagram.up
 display_venn.up <- function(x){
   grid.newpage()
-  venn_object <- venn.diagram(x, main=("Upregulated TRAS between different stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL)
+  venn_object <- venn.diagram(x, main=("Upregulated TRAS between different stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL,cat.cex=0.6)
   grid.draw(venn_object)
 }
+#,main.fontfamily= "Arial",main.fontface="bold" not working
+
 
 #venn plot up
 display_venn.up(list_venn.up)
@@ -1029,8 +1031,10 @@ intersect.tra.genes.up=Intersect(list_venn.up)
 
 
 Venn.genes.up<-annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.up,]
+```
 
 
+```{r Venn diagram down, fig.cap="Venn diagram downregulated genes",fig.height=4, fig.width=4, fig.align='center' }
 #1.8.tra downregulated
 tra.1.8.down=annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC<0),]$ensembl.transcript
 #8.m.tra downregulated
@@ -1061,7 +1065,7 @@ We found three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated
 ### 4.3.2 Volcano plot
 After looking that TRA genes that are important for all stages, we then focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly differential genes with a p-value cutoff of 0.01 and a fold10change cutoff of 2. To extract the most biologically significant genes, we then identified the top 10 up/down-regulated TRA transcripts that are most significantly expressed and have the largest fold changes. These genes are labeled in the volcano plots.
 
-```{r volcano plots 1.8, include= TRUE, fig.cap= "Volcano plot comparing the 1-cell and 8-cell stage",fig.height=4, fig.width=8, fig.align='center' }
+```{r volcano plots 1.8, include= TRUE, fig.cap= "Volcano plot comparing the 1-cell and 8-cell stage",fig.height=4, fig.width=9, fig.align='center' }
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
 
 #for the stage between 1-cell and 8-cell stage
@@ -1110,52 +1114,7 @@ p1
 ```
 
 
-```{r toptable 1.8, include= TRUE}
-#Top table
-f<-c(1,2,8)
-
-knitr::kable(top_genes_tra.1.8[,f],format = "simple",caption ="Up-/downregulated genes comparing 1-cell and 8-cell stage")
-
-```
-
-```{r Try, include=TRUE}
-library(gridExtra)
-library(ggplot2)
-
-par(mfrow=c(1,2))
-
-#<-grid.table(as.matrix(top_genes_tra.1.8[,f]))
-#k
-p1
-p1
-
-
-```
-
-```{r combi, include=TRUE}
-library(gridExtra)
-library(ggplot2)
-
-myTable = tableGrob(top_genes_tra.1.8[,f],theme=ttheme_minimal(base_size = 5))
-myPlot = p1
-lay = rbind(c(1,2), c(1,2))
-
-legend <- cowplot::get_legend(p1)
-#grid.arrange(myTable, p1, layout_matrix = lay)
-grid.arrange(p1 + guides(size = FALSE), # plot without legend
-             legend,                   # then add legend as grob
-             myTable, 
-             layout_matrix = rbind(c(1,1,1,1,3),
-                                   c(1,1,1,1,3),
-                                   c(1,1,1,1,3),
-                                   c(1,1,1,1,3),
-                                   c(1,1,1,1,3),
-                                   c(2,2,2,2,3),
-                                   c(2,2,2,2,3),
-                                   c(2,2,2,2,3)))
-```
-
-```{r Volcano plot 8.m, include= TRUE, fig.cap= "Volcano plot comparing the 8-cell and morula stage",fig.height=4, fig.width=8, fig.align='center'}
+```{r Volcano plot 8.m, fig.cap= "Volcano plot comparing the 8-cell and morula stage",fig.height=4, fig.width=8, fig.align='center'}
 #Repeating the same procedure with the other three stages
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.8.m <- annotated.limma.table.vollst.8.m %>% 
@@ -1203,15 +1162,8 @@ p2
 
 ```
 
-```{r toptable 8.m, include= TRUE}
-#Top table
-f<-c(2,8)
 
-knitr::kable(top_genes_tra.8.m[,f],format = "simple",caption ="Up-/downregulated genes comparing 8-cell and morula stage")
-
-```
-
-```{r Volcano plot m.b, include= TRUE, fig.cap= " Volcano plot comparing the morula and blastocyst stage",fig.height=4, fig.width=8, fig.align='center'}
+```{r Volcano plot m.b, fig.cap= " Volcano plot comparing the morula and blastocyst stage",fig.height=4, fig.width=8, fig.align='center'}
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot
 annotated.limma.table.vollst.m.b <- annotated.limma.table.vollst.m.b %>% 
   mutate(
@@ -1256,15 +1208,6 @@ p3 <-  p3 +
 p3
 ```
 
-
-
-```{r toptable m.b, include= TRUE}
-#Top table
-f<-c(2,8)
-
-knitr::kable(top_genes_tra.m.b[,f],format = "simple",caption ="Up-/downregulated genes comparing morula and blastocyst stage")
-
-```
 
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
 
@@ -1395,7 +1338,7 @@ After extracting the top up/down-regulated DEGs and understanding their biologic
 (eher Methode?)
 
 
-```{r Annotate Expression set with Entrez Gene IDs}
+```{r Annotate Expression set with Entrez Gene IDs, include=TRUE,, fig.height=5,fig.width=8}
 # Convert Ensembl Gene IDs to Entrez IDs because Entrez IDs are needed for GSEA-code
 # Extract unique transcripts in ensembl data
 ensembl.unique = unique(ensembl.data$Transcript.stable.ID)
@@ -1602,16 +1545,39 @@ Even though our data only includes preimplantation stages, we still can observe 
 
 
 # 6. Supplementary material
+## 6.1 Top 10 upregualted genes in the compared stages
+```{r toptable 1.8, include= TRUE}
+#Top table
+f<-c(1,2,8)
 
-## 6.1 Expression plots interesting genes
+knitr::kable(top_genes_tra.1.8[1:10,f],format = "simple",caption ="Upregulated genes comparing 1-cell and 8-cell stage")
 
-```{r Expression plot STMN1, include=TRUE}
-names1 = c("1 cell stage", 
-          "2 cell stage",
-          "4 cell stage",
-          "8 cell stage",
-          "morula stage",
-          "blastocyst stage")
+```
+
+```{r toptable 8.m, include= TRUE}
+#Top table
+
+knitr::kable(top_genes_tra.8.m[1:10,f],format = "simple",caption ="Updownregulated genes comparing 8-cell and morula stage")
+
+```
+
+
+```{r toptable m.b, include= TRUE}
+#Top table
+
+knitr::kable(top_genes_tra.m.b[1:10,f],format = "simple",caption ="Upregulated genes comparing morula and blastocyst stage")
+
+```
+
+### 6.1.1 Expression plots certain Top 10 genes
+
+```{r Expression plot STMN1, include=TRUE, fig.height=3,fig.width=6}
+names1 = c("1 ", 
+          "2 ",
+          "4 ",
+          "8 ",
+          "m ",
+          "b")
 
 
 annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1630,13 +1596,13 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression STMN1")
 ```
 
-```{r Expression plot SLC2A3,include= TRUE}
-names1 = c("1 cell stage", 
-          "2 cell stage",
-          "4 cell stage",
-          "8 cell stage",
-          "morula stage",
-          "blastocyst stage")
+```{r Expression plot SLC2A3,include= TRUE, fig.height=3,fig.width=6}
+names1 = c("1 ", 
+          "2 ",
+          "4 ",
+          "8 ",
+          "m ",
+          "b")
 
 
 annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1655,14 +1621,13 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression SLC2A3")
 ```
 
-```{r Expression plot TEAD4, include=TRUE}
-names1 = c("1 cell stage", 
-          "2 cell stage",
-          "4 cell stage",
-          "8 cell stage",
-          "morula stage",
-          "blastocyst stage")
-
+```{r Expression plot TEAD4, include=TRUE, fig.height=3,fig.width=6}
+names1 =c("1 ", 
+          "2 ",
+          "4 ",
+          "8 ",
+          "m ",
+          "b")
 
 annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
 
@@ -1680,13 +1645,13 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression TEAD4")
 ```
 
-```{r Expression plot NQO1, include=TRUE}
-names1 = c("1 cell stage", 
-          "2 cell stage",
-          "4 cell stage",
-          "8 cell stage",
-          "morula stage",
-          "blastocyst stage")
+```{r Expression plot NQO1, include=TRUE, fig.height=3,fig.width=6}
+names1 = c("1 ", 
+          "2 ",
+          "4 ",
+          "8 ",
+          "m ",
+          "b")
 
 
 annotated.tra.mean= cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
