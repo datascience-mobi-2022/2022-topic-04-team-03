@@ -1290,7 +1290,7 @@ After extracting the top up/down-regulated DEGs and understanding their biologic
  
 (eher Methode?)
 
-```{r GSEA for stage 1-8, include=TRUE}
+```{r GSEA for stage 1-8, include=TRUE, fig.cap="Gene set enrichment analysis comparing 1-cell and 8-cell stage"}
 #create the input for the function gseGO() for stage 1-8
 # we want the log10 fold change 
 GO.1.8.genes<- annotated.limma.1.8$logFC
@@ -1320,7 +1320,7 @@ dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~
 #gse.1.8.DEG@result
 ```
 
-```{r GSEA for stage 8-m, include=TRUE}
+```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage"}
 #create the input for the function gseGO() for stage 8-m
 # we want the log10 fold change 
 GO.8.m.genes<- annotated.limma.8.m$logFC
@@ -1350,7 +1350,7 @@ dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=4) + facet_grid(.~
 #gse.8.m.DEG@result
 ```
 
-```{r GSEA for stage m-b,include=TRUE}
+```{r GSEA for stage m-b,include=TRUE, fig.cap="Gene set enrichment analysis comparing morula and blastocyst stage"}
 #create the input for the function gseGO() for stage m-b
 # we want the log10 fold change 
 GO.m.b.genes<- annotated.limma.m.b$logFC
@@ -1452,7 +1452,7 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 
 ```
 
-```{r chemokine heatmap}
+```{r chemokine heatmap,include=TRUE,fig.cap="Chemokine heatmap",fig.height=3, fig.width=5}
 #extract the chemokine transkript
 chemokine.transkript=unique(c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine)))
 
@@ -1473,6 +1473,7 @@ rownames(annotation_row) = chemokine.deg$Transcript.stable.ID
 heatmap=pheatmap(as.matrix(chemokine.expression[,1:18]), cluster_cols=FALSE,cluster_rows=TRUE, show_rownames = TRUE, legend=TRUE, fontsize_row=0.5, annotation_row = annotation_row)
 
 ```
+
 # 5. Discussion
 
 ## 5.1	General Embryo development 
