@@ -9,4 +9,4 @@ Furthermore, we found three differentially expressed chemokines that play a role
 
 # 2. Used data
 
-* Geo accession to the analysed data set [link](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18290)
+* Geo accession to the analysed data set: GSE18290 ("[link](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18290)")
