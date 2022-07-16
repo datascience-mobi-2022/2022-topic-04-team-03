@@ -12,25 +12,13 @@ Furthermore, we found three differentially expressed chemokines that play a role
 * Geo accession to the analysed data set: GSE18290 ([link](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18290))
 * TRA data set: GTEX RNAseq human dataset provided by Dr. Dinkelacker in 2019 (60,131 transcripts)
 
-\begin{table}[htb]
-\caption{List of all R and Bioconducter packages used in our project.}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{lllll}
-\hline
-affy 1.74.0 & vsn 3.64.2 & ggplot2 3.3.6 & AnnotationDbi 1.58.0 & VennDiagram 1.7.3 \\ 
- & limma 3.52.2  & dplyr 1.0.9 & tidyverse 1.3.1 & hexbin 1.28.2 \\ 
-hgu133plus2hsenstcdf 25.0.0  & cluster 2.1.3 & factoextra 1.0.7 & org.Hs.eg.d 3.15.0 & go.db 3.15.0\\
-hgu133plus2hsenstprobe 25.0.0 & pheatmap 1.0.12 & imager 0.42.13 & tinytex 0.40 & RColorBrewer 1.1-3 \\
-clusterProfiler 4.4.4 & enrichplot 1.16.1 & \\
-\hline
-\end{tabular}}
-\end{table}
 
-Table Header  | Second Header |
-------------- | ------------- |
-ggplot2 3.3.6 | AnnotationDbi 1.58.0 | dplyr 1.0.9 | hgu133plus2hsenstcdf 25.0.0|
-affy 1.74.0   | vsn 3.64.2.   | tidyverse 1.3.1 | hgu133plus2hsenstprobe |
-VennDiagram 1.7.3  | limma 3.52.2 | hexbin 1.28.2 | org.Hs.eg.d 3.15.0 |
-cluster 2.1.3 | factoextra 1.0.7  | go.db 3.15.0 | pheatmap 1.0.12 |
-imager 0.42.13 | tinytex 0.40 | RColorBrewer 1.1-3 | clusterProfiler 4.4.4 |
-enrichplot 1.16.1
+List of all R and Bioconducter packages used in our project
+                   |                      |                 |                            |
+-------------      | -------------        |-------------    | -------------              |
+ggplot2 3.3.6      | AnnotationDbi 1.58.0 | dplyr 1.0.9     | hgu133plus2hsenstcdf 25.0.0|
+affy 1.74.0        | vsn 3.64.2.          | tidyverse 1.3.1 | hgu133plus2hsenstprobe     |
+VennDiagram 1.7.3  | limma 3.52.2         | hexbin 1.28.2   | org.Hs.eg.d 3.15.0         |
+cluster 2.1.3      | factoextra 1.0.7     | go.db 3.15.0    | pheatmap 1.0.12            |
+imager 0.42.13     | RColorBrewer 1.1-3   | tinytex 0.40    | clusterProfiler 4.4.4      |
+enrichplot 1.16.1  |
