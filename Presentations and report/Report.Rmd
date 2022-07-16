@@ -1165,7 +1165,6 @@ p3
 
 Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
 
-### 4.3.3 Compare our top TRA genes and PCA Variance genes
 
 <!-- #Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages. -->
 
@@ -1286,70 +1285,10 @@ intersect(top_genes_tra.m.b$gene.name,top_tra_pca1.m.b$Gene.name)
 ```
 
 
-### 4.3.4 Gene set enrichment analysis
+### 4.3.3 Gene set enrichment analysis
 After extracting the top up/down-regulated DEGs and understanding their biological relevance in embryo as well as their presence in possible pathways, we decided to perform GSEA to find out if our DEGs were generally enriched in certain gene sets of biological pathways. (Therefore, we compared the DEGs with gene sets of the Gene Ontology (GO) database using the limma function goana(). Then, we generated topTables with the results of GSEA that contain the significantly enriched or depleted biological pathways. In addition, these tables provide information about the pathway ID and name, the number of genes in the set, the number of up- and downregulated genes, and the p-value for enrichment of up- and downregulated genes.)
  
 (eher Methode?)
-
-```{r GSEA for stage 1-8, include=TRUE, fig.cap="Gene set enrichment analysis comparing 1-cell and 8-cell stage"}
-#create the input for the function gseGO() for stage 1-8
-# we want the log10 fold change 
-GO.1.8.genes<- annotated.limma.1.8$logFC
-
-# name the vector with Transkript ID
-names(GO.1.8.genes) <- rownames(annotated.limma.1.8)
-
-
-# sort the list in decreasing order (required for clusterProfiler)
-gene_list = sort(GO.1.8.genes, decreasing = TRUE)
-
-# conduct the GSEA with GO data
-organism = "org.Hs.eg.db"
-gse.1.8.DEG <- gseGO(geneList=gene_list, 
-                 ont ="ALL", 
-                 keyType = "ENSEMBLTRANS", 
-                 minGSSize = 3, 
-                 maxGSSize = 800, 
-                 pvalueCutoff = 0.05,
-                 verbose = TRUE, 
-                 OrgDb = organism, 
-                 pAdjustMethod = "BH")
-
-#visualize the GSEA output
-require(DOSE)
-dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~.sign)
-#gse.1.8.DEG@result
-```
-
-```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage"}
-#create the input for the function gseGO() for stage 8-m
-# we want the log10 fold change 
-GO.8.m.genes<- annotated.limma.8.m$logFC
-
-# name the vector with Transkript ID
-names(GO.8.m.genes) <- rownames(annotated.limma.8.m)
-
-
-# sort the list in decreasing order (required for clusterProfiler)
-gene_list = sort(GO.8.m.genes, decreasing = TRUE)
-
-# conduct the GSEA with GO data
-gse.8.m.DEG <- gseGO(geneList=gene_list, 
-                 ont ="ALL", 
-                 keyType = "ENSEMBLTRANS", 
-                 minGSSize = 3, 
-                 maxGSSize = 800, 
-                 pvalueCutoff = 0.05, 
-                 eps=0,
-                 verbose = TRUE, 
-                 OrgDb = organism, 
-                 pAdjustMethod = "BH")
-
-#visualize the GSEA output
-require(DOSE)
-dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=4) + facet_grid(.~.sign)
-#gse.8.m.DEG@result
-```
 
 ```{r GSEA for stage m-b,include=TRUE, fig.cap="Gene set enrichment analysis comparing morula and blastocyst stage"}
 #create the input for the function gseGO() for stage m-b
@@ -1497,7 +1436,7 @@ Even though our data only includes preimplantation stages, we still can observe 
 
 As described in the introduction, chemokines expression are durin important during the embryonic development. For successful implantation, new blood vessels need to be formed in the endometrium (Torry et al., 2007). CCL15 showed to induce the process of angiogenesis (Hwang et al., 2004). Our analysis showed that this chemokine is first upregulated between the stages 8-cell and morula. This also demonstrates the process of implantation preparation. However, we could not explain the downregulation between the stages morula and blastocyst. Our findings on the upregulation of CXCL14 hint that it could also play a significant role in embryogenesis. This chemokine is related to CXCL12 whose expression showed to encourage angiogenesis and a positive pregnancy course (Koo et al., 2021). In line with previous studies, where the involvement of CXCL14 in the same embryonic pathways as CXCL12 (Nassari et al., 2017), the expressions seem logical. All in all, it can be said, that our analysis points up that chemokines play a role in early embryonc development. But ensuing steps for further analysis and research should be taken, to study the mechanism by which those signal proteins are involved in the embryogenesis.
 
-
+\newpage
 # 6. Supplementary material
 ## 6.1 Top 10 upregualted genes in the compared stages
 ```{r toptable 1.8, include= TRUE}
@@ -1525,7 +1464,7 @@ knitr::kable(top_genes_tra.m.b[1:10,f],format = "simple",caption ="Upregulated g
 
 ### 6.1.1 Expression plots certain Top 10 genes
 
-```{r Expression plot STMN1, include=TRUE, fig.height=3,fig.width=6}
+```{r Expression plot STMN1, include=TRUE, fig.cap="Expression plot of Stathmin 1", fig.height=3,fig.width=6}
 names1 = c("1 ", 
           "2 ",
           "4 ",
@@ -1550,7 +1489,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression STMN1")
 ```
 
-```{r Expression plot SLC2A3,include= TRUE, fig.height=3,fig.width=6}
+```{r Expression plot SLC2A3,include= TRUE, fig.cap="Expression plot of Solute Carrier Family 2 Member 3", fig.height=3,fig.width=6}
 names1 = c("1 ", 
           "2 ",
           "4 ",
@@ -1575,7 +1514,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression SLC2A3")
 ```
 
-```{r Expression plot TEAD4, include=TRUE, fig.height=3,fig.width=6}
+```{r Expression plot TEAD4, include=TRUE, fig.cap="Expression plot of TEA Domain Transcription Factor 4", fig.height=3,fig.width=6}
 names1 =c("1 ", 
           "2 ",
           "4 ",
@@ -1599,7 +1538,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
     ggtitle("Expression TEAD4")
 ```
 
-```{r Expression plot NQO1, include=TRUE, fig.height=3,fig.width=6}
+```{r Expression plot NQO1, include=TRUE, fig.cap="Expression plot of NAD(P)H Quinone Dehydrogenase 1", fig.height=3,fig.width=6}
 names1 = c("1 ", 
           "2 ",
           "4 ",
@@ -1623,6 +1562,69 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y =expression,group=as.character(tr
   labs(y=("Expression")) +
     ggtitle("Expression NQO1")
 ```
+## 6.2 Gene set enrichment analysis
+
+
+```{r GSEA for stage 1-8, include=TRUE, fig.cap="Gene set enrichment analysis comparing 1-cell and 8-cell stage"}
+#create the input for the function gseGO() for stage 1-8
+# we want the log10 fold change 
+GO.1.8.genes<- annotated.limma.1.8$logFC
+
+# name the vector with Transkript ID
+names(GO.1.8.genes) <- rownames(annotated.limma.1.8)
+
+
+# sort the list in decreasing order (required for clusterProfiler)
+gene_list = sort(GO.1.8.genes, decreasing = TRUE)
+
+# conduct the GSEA with GO data
+organism = "org.Hs.eg.db"
+gse.1.8.DEG <- gseGO(geneList=gene_list, 
+                 ont ="ALL", 
+                 keyType = "ENSEMBLTRANS", 
+                 minGSSize = 3, 
+                 maxGSSize = 800, 
+                 pvalueCutoff = 0.05,
+                 verbose = TRUE, 
+                 OrgDb = organism, 
+                 pAdjustMethod = "BH")
+
+#visualize the GSEA output
+require(DOSE)
+dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~.sign)
+#gse.1.8.DEG@result
+```
+
+```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage"}
+#create the input for the function gseGO() for stage 8-m
+# we want the log10 fold change 
+GO.8.m.genes<- annotated.limma.8.m$logFC
+
+# name the vector with Transkript ID
+names(GO.8.m.genes) <- rownames(annotated.limma.8.m)
+
+
+# sort the list in decreasing order (required for clusterProfiler)
+gene_list = sort(GO.8.m.genes, decreasing = TRUE)
+
+# conduct the GSEA with GO data
+gse.8.m.DEG <- gseGO(geneList=gene_list, 
+                 ont ="ALL", 
+                 keyType = "ENSEMBLTRANS", 
+                 minGSSize = 3, 
+                 maxGSSize = 800, 
+                 pvalueCutoff = 0.05, 
+                 eps=0,
+                 verbose = TRUE, 
+                 OrgDb = organism, 
+                 pAdjustMethod = "BH")
+
+#visualize the GSEA output
+require(DOSE)
+dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=4) + facet_grid(.~.sign)
+#gse.8.m.DEG@result
+```
+
 
 \newpage
 # 7. References
