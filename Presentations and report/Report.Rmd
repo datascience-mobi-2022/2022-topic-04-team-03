@@ -65,10 +65,10 @@ Research, especially in the field of early embryogenesis is important in many wa
 # 2.Introduction
 After the fertilization the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later important for implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*.,1993).
 Interestingly the activation of the embryo genome is thought to only start after the 4-cell stage. Prior the development is driven by maternal stores of RNA which were passed during oogenesis. 
-The metabolic activity itself only starts rising at the late morula stage. The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
-During this phase the energy metabolism of the embryo changes from using aerobic substrates such as pyruvate, lactate, and glutamine to using glucose (Leese *et al*.,1993). 
-This switch results in a 2.7-fold rise of oxygen consumption in the trophectoderm where the oxidative phosphorylation takes place. As a consequence, the production of harmful reactive oxygen species (ROS) increases. The embryo therefore has to invent a system to prevent high amounts of ROS and at the same time prepare repair mechanisms for fixing the damage (Kaneko *et al*.,2013).
-
+The metabolic activity itself only starts rising at the late morula stage, after a process called the maternal to zygotic transition (MZT) (Schier, 2007). The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
+During this phase the energy metabolism of the embryo changes from using aerobic substrates such as pyruvate, lactate, and glutamine to using glucose (Leese *et al*., 1993). 
+This switch results in a 2.7-fold rise of oxygen consumption in the trophectoderm where the oxidative phosphorylation takes place. As a consequence, the production of harmful reactive oxygen species (ROS) increases. The embryo therefore has to invent a system to prevent high amounts of ROS and at the same time prepare repair mechanisms for fixing the damage (Kaneko *et al*., 2013).
+The secretion of signal proteins known as chemokines plays an important cause different biological processes like the movement of epithelial cells or leukocytes (Raman et al., 2011). Those effects also occur during pregnancy and it has been shown that chemokines play an essential role in the implantation of the embryo and embryonic development (Hannan et al., 2007) 
 \newpage
 
 # 3.Materials and methods
@@ -1481,8 +1481,6 @@ heatmap=pheatmap(as.matrix(chemokine.expression[,1:18]), cluster_cols=FALSE,clus
 ## 5.2	Meiose, Spermien 
 In the early stage of embryonic development, the embryo is transcriptionally silent, which means, that the genome activation of the zygote occurs a bit later. Just after the so-called development stage of maternal to zygotic transition (MZT), the newly arranged genom from the sperm and maternal egg is used. Therefore, degradation of maternal mRNA needs to take place (Schier, 2007).
 
-The differentially expressed gene REC114 codes a meiotic recombination protein that plays an essential role in the DNA double-strand breaks (DSBs) formation. Since DSBs induce the meiotic homologous recombination pathway it is important in accurate chromosome segregation (de Massy, 2013). A mutation of this gene results in defects in spermatogenesis and oogenesis indicating its essential role in both processes (Kumer et al., 2018). REC114 mutation is also responsible for early embryonic arrest (Wang et al., 2020). Our result, that between the stages 1-cell to 8-cell REC114 is downregulated, demonstrates two things. First, because of its essential role in oogenesis the protein must be presented in high quantity in the maternal egg and also must be downregulated during the MZT. Secondly, our findings point to the role of REC114 as a TRA-specific to the testis. In the early embryonic development stages, no male organs are developed and therefore it seems logical, that this TRA is not expressed in a high quantity. 
-
 From the results, it is clear that in our data the MZT takes place in between stages 1 cell to 8 cell. This can be seen in the differential expression of the proteins like PRPF4B and EIF5. After the transcription the non-coding sequences of the RNA need to be removed by the process called RNA-Splicing. PRPF4B has a regulative role in the pre-mRNA splicing (Corkery et al., 2015).    
 EIF5 plays an important role in the formation of a functional 80 S initiation complex (Si et al., 1996).  Therefore an up regulation of both proteins indicates translation events which also imply that the activation of the zygotic genome took place.  
  
@@ -1496,7 +1494,9 @@ During our limma analysis of the differentially expressed genes we also found ge
 ## 5.4	Implantation 
 Even though our data only includes preimplantation stages, we still can observe the first differentiative event in embryogenesis- the formation of the blastocyst. The outer cells start to form tight junctions and build an epithelial layer which is called the trophectoderm. This layer is later involved in in the implantation process meaning the blastocyst will settle in the uterine endometrium (Leese et al.,1993). To ensure a successful implantation several arrangements must be made in advance. One of them is the expression of STMN1 which promotes the migration and invasion of the trophoblast by regulating the expression of N-cadherin and E-cadherin. N-cadherin promotes invasion whereas E-cadherin suppresses the invasion (Tian et al.,2015). In our data one can observe a significant increase in STMN1 expression during the morula stage which indicates that the preparation for implantation starts long before the actual implantation event. 
 
-\newpage
+As described in the introduction, chemokines expression are durin important during the embryonic development. For successful implantation, new blood vessels need to be formed in the endometrium (Torry et al., 2007). CCL15 showed to induce the process of angiogenesis (Hwang et al., 2004). Our analysis showed that this chemokine is first upregulated between the stages 8-cell and morula. This also demonstrates the process of implantation preparation. However, we could not explain the downregulation between the stages morula and blastocyst. Our findings on the upregulation of CXCL14 hint that it could also play a significant role in embryogenesis. This chemokine is related to CXCL12 whose expression showed to encourage angiogenesis and a positive pregnancy course (Koo et al., 2021). In line with previous studies, where the involvement of CXCL14 in the same embryonic pathways as CXCL12 (Nassari et al., 2017), the expressions seem logical. All in all, it can be said, that our analysis points up that chemokines play a role in early embryonc development. But ensuing steps for further analysis and research should be taken, to study the mechanism by which those signal proteins are involved in the embryogenesis.
+
+
 # 6. Supplementary material
 ## 6.1 Top 10 upregualted genes in the compared stages
 ```{r toptable 1.8, include= TRUE}
@@ -1658,5 +1658,47 @@ Xie, D., Chen, C.C., Ptaszek, L.M., Xiao, S., Cao, X., Fang, F., Ng, H.H., Lewin
 Gentleman, R., Carey, V. J., Huber, W., Irizarry, R. A., Dudoit, S. . (2005). Bioinformatics and Computational Biology Solutions Using R and Bioconductor (Springer New York, NY). 10.1007/0-387-29362-0.
 
 
+Leese, H.J., Conaghan, J., Martin, K.L., and Hardy, K. (1993). Early human embryo metabolism. Bioessays 15, 259-264. 10.1002/bies.950150406.
+
+Corkery, D.P., Holly, A.C., Lahsaee, S., and Dellaire, G. (2015). Connecting the speckles: Splicing kinases and their role in tumorigenesis and treatment response. Nucleus 6, 279-288. 10.1080/19491034.2015.1062194.
+
+Kaneko, K.J., and DePamphilis, M.L. (2013). TEAD4 establishes the energy homeostasis essential for blastocoel formation. Development 140, 3680-3690. 10.1242/dev.093799.
+
+Bortz, J., Schuster, C. (2010). Statistik für Human- und Sozialwissenschaftler, 7 Edition (Springer Berlin, Heidelberg). 10.1007/978-3-642-12770-0.
+
+Ritchie, M.E., Phipson, B., Wu, D., Hu, Y., Law, C.W., Shi, W., and Smyth, G.K. (2015). limma powers differential expression analyses for RNA-sequencing and microarray studies. Nucleic Acids Research 43, e47-e47. 10.1093/nar/gkv007.
+
+Subramanian, A., Tamayo, P., Mootha, V.K., Mukherjee, S., Ebert, B.L., Gillette, M.A., Paulovich, A., Pomeroy, S.L., Golub, T.R., Lander, E.S., and Mesirov, J.P. (2005). Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. Proceedings of the National Academy of Sciences 102, 15545-15550. doi:10.1073/pnas.0506580102.
+
+Wang, W., Dong, J., Chen, B., Du, J., Kuang, Y., Sun, X., Fu, J., Li, B., Mu, J., Zhang, Z., et al. (2020). Homozygous mutations in REC114 cause female infertility characterised by multiple pronuclei formation and early embryonic arrest. J Med Genet 57, 187-194. 10.1136/jmedgenet-2019-106379.
+
+Schier, A.F. (2007). The maternal-zygotic transition: death and birth of RNAs. Science 316, 406-407. 10.1126/science.1140693.
+
+Leese, H.J., Baumann, C.G., Brison, D.R., McEvoy, T.G., and Sturmey, R.G. (2008). Metabolism of the viable mammalian embryo: quietness revisited. Mol Hum Reprod 14, 667-672. 10.1093/molehr/gan065.
+
+Ziegler, G.C., Almos, P., McNeill, R.V., Jansch, C., and Lesch, K.P. (2020). Cellular effects and clinical implications of SLC2A3 copy number variation. J Cell Physiol 235, 9021-9036. 10.1002/jcp.29753.
+
+Ross, D., and Siegel, D. (2021). The diverse functionality of NQO1 and its roles in redox control. Redox Biol 41, 101950. 10.1016/j.redox.2021.101950.
+
+Tian, F.J., Qin, C.M., Li, X.C., Wu, F., Liu, X.R., Xu, W.M., and Lin, Y. (2015). Decreased stathmin-1 expression inhibits trophoblast proliferation and invasion and is associated with recurrent miscarriage. Am J Pathol 185, 2709-2721. 10.1016/j.ajpath.2015.06.010.
+
+Huber, W., von Heydebreck, A., Sültmann, H., Poustka, A., and Vingron, M. (2002). Variance stabilization applied to microarray data calibration and to the quantification of differential expression. Bioinformatics 18 Suppl 1, S96-104. 10.1093/bioinformatics/18.suppl_1.s96.
+
+Xie, D., Chen, C.C., Ptaszek, L.M., Xiao, S., Cao, X., Fang, F., Ng, H.H., Lewin, H.A., Cowan, C., and Zhong, S. (2010). Rewirable gene regulatory networks in the preimplantation embryonic development of three mammalian species. Genome Res 20, 804-815. 10.1101/gr.100594.109.
+
+Gentleman, R., Carey, V. J., Huber, W., Irizarry, R. A., Dudoit, S. . (2005). Bioinformatics and Computational Biology Solutions Using R and Bioconductor (Springer New York, NY). 10.1007/0-387-29362-0.
+
+Hannan, N.J., and Salamonsen, L.A. (2007). Role of chemokines in the endometrium and in embryo implantation. Current Opinion in Obstetrics and Gynecology 19, 266-272. 10.1097/GCO.0b013e328133885f.
+
+
+Raman, D., Sobolik-Delmaire, T., and Richmond, A. (2011). Chemokines in health and disease. Exp Cell Res 317, 575-589. 10.1016/j.yexcr.2011.01.005.
+
+Torry, D.S., Leavenworth, J., Chang, M., Maheshwari, V., Groesch, K., Ball, E.R., and Torry, R.J. (2007). Angiogenesis in implantation. J Assist Reprod Genet 24, 303-315. 10.1007/s10815-007-9152-7.
+
+Hwang, J., Kim, C.W., Son, K.N., Han, K.Y., Lee, K.H., Kleinman, H.K., Ko, J., Na, D.S., Kwon, B.S., Gho, Y.S., and Kim, J. (2004). Angiogenic activity of human CC chemokine CCL15 in vitro and in vivo. FEBS Lett 570, 47-51. 10.1016/j.febslet.2004.06.023.
+
+Koo, H.S., Yoon, M.-J., Hong, S.-H., Ahn, J., Cha, H., Lee, D., Ko, J.-E., Kwon, H., Choi, D.H., Lee, K.-A., et al. (2021). CXCL12 enhances pregnancy outcome via improvement of endometrial receptivity in mice. Scientific Reports 11, 7397. 10.1038/s41598-021-86956-y.
+
+Nassari, S., Blavet, C., Bonnin, M.A., Stricker, S., Duprez, D., and Fournier-Thibault, C. (2017). The chemokines CXCL12 and CXCL14 differentially regulate connective tissue markers during limb development. Sci Rep 7, 17279. 10.1038/s41598-017-17490-z.
 
 
