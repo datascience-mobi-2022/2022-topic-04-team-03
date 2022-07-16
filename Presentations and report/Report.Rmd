@@ -1660,6 +1660,8 @@ Huber, W., von Heydebreck, A., Sültmann, H., Poustka, A., and Vingron, M. (2002
 
 Hwang, J., Kim, C.W., Son, K.N., Han, K.Y., Lee, K.H., Kleinman, H.K., Ko, J., Na, D.S., Kwon, B.S., Gho, Y.S., and Kim, J. (2004). Angiogenic activity of human CC chemokine CCL15 in vitro and in vivo. FEBS Lett 570, 47-51. 10.1016/j.febslet.2004.06.023.
 
+Ihrie, R.A., Marques, M.R., Nguyen, B.T., Horner, J.S., Papazoglu, C., Bronson, R.T., Mills, A.A., Attardi, L.D. (2005). Perp is a p63-regulated gene essential for epithelial integrity. Cell 120, 843-856. 10.1016/j.cell.2005.01.008
+
 Kaneko, K.J., and DePamphilis, M.L. (2013). TEAD4 establishes the energy homeostasis essential for blastocoel formation. Development 140, 3680-3690. 10.1242/dev.093799.
 
 Koo, H.S., Yoon, M.-J., Hong, S.-H., Ahn, J., Cha, H., Lee, D., Ko, J.-E., Kwon, H., Choi, D.H., Lee, K.-A., et al. (2021). CXCL12 enhances pregnancy outcome via improvement of endometrial receptivity in mice. Scientific Reports 11, 7397. 10.1038/s41598-021-86956-y.
@@ -1667,6 +1669,8 @@ Koo, H.S., Yoon, M.-J., Hong, S.-H., Ahn, J., Cha, H., Lee, D., Ko, J.-E., Kwon,
 Leese, H.J., Baumann, C.G., Brison, D.R., McEvoy, T.G., and Sturmey, R.G. (2008). Metabolism of the viable mammalian embryo: quietness revisited. Mol Hum Reprod 14, 667-672. 10.1093/molehr/gan065.
 
 Leese, H.J., Conaghan, J., Martin, K.L., and Hardy, K. (1993). Early human embryo metabolism. Bioessays 15, 259-264. 10.1002/bies.950150406.
+
+Morris, S.M., Tallquist, M.D, Rock, C.O., Cooper, J.A. (2002). Dual roles for the Dab2 adaptor protein in embryonic development and kidney transport. EMBO J 21, 1555-1564. 10.1093/emboj/21.7.1555
 
 Murphy, K., and Weaver, C. (2018). Janeway Immunologie, 9th Edition (Springer Spektrum, Berlin, Heidelberg). 10.1007/978-3-662-56004-4.
 
