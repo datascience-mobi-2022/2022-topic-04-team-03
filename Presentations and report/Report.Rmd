@@ -1652,13 +1652,17 @@ Dinkelacker, M.A. (2007). A database of genes that are expressed in a tossue-res
 
 Gentleman, R., Carey, V. J., Huber, W., Irizarry, R. A., Dudoit, S. . (2005). Bioinformatics and Computational Biology Solutions Using R and Bioconductor (Springer New York, NY). 10.1007/0-387-29362-0.
 
+Glanzner, W.G., Gutierrez, K., Rissi, V.B., de Macedo, M.P., Lopez, R., Currin, L., Dicks, N., Baldassarre, H., Agellon, L.B., and Bordignon, V. (2020). Histone Lysine Demethylases KDM5B and KDM5C Modulate Genome Activation and Stability in Porcine Embryos. Front Cell Dev Biol 8, 151. 10.3389/fcell.2020.00151.
+
 Hannan, N.J., and Salamonsen, L.A. (2007). Role of chemokines in the endometrium and in embryo implantation. Current Opinion in Obstetrics and Gynecology 19, 266-272. 10.1097/GCO.0b013e328133885f.
 
 Huber, W., von Heydebreck, A., Sültmann, H., Poustka, A., and Vingron, M. (2002). Variance stabilization applied to microarray data calibration and to the quantification of differential expression. Bioinformatics 18 Suppl 1, S96-104. 10.1093/bioinformatics/18.suppl_1.s96.
 
 Hwang, J., Kim, C.W., Son, K.N., Han, K.Y., Lee, K.H., Kleinman, H.K., Ko, J., Na, D.S., Kwon, B.S., Gho, Y.S., and Kim, J. (2004). Angiogenic activity of human CC chemokine CCL15 in vitro and in vivo. FEBS Lett 570, 47-51. 10.1016/j.febslet.2004.06.023.
 
-Ihrie, R.A., Marques, M.R., Nguyen, B.T., Horner, J.S., Papazoglu, C., Bronson, R.T., Mills, A.A., Attardi, L.D. (2005). Perp is a p63-regulated gene essential for epithelial integrity. Cell 120, 843-856. 10.1016/j.cell.2005.01.008
+Ihrie, R.A., Marques, M.R., Nguyen, B.T., Horner, J.S., Papazoglu, C., Bronson, R.T., Mills, A.A., Attardi, L.D. (2005). Perp is a p63-regulated gene essential for epithelial integrity. Cell 120, 843-856. 10.1016/j.cell.2005.01.008.
+
+Jolliffe, I.T. (2002). Principal Component Analysis, 2nd Edition (Springer New York, NY). 10.1007/b98835.
 
 Kaneko, K.J., and DePamphilis, M.L. (2013). TEAD4 establishes the energy homeostasis essential for blastocoel formation. Development 140, 3680-3690. 10.1242/dev.093799.
 
@@ -1668,7 +1672,7 @@ Leese, H.J., Baumann, C.G., Brison, D.R., McEvoy, T.G., and Sturmey, R.G. (2008)
 
 Leese, H.J., Conaghan, J., Martin, K.L., and Hardy, K. (1993). Early human embryo metabolism. Bioessays 15, 259-264. 10.1002/bies.950150406.
 
-Morris, S.M., Tallquist, M.D, Rock, C.O., Cooper, J.A. (2002). Dual roles for the Dab2 adaptor protein in embryonic development and kidney transport. EMBO J 21, 1555-1564. 10.1093/emboj/21.7.1555
+Morris, S.M., Tallquist, M.D, Rock, C.O., Cooper, J.A. (2002). Dual roles for the Dab2 adaptor protein in embryonic development and kidney transport. EMBO J 21, 1555-1564. 10.1093/emboj/21.7.1555.
 
 Murphy, K., and Weaver, C. (2018). Janeway Immunologie, 9th Edition (Springer Spektrum, Berlin, Heidelberg). 10.1007/978-3-662-56004-4.
 
