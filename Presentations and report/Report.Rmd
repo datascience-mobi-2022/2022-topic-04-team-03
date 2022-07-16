@@ -53,7 +53,7 @@ knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 ```
 
 ```{r}
-projectPath <- dirname(rstudioapi::getSourceEditorContext()$path)
+projectPath = dirname(rstudioapi::getSourceEditorContext()$path)
 ```
 
 
@@ -149,7 +149,7 @@ Before analyzing the microarrays, it is important to determine the quality of th
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Data//rawData")
 
 data.human = ReadAffy()
-data.human@cdfName <- "HGU133Plus2_Hs_ENST"
+data.human@cdfName = "HGU133Plus2_Hs_ENST"
 
 ```
 \newpage
@@ -158,11 +158,11 @@ The first step of QC is the single-chip analysis where major quality problems li
 
 ```{r chip pictures, eval =FALSE}
 for (i in 1:18){
-   image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[i],1,9)) }
+   image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[i],1,9)) }
 ```
 
 ```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=3.4, fig.width=3.2,fig.align="center"}
-image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main=substr(colnames(data.human)[3],1,9))
+image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[3],1,9))
 ```
  
 ### 3.3.2 RNA degradation plot
@@ -191,10 +191,10 @@ By performing the variance stabilization normalization (vsnrma) (Huber *et al*.,
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
 
-human.vsnrma <- vsnrma(data.human)
+human.vsnrma = vsnrma(data.human)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
-colnames(human.vsnrma)= substr(colnames(human.vsnrma), 1,9)
-expression.data <- exprs(human.vsnrma)
+colnames(human.vsnrma) = substr(colnames(human.vsnrma), 1,9)
+expression.data = exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
 
@@ -224,15 +224,15 @@ names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
 
 # Before normalization:
 par(las=2)
-mmi=c(1,0.7,1.0477939,0.5366749)
+mmi = c(1,0.7,1.0477939,0.5366749)
 par(mai=mmi)
-boxplot(data.human, col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", names =names,las=2)
+boxplot(data.human, col=rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data before normalization", names=names,las=2)
 title(ylab="relative expression", line=2)
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Boxplot")
 dev.copy2eps(file="boxplot_rawdata_18290.eps")
 
 # After Normalization:
-boxplot(exprs(human.vsnrma), col= rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization",names =names,las=2)
+boxplot(exprs(human.vsnrma), col=rainbow(35), cex.axis=0.5, main="Gene expression in human embroyogenesis data after normalization",names=names,las=2)
 title(ylab="relative expression", line=2)
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Boxplot")
 dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
@@ -243,18 +243,19 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 <!-- #### 3.3.3.2 Density plots -->
 In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization the distribution of all curves in the plot showed a vicinity. 
-```{r density plots, eval =FALSE, include = TRUE, fig.cap= "Figure 4: Density plot"}
+```{r density plots, eval=FALSE, include=TRUE, fig.cap="Figure 4: Density plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Density")
+
 # Before Normalization:
 hist(data.human, col=rainbow(35), main="Density function of log Intensity of human embryogenesis raw data")
-
 
 dev.copy2pdf(file="Histogram_rawdata_39897.pdf", width = 10, height = 7)
 
 # After Normalization:
-eset=exprs(human.vsnrma)
+eset = exprs(human.vsnrma)
 
-plot(density(eset[,1]), type="n", xlab="log Intensity", ylim=c(0,1), main="Density function of log Intensity of human embryogenesis normalized")
+plot(density(eset[,1]), type="n", xlab="log Intensity", ylim=c(0,1), main="Density function of log intensity of human embryogenesis normalized")
+
 for (i in 1:ncol(eset)) {
   lines(density(eset[,i]), col=rainbow(35)[i])
 }
@@ -267,8 +268,8 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 <!-- #### 3.3.3.3 Scatter plots -->
 For the control of the normalization the scatter plots, that compare the log fold intensity change between an array and a reference array, were made.
 
-```{r scatter plot, eval =FALSE}
-expression.data <- exprs(human.vsnrma)
+```{r scatter plot, eval=FALSE}
+expression.data = exprs(human.vsnrma)
 
 for(i in 1:17){
   plot(expression.data[,c(i,i+1)], pch=".", cex=2)
@@ -279,7 +280,7 @@ for(i in 1:17){
                      substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1])), 
                      sep=" ", collapse = NULL))
   
-  file.name <- paste("~//documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplot", 
+  file.name = paste("~//documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Scatterplot", 
                      as.character(substr(colnames(human.vsnrma)[i], 1, nchar(colnames(human.vsnrma)[i]))), "_",
                      as.character(substr(colnames(human.vsnrma)[i+1], 1, nchar(colnames(human.vsnrma)[i+1]))),
                      ".pdf", sep="")
@@ -299,7 +300,6 @@ human.vsnrma.df = data.frame(exprs(human.vsnrma))
 # Are there any NAs in our dataset?
 sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 #> No
-
 ```
 
 ## 3.4 Principal component analysis
@@ -328,12 +328,11 @@ Gene set enrichment analysis (GSEA) is a method to identify groups of genes in a
 
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
-ensembl.data <- read.csv("ensembl.human.txt")
+ensembl.data = read.csv("ensembl.human.txt")
 dim(ensembl.data)
-##268341      9
+#268,341      9
 
-# create variables that contain gene ID, transcript ID, 
-#the chromosome name and the gene symbol
+# create variables that contain gene ID, transcript ID, the chromosome name and the gene symbol
 ensembl.genes = ensembl.data[,1]
 ensembl.transcripts = ensembl.data[,3]
 ensembl.chromosome = ensembl.data[,7]
