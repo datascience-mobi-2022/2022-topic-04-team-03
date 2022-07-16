@@ -60,15 +60,14 @@ projectPath <- dirname(rstudioapi::getSourceEditorContext()$path)
 \newpage
 
 # 1.Abstract
-Research, especially in the field of early embryogenesis is important in many ways. It is not only required for better understanding of genetic defects of the embryos in an early stage it is also important for improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed tissue-restricted antigens that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch from anaerobic to aerobic energy metabolism in the early embryo.
-Furthermore, we found three differentially expressed chemokines that play a role in ??
-
+Research, especially in the field of early embryogenesis is important in many ways. It is not only required for better understanding of genetic defects of the embryos in an early stage but it is also important for the improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed TRAs that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch from anaerobic to aerobic energy metabolism in the early embryo.
+Furthermore, we found three differentially expressed chemokines that play a role in implantation and embryonic development.
 
 
 # 2.Introduction
-## 2.1 Earyl embryogenesis
-After the fertilization the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later important for implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*.,1993).
-Interestingly the activation of the embryo genome is thought to only start after the 4-cell stage. Prior the development is driven by maternal stores of RNA which were passed during oogenesis. 
+## 2.1 Early embryogenesis
+After the fertilization the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later important for implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*., 1993).
+Interestingly the activation of the embryo genome is thought to only start after the 4-cell stage. Prior, the development is driven by maternal stores of RNA which were passed during oogenesis. 
 The metabolic activity itself only starts rising at the late morula stage, after a process called the maternal to zygotic transition (MZT) (Schier, 2007). The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
 During this phase the energy metabolism of the embryo changes from using aerobic substrates such as pyruvate, lactate, and glutamine to using glucose (Leese *et al*., 1993).
 This switch results in a 2.7-fold rise of oxygen consumption in the trophectoderm where the oxidative phosphorylation takes place. As a consequence, the production of harmful reactive oxygen species (ROS) increases. The embryo therefore has to invent a system to prevent high amounts of ROS and at the same time prepare repair mechanisms for fixing the damage (Kaneko *et al*., 2013).
@@ -79,27 +78,26 @@ The secretion of signal proteins known as chemokines plays an important cause di
 
 ## 2.3 Tissue-restricted antigens
 Our immune system has the important role of protecting our body from exogenous pathogens. The immune system consists of two parts, the innate immune system and the adaptive immune system. The innate immune system reacts very quickly to foreign substances but is restricted to recognizing conserved structures like bacterial cell wall components. Whereas the adaptive immune system develops after birth and is able to target a great variety of antigens. An important part of the adaptive immune response are T cells which recognize antigens with specific T cell receptors (TCRs). 
-In this process it is crucial that the immune system solely attacks foreign pathogens and not the body’s own tissues. To gain self-tolerance a selection process takes place in the thymus where T cells are screened for T cell receptors that can recognize antigens but not self-antigens. First, the T cells undergo positive selection. In this step only those T cells that can recognize self-major histocompatibility complex (MHC) proteins are selected to survive. Thereafter, a negative selection process takes places which prevents the emergence of autoreactive T cells. This is based on triggering of apoptosis in T cells with TCRs that are capable of recognizing self-antigens in the context of self MHC. These self-antigens are referred to as tissue-restricted antigens (TRAs) and are presented by medullary thymic epithelial cells (mTECs) (Murphy *et al*., 2012).
+In this process it is crucial that the immune system solely attacks foreign pathogens and not the body’s own tissues. To gain self-tolerance, a selection process takes place in the thymus where T cells are screened for T cell receptors that can recognize antigens but not self-antigens. First, the T cells undergo positive selection. In this step only those T cells that can recognize self-major histocompatibility complex (MHC) proteins are selected to survive. Thereafter, a negative selection process takes places which prevents the emergence of autoreactive T cells. This is based on triggering of apoptosis in T cells with TCRs that are capable of recognizing self-antigens in the context of self-MHC. These self-antigens are referred to as tissue-restricted antigens (TRAs) and are presented by medullary thymic epithelial cells (mTECs) (Murphy *et al*., 2012).
 TRAs are genes which are expressed considerably higher in certain tissues compared to other tissues. Thus, TRAs are characteristic for the tissues they belong to. However, in mTECs, TRAs are expressed promiscuously to ensure that all tissues are represented in the thymus. Hence, every autoreactive T cell is sorted out (Dinkelacker *et al*., 2007).
 
 ## 2.4 Aim of this project
 This project aims to investigate the expression of TRAs in the early embryonic development. Tissue-specifity plays an important role in embryonic development as embryonic stem cells differentiate step by step to eventually form organs. This development could be monitored by analyzing gene expression data of different stages in embryogenesis. 
-In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes between the first few stages of embryonic development and extract the differentially expressed TRAs for further analysis. 
-Chemokines??
+In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes between the first few stages of embryonic development and extract the differentially expressed TRAs for further analysis. In addition, we will investigate the differentially expressed chemokines in our data.
 \newpage
 
 # 3.Materials and methods
 ## 3.1 Datasets
-In order to study the cellular and tissue development during human early embryogenesis we analyzed a microarray dataset published by Xie *et al*.in 2010. We examined the amount of differentially expressed tissue-restricted antigens (TRAs) in our dataset by comparing it with the TRA dataset provided by Dr. Dinkelacker in 2019.
+In order to study the cellular and tissue development during human early embryogenesis we analyzed a microarray dataset published by Xie *et al*. in 2010. We examined the amount of differentially expressed tissue-restricted antigens (TRAs) in our dataset by comparing it with the TRA dataset provided by Dr. Dinkelacker in 2019.
 
 ### 3.1.1 Microarray dataset
-The microarray dataset by Xie *et al*. contained three datasets one of bovine, one of mouse and one of human. We decided to focus our project on the human dataset. The data was generated by RNA extraction, amplification, and hybridisation onto Affymetrix microarrays. For early human embryogenesis they prepared three replicates at one cell stage, two cell stage, four cell stage, eight cell stage, morula, and blastocyst each. Each replicate included 95,659 transcripts.
+The microarray dataset by Xie *et al*. contained three datasets. One of bovine, one of mouse and one of human. We decided to focus our project on the human dataset. The data was generated by RNA extraction, amplification, and hybridisation onto Affymetrix microarrays. For early human embryogenesis they prepared three replicates at one cell stage, two cell stage, four cell stage, eight cell stage, morula, and blastocyst each. Each replicate included 95,659 transcripts.
 
 ### 3.1.2 TRA dataset
 As a reference TRA dataset we chose the GTEX RNAseq human dataset provided by Dr. Dinkelacker in 2019. It consisted of 60,131 transcripts. We used the TRA dataset and ensembl gene information to annotate our raw data.
 
 ## 3.2 Packages used in R
-During of the analysis a number of packages was used which are listed in Table 1. The code was written using the 4.2.0 Version of R.
+During the analysis a number of packages was used which are listed in Table 1. The code was written using the 4.2.0 Version of R.
 \begin{table}[htb]
 \caption{List of all R and Bioconducter packages used in our project.}
 \resizebox{\textwidth}{!}{
@@ -168,7 +166,7 @@ image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main=sub
 ```
  
 ### 3.3.2 RNA degradation plot
-In the next step we analysed the RNA degradation that is an indicator for a bad quality RNA. Due to the start of the RNA degradation at the 5´ sequence end the intestines of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected.
+In the next step we analysed the RNA degradation that is an indicator for bad quality RNA. Due to the start of the RNA degradation at the 5´ sequence end the intensities of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected.
 
 ```{r RNA Degradation Plot, eval =FALSE, include=TRUE}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//RNAdegrad")
@@ -189,7 +187,7 @@ dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 ```
 
 ### 3.3.3 Normalization
-By performing the variance stabilization normalization (vsnrma) (Huber *et al*., 2002 ) the data is corrected for biases from non-biological sources, like labelling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
+By performing the variance stabilization normalization (vsnrma) (Huber *et al*., 2002) the data is corrected for biases from non-biological sources, like labelling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
 
@@ -211,8 +209,7 @@ meanSdPlot(human.vsnrma)
 ```
 
 
-
-Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both, the pre-normalized data and the normalized data, density plots and box plots were generated.
+Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both the pre-normalized data and the normalized data, density plots and box plots were generated.
 
 <!-- #### 3.3.3.1 Boxplots -->
 The box plots visualize the variation of the gene expression for each chip. After the normalization no boxes were significantly elevated or more spread out than other arrays.
@@ -306,7 +303,7 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 ```
 
 ## 3.4 Principal component analysis
-Principal Component Analysis (PCA) is an important method to reduce the dimensionality of a data set by decreasing its number of variables, which do not contribute to the variance of the data. Principal components (PC) are calculated, which are linear combinations of variables that explain a portion of variance among the total variance in the data. By looking at the PCs that explain an accumulative variance of over 90% and plotting them against each other, a better understanding of the data can be achieved, for example, by discovering potential clusters of the data points.
+Principal component analysis (PCA) is an important method to reduce the dimensionality of a data set by decreasing its number of variables, which do not contribute to the variance of the data. Principal components (PCs) are calculated, which are linear combinations of variables that explain a portion of variance among the total variance in the data. By looking at the PCs that explain an accumulative variance of over 90% and plotting them against each other, a better understanding of the data can be achieved, for example, by discovering potential clusters of the data points.
 
 Quelllee!!!!!!!!!!!!!!
 
@@ -509,7 +506,7 @@ legend(x = 100,y=48,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8
 
 
 ```
-We grouped our replicates using k-means clustering on the first 4 principal components which eyplain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters.The clusters were composed as follows:Cluster 1 (1-cell, 2-cell and 4-cell stage), Cluster 2(8-cell stage), Cluster 3 (morula stage) and Cluster 4 (blastocyst stage). Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
+We grouped our replicates using k-means clustering on the first four principal components which explain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters.The clusters were composed as follows: Cluster 1 (1-cell, 2-cell and 4-cell stage), Cluster 2 (8-cell stage), Cluster 3 (morula stage) and Cluster 4 (blastocyst stage). Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
 
 
 ```{r run models with varying value of k}
@@ -673,7 +670,7 @@ d
 
 ## 4.3 Limma analysis
 
-We performed limma analysis using the normalized expression data to discover the differentially expressed genes (DEGs) between every combination of stages. We filtered the resulting DEGs for a p-value of 0.01 and annotated the genes with ensembl Biomart and the TRA data. Based on our relevant clusters found by K-means clustering, we solely focused on the DEGs between stages 1-cell to 8-cell, 8-cell to morula and morula to blastocyst for further analysis. For the comparison of the 1-cell to 8-cell stage, we found xx DEGs, for 8-cell stage to morula stage there were xx DEGs and for morula stage to blastocyst we got xx DEGs.
+We performed limma analysis using the normalized expression data to discover the differentially expressed genes (DEGs) between every combination of stages. We filtered the resulting DEGs for a p-value of 0.01 and annotated the genes with ensembl Biomart and the TRA data. Based on our relevant clusters found by k-means clustering, we solely focused on the DEGs between stages 1-cell to 8-cell, 8-cell to morula and morula to blastocyst for further analysis. For the comparison of the 1-cell to 8-cell stage, we found 23,444 DEGs, for 8-cell stage to morula stage there were 6,392 DEGs and for morula stage to blastocyst we got 5,139 DEGs.
 
 ```{r limma Analysis}
 
@@ -883,7 +880,7 @@ dev.off()
 
 <!-- #### filter DE genes & volcanoplots -->
 
-In order to visualize our results based on limma and find out interesting TRA genes that play a significant role in embryogenesis, we decided to use Venn Diagram and Volcano plots to process our results.
+In order to visualize our results based on limma and find out interesting TRA genes that play a significant role in embryogenesis, we decided to use a Venn diagram and Volcano plots to process our results.
 
 
 
@@ -958,7 +955,7 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 ```
 ### 4.3.1 Venn diagram
 
-To gain an overview of TRA genes that are important for all stages, we use a Venn diagram to plot the intersection of differentially expressed TRA genes from 1-cell stage to 8-cell stage, from 8-cell stage to morula stage as well as from morula stage to blastocyst stage. We extracted genes that are continuously up/down-regulated along the three stage transitions we investigated, since they might be important for the embryogenesis.
+To gain an overview of TRA genes that are important for all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes from 1-cell stage to 8-cell stage, from 8-cell stage to morula stage as well as from morula stage to blastocyst stage. We extracted genes that are continuously up/down-regulated along the three stage transitions we investigated, since they might be important for embryogenesis.
 
 ```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram upregulated genes",fig.height=3, fig.width=4.5, fig.align='center' }
 #creating demo data for Venn diagram
@@ -1033,7 +1030,7 @@ We found three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated
 
 
 ### 4.3.2 Volcano plot
-After looking that TRA genes that are important for all stages, we then focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly differential genes with a p-value cutoff of 0.01 and a fold10change cutoff of 2. To extract the most biologically significant genes, we then identified the top 10 up/down-regulated TRA transcripts that are most significantly expressed and have the largest fold changes. These genes are labeled in the volcano plots.
+After looking at TRA genes that are important for all stages, we then focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly DEGs with a p-value cutoff of 0.01 and a fold10change cutoff of 2. To extract the most biologically significant genes, we then identified the top 10 up/down-regulated TRA transcripts that are most significantly expressed and have the largest fold changes. These genes are labeled in the volcano plots.
 
 ```{r volcano plots 1.8, include= TRUE, fig.cap= "Volcano plot comparing the 1-cell and 8-cell stage",fig.height=4, fig.width=9, fig.align='center' }
 #group the genes into "Up-regulated","Down-regulated" and "Unchanged" for colouring volcano plot. We definded a gene as up/down-regulated wenn the LogFC is higher than 2 or smaller than -2 
@@ -1344,7 +1341,7 @@ dotplot(gse.m.b.DEG, showCategory=10, split=".sign",font.size=3) + facet_grid(.~
 
 
 ## 4.4 Chemokines
-According to our hypothesis, we also examined the expression of chemokines. The result of the filtering of our annotated TRA matrix showed that there are 62 proteins with a chemokine motif. Due to this, we looked at whether some of the filtered proteins are differentially expressed genes (DEGs) in our four clusters. The result of this is that there are no proteins with a chemokine motif that are TRAs and DEGs. 
+According to our hypothesis, we also examined the expression of chemokines. The result of filtering of our annotated TRA matrix showed that there are 62 proteins with a chemokine motif. Due to this, we looked at whether some of the filtered proteins are DEGs in our four clusters. The result of this was that there are no proteins with a chemokine motif that are TRAs and DEGs. 
 
 Thus, we looked after proteins with a chemokine motif in all of our DEGs including non-TRA genes. We got the following results:
 
@@ -1435,13 +1432,14 @@ heatmap=pheatmap(as.matrix(chemokine.expression[,1:18]),main = "Expression of ch
 
 # 5. Discussion
 
-## 5.1	General embryo development 
+## 5.1	General embryonic development 
+As might be expected, the TRAs that are significantly upregulated over all three investigated stages have important functions in embryonic development. DAB2 for example is involved in the formation of the visceral endoderm (Morris *et al*., 2002) while PERP plays a critical role in stratified epithelial development (Ihrie *et al*., 2005).
 
 ## 5.2	Maternal to zygotic transition  
-In the early stage of embryonic development, the embryo is transcriptionally silent, which means, that the genome activation of the zygote occurs a bit later. Just after the so-called development stage of maternal to zygotic transition (MZT), the newly arranged genom from the sperm and maternal egg is used. Therefore, degradation of maternal mRNA needs to take place (Schier, 2007).
+In the early stage of embryonic development, the embryo is transcriptionally silent, which means that the genome activation of the zygote occurs a bit later. Just after the so-called development stage of maternal to zygotic transition (MZT), the newly arranged genome from the sperm and maternal egg is used. Therefore, degradation of maternal mRNA needs to take place (Schier, 2007).
 
 From the results, it is clear that in our data the MZT takes place in between stages 1-cell to 8-cell. This can be seen in the differential expression of the proteins like PRPF4B and EIF5. After the transcription the non-coding sequences of the RNA need to be removed by the process called RNA-Splicing. PRPF4B has a regulative role in the pre-mRNA splicing (Corkery *et al*., 2015).    
-EIF5 plays an important role in the formation of a functional 80 S initiation complex (Si *et al*., 1996).  Therefore an up regulation of both proteins indicates translation events which also imply that the activation of the zygotic genome took place.  
+EIF5 plays an important role in the formation of a functional 80 S initiation complex (Si *et al*., 1996).  Therefore an up-regulation of both proteins indicates translation events which also imply that the activation of the zygotic genome took place.  
  
  
 
@@ -1451,9 +1449,9 @@ EIF5 plays an important role in the formation of a functional 80 S initiation co
 During our limma analysis of the differentially expressed genes we also found genes indicating a change of energy source in the mammalian embryo development. In the late morula stage glucose becomes the predominant exogenous energy substrate while before the energy was mostly derived from aerobic substrates like pyruvate, lactate, and glutamine (Leese *et al*., 1993). At the same time the oxygen consumption increases. This is a result of ATP synthesis in the trophectoderm which is driven by oxidative phosphorylation. Unfortunately, the production of reactive oxygen species (ROS) thereby also rises (Kaneko *et al*., 2013). One indicator for this event is that in our data the SLC2A3 gene was significantly upregulated in the morula stage. SLC2A3 encodes for a glucose transporter (GLUT3) which is responsible for diffusion of glucose across plasma membranes (Ziegler *et al*., 2020). Furthermore, we found genes encoding for proteins which prevent excess accumulation of ROS during oxidative phosphorylation (TEAD4)(Kaneko *et al*., 2013) and proteins which defense the cell against oxidative stress (NQO1)(Ross *et al*., 2021).This energy homeostasis is thought to be caused by increased energy demands due to two processes: the pumping of sodium ions by the Na+/K+ ATPase in the trophectoderm and the increased protein synthesis because the embryo starts its net growth (Leese *et al*., 2008).
 
 ## 5.4	Implantation 
-Even though our data only includes preimplantation stages, we still can observe the first differentiative event in embryogenesis- the formation of the blastocyst. The outer cells start to form tight junctions and build an epithelial layer which is called the trophectoderm. This layer is later involved in in the implantation process meaning the blastocyst will settle in the uterine endometrium (Leese *et al*., 1993). To ensure a successful implantation several arrangements must be made in advance. One of them is the expression of STMN1 which promotes the migration and invasion of the trophoblast by regulating the expression of N-cadherin and E-cadherin. N-cadherin promotes invasion whereas E-cadherin suppresses the invasion (Tian *et al*., 2015). In our data one can observe a significant increase in STMN1 expression during the morula stage which indicates that the preparation for implantation starts long before the actual implantation event. 
+Even though our data only includes preimplantation stages, we still can observe the first differentiative event in embryogenesis: the formation of the blastocyst. The outer cells start to form tight junctions and build an epithelial layer which is called the trophectoderm. This layer is later involved in in the implantation process meaning the blastocyst will settle in the uterine endometrium (Leese *et al*., 1993). To ensure a successful implantation several arrangements must be made in advance. One of them is the expression of STMN1 which promotes the migration and invasion of the trophoblast by regulating the expression of N-cadherin and E-cadherin. N-cadherin promotes invasion whereas E-cadherin suppresses the invasion (Tian *et al*., 2015). In our data one can observe a significant increase in STMN1 expression during the morula stage which indicates that the preparation for implantation starts long before the actual implantation event. 
 
-As described in the introduction, chemokines expression are important during the embryonic development. For successful implantation, new blood vessels need to be formed in the endometrium (Torry *et al*., 2007). CCL15 showed to induce the process of angiogenesis (Hwang *et al*., 2004). Our analysis showed that this chemokine is first upregulated between the stages 8-cell and morula. This also demonstrates the process of implantation preparation. However, we could not explain the downregulation between the stages morula and blastocyst. Our findings on the upregulation of CXCL14 hint that it could also play a significant role in embryogenesis. This chemokine is related to CXCL12 whose expression showed to encourage angiogenesis and a positive pregnancy course (Koo *et al*., 2021). In line with previous studies, where the involvement of CXCL14 in the same embryonic pathways as CXCL12 (Nassari *et al*., 2017), the expressions seem logical. All in all, it can be said, that our analysis points up that chemokines play a role in early embryonc development. But ensuing steps for further analysis and research should be taken, to study the mechanism by which those signal proteins are involved in the embryogenesis.
+As described in the introduction, chemokines expression are important during the embryonic development. For successful implantation, new blood vessels need to be formed in the endometrium (Torry *et al*., 2007). CCL15 showed to induce the process of angiogenesis (Hwang *et al*., 2004). Our analysis showed that this chemokine is first upregulated between the stages 8-cell and morula. This also demonstrates the process of implantation preparation. However, we could not explain the downregulation between the stages morula and blastocyst. Our findings on the upregulation of CXCL14 hint that it could also play a significant role in embryogenesis. This chemokine is related to CXCL12 whose expression showed to encourage angiogenesis and a positive pregnancy course (Koo *et al*., 2021). In line with previous studies, where the involvement of CXCL14 in the same embryonic pathways as CXCL12 (Nassari *et al*., 2017), the expressions seem logical. All in all, it can be said, that our analysis points up that chemokines play a role in early embryonic development. But ensuing steps for further analysis and research should be taken to study the mechanism by which those signal proteins are involved in embryogenesis.
 
 \newpage
 # 6. Supplementary material
