@@ -14,7 +14,8 @@ Furthermore, we found three differentially expressed chemokines that play a role
 
 
 List of all R and Bioconducter packages used in our project
-                   |                      |                 |                            |
+
+Tabele Header      |                      |                 |                            |
 -------------      | -------------        |-------------    | -------------              |
 ggplot2 3.3.6      | AnnotationDbi 1.58.0 | dplyr 1.0.9     | hgu133plus2hsenstcdf 25.0.0|
 affy 1.74.0        | vsn 3.64.2.          | tidyverse 1.3.1 | hgu133plus2hsenstprobe     |
