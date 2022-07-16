@@ -120,6 +120,7 @@ library(tinytex)
 library(clusterProfiler)
 library(enrichplot)
 library(ggplot2)
+library(imager)
 ```
 
 
@@ -416,7 +417,7 @@ We wanted to investigate our hypothesis whether or not there are even differenti
 ```{r Tissue distribution image, include = TRUE}
 library(imager)
 img<-load.image('tissue.distribution.arranged.barplot.jpeg') 
-plot(img)
+plot(img, axes=F)
 ```
 
 
