@@ -28,7 +28,7 @@ Clara Certa, Yaxin Chen, Linda Kaupp, Alewtina Towara \\
 	Dr. Maria Dinkelacker, Dr. Carl Herrmann \\
 	 \\
 	Tutor:
-	Ian Dirk Fichter \\
+	Ian Dirk Fichtner \\
 	 \\
 	 \\
 	Data analysis for students of Molecular Biotechnology \\
@@ -60,44 +60,44 @@ projectPath = dirname(rstudioapi::getSourceEditorContext()$path)
 \newpage
 
 # 1.Abstract
-Research, especially in the field of early embryogenesis is important in many ways. It is not only required for better understanding of genetic defects of the embryos in an early stage but it is also important for the improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed TRAs that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch from anaerobic to aerobic energy metabolism in the early embryo.
-Furthermore, we found three differentially expressed chemokines that play a role in implantation and embryonic development.
-
+Research, especially in the field of early embryogenesis is important in many ways. It is not only required for a better understanding of genetic defects of the embryos in an early stage but also important for the improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed TRAs that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch of energy metabolism in the early embryo.
+Furthermore, we found three differentially expressed chemokines that play a role in implantation and embryonic development. 
+These insights may contribute to a deeper understanding of embryo implantation and therefore successful conception.
 
 # 2.Introduction
 ## 2.1 Early embryogenesis
-After the fertilization the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later important for implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*., 1993).
-Interestingly the activation of the embryo genome is thought to only start after the 4-cell stage. Prior, the development is driven by maternal stores of RNA which were passed during oogenesis. 
-The metabolic activity itself only starts rising at the late morula stage, after a process called the maternal to zygotic transition (MZT) (Schier, 2007). The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
+After the fertilization, the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage, an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later needed for the implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*., 1993).
+Interestingly, the activation of the embryo genome is thought to only start around the 4-cell stage. Prior, the development is driven by maternal stores of RNA which were passed during oogenesis. This process is called the maternal to zygotic transition (MZT)(Schier, 2007).
+The metabolic activity itself only starts rising at the late morula stage. The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
 During this phase the energy metabolism of the embryo changes from using aerobic substrates such as pyruvate, lactate, and glutamine to using glucose (Leese *et al*., 1993).
 This switch results in a 2.7-fold rise of oxygen consumption in the trophectoderm where the oxidative phosphorylation takes place. As a consequence, the production of harmful reactive oxygen species (ROS) increases. The embryo therefore has to invent a system to prevent high amounts of ROS and at the same time prepare repair mechanisms for fixing the damage (Kaneko *et al*., 2013).
 
 ## 2.2 Chemokines
-The secretion of signal proteins known as chemokines plays an important cause different biological processes like the movement of epithelial cells or leukocytes (Raman *et al*., 2011). Those effects also occur during pregnancy and it has been shown that chemokines play an essential role in the implantation of the embryo and embryonic development (Hannan *et al*., 2007)
+The secretion of signal proteins known as chemokines plays an important role in several cellular processes by causing, for example, the movement of epithelial cells or leukocytes (Raman *et al*., 2011). Those effects also occur during pregnancy. It has been shown that chemokines are essential for the implantation of the embryo and for embryonic development (Hannan *et al*., 2007)
 \newpage
 
 ## 2.3 Tissue-restricted antigens
-Our immune system has the important role of protecting our body from exogenous pathogens. The immune system consists of two parts, the innate immune system and the adaptive immune system. The innate immune system reacts very quickly to foreign substances but is restricted to recognizing conserved structures like bacterial cell wall components. Whereas the adaptive immune system develops after birth and is able to target a great variety of antigens. An important part of the adaptive immune response are T cells which recognize antigens with specific T cell receptors (TCRs). 
-In this process it is crucial that the immune system solely attacks foreign pathogens and not the body’s own tissues. To gain self-tolerance, a selection process takes place in the thymus where T cells are screened for T cell receptors that can recognize antigens but not self-antigens. First, the T cells undergo positive selection. In this step only those T cells that can recognize self-major histocompatibility complex (MHC) proteins are selected to survive. Thereafter, a negative selection process takes places which prevents the emergence of autoreactive T cells. This is based on triggering of apoptosis in T cells with TCRs that are capable of recognizing self-antigens in the context of self-MHC. These self-antigens are referred to as tissue-restricted antigens (TRAs) and are presented by medullary thymic epithelial cells (mTECs) (Murphy *et al*., 2012).
-TRAs are genes which are expressed considerably higher in certain tissues compared to other tissues. Thus, TRAs are characteristic for the tissues they belong to. However, in mTECs, TRAs are expressed promiscuously to ensure that all tissues are represented in the thymus. Hence, every autoreactive T cell is sorted out (Dinkelacker *et al*., 2007).
+Our immune system is pivotal for protecting our body from exogenous pathogens. It consists of two parts, the innate immune system and the adaptive immune system. The innate immune system reacts very quickly to foreign substances but is restricted to recognizing conserved structures like bacterial cell wall components, whereas the adaptive immune system develops after birth and is able to target a great variety of antigens. An important part of the adaptive immune response are T cells which recognize antigens with specific T cell receptors (TCRs). 
+In this process, it is crucial that the immune system solely attacks foreign pathogens and not the body’s own tissues. To gain self-tolerance, a selection process takes place in the thymus where T cells are screened for T cell receptors that can recognize antigens but not self-antigens. First, the T cells undergo positive selection. In this step, only those T cells that can recognize self-major histocompatibility complex (MHC) proteins are selected to survive. Thereafter, a negative selection process takes places which prevents the emergence of autoreactive T cells. This is based on triggering of apoptosis in T cells with TCRs that are capable of recognizing self-antigens in the context of self-MHC. These self-antigens are referred to as tissue-restricted antigens (TRAs) and are presented by medullary thymic epithelial cells (mTECs) (Murphy *et al*., 2012).
+TRAs are genes which are expressed considerably higher in certain tissues compared to other tissues. Thus, TRAs are characteristic for the tissues they belong to. However, in mTECs, TRAs are expressed promiscuously to ensure that all tissues are represented in the thymus. Hence, every autoreactive T cell is sorted out (Dinkelacker, 2007).
 
 ## 2.4 Aim of this project
-This project aims to investigate the expression of TRAs in the early embryonic development. Tissue-specifity plays an important role in embryonic development as embryonic stem cells differentiate step by step to eventually form organs. This development could be monitored by analyzing gene expression data of different stages in embryogenesis. 
-In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes between the first few stages of embryonic development and extract the differentially expressed TRAs for further analysis. In addition, we will investigate the differentially expressed chemokines in our data.
+This project aims to investigate the expression of TRAs in early embryonic development. Tissue-specificity plays an important role in embryonic development as embryonic stem cells differentiate step by step to eventually form organs. This development could be monitored by analyzing gene expression data of different stages in embryogenesis. 
+In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes (DEG) between the first few stages of embryonic development and extract the differentially expressed TRAs and chemokines for further analysis of their function.
 \newpage
 
 # 3.Materials and methods
 ## 3.1 Datasets
-In order to study the cellular and tissue development during human early embryogenesis we analyzed a microarray dataset published by Xie *et al*. in 2010. We examined the amount of differentially expressed tissue-restricted antigens (TRAs) in our dataset by comparing it with the TRA dataset provided by Dr. Dinkelacker in 2019.
+In order to study the cellular and tissue development during human early embryogenesis, we analyzed a microarray dataset published by Xie *et al*. in 2010. We examined the amount of differentially expressed TRAs in our dataset by comparing it with the TRA dataset provided by Dr. Dinkelacker in 2019.
 
 ### 3.1.1 Microarray dataset
-The microarray dataset by Xie *et al*. contained three datasets. One of bovine, one of mouse and one of human. We decided to focus our project on the human dataset. The data was generated by RNA extraction, amplification, and hybridisation onto Affymetrix microarrays. For early human embryogenesis they prepared three replicates at one cell stage, two cell stage, four cell stage, eight cell stage, morula, and blastocyst each. Each replicate included 95,659 transcripts.
+The microarray dataset by Xie *et al*. contained three datasets for three species: bovine, mouse and human. We decided to focus our project on the human dataset. The data was generated by RNA extraction, amplification, and hybridisation onto Affymetrix microarrays. For early human embryogenesis, they prepared three replicates at 1-cell stage, 2-cell stage, 4-cell stage, 8-cell stage, morula, and blastocyst each. Each replicate includes 95,659 transcripts.
 
 ### 3.1.2 TRA dataset
-As a reference TRA dataset we chose the GTEX RNAseq human dataset provided by Dr. Dinkelacker in 2019. It consisted of 60,131 transcripts. We used the TRA dataset and ensembl gene information to annotate our raw data.
+As a reference TRA dataset, we chose the GTEX RNAseq human dataset provided by Dr. Dinkelacker in 2019. It consists of 60,131 transcripts from 53 different tissues. We used the TRA dataset and Ensembl gene information to annotate our raw data.
 
 ## 3.2 Packages used in R
-During the analysis a number of packages was used which are listed in Table 1. The code was written using the 4.2.0 Version of R.
+During the analysis, a number of packages were used which are listed in Table 1. The code was written using the 4.2.0 version of R.
 \begin{table}[htb]
 \caption{List of all R and Bioconducter packages used in our project.}
 \resizebox{\textwidth}{!}{
@@ -152,21 +152,21 @@ data.human = ReadAffy()
 data.human@cdfName = "HGU133Plus2_Hs_ENST"
 
 ```
-\newpage
+
 ### 3.3.1 Single chip control
-The first step of QC is the single-chip analysis where major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities can be detected by a visual inspection of the microarray images. After looking at our chips we presupposed that the GSM456645 chip could be of bad quality due to a smudge on the bottom edge.
+The first step of QC is the single-chip analysis where major quality problems like fingerprints, local irregularities, imprints of pipette tips and extreme light intensities can be detected by a visual inspection of the microarray images. After looking at our chips, we assumed that the GSM456645 chip could be of bad quality due to a smudge on the bottom edge.
 
 ```{r chip pictures, eval =FALSE}
 for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[i],1,9)) }
 ```
 
-```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=3.4, fig.width=3.2,fig.align="center"}
+```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=3.6, fig.width=3.2,fig.align="center"}
 image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[3],1,9))
 ```
  
 ### 3.3.2 RNA degradation plot
-In the next step we analysed the RNA degradation that is an indicator for bad quality RNA. Due to the start of the RNA degradation at the 5´ sequence end the intensities of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected.
+In the next step, we analyzed the RNA degradation that is an indicator for bad quality RNA. Due to the start of the RNA degradation at the 5´ end, the intensities of probes at the 5´ end must be lower than at the 3´ end. In our RNA degradation plot, where the mean intensity for each probe set is plotted versus the probe number, no high slope and disagreements between the arrays were detected.
 
 ```{r RNA Degradation Plot, eval =FALSE, include=TRUE}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//RNAdegrad")
@@ -187,7 +187,7 @@ dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 ```
 
 ### 3.3.3 Normalization
-By performing the variance stabilization normalization (vsnrma) (Huber *et al*., 2002) the data is corrected for biases from non-biological sources, like labelling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
+By performing the variance stabilization normalization (vsnrma) (Huber *et al*., 2002), the data is corrected for biases from non-biological sources, like labeling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
 
@@ -198,7 +198,7 @@ expression.data = exprs(human.vsnrma)
 setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
 
-The red line in this meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
+The red line in the meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
 
 ```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2.7,fig.width=4.5,fig.align='center'}
 meanSdPlot(human.vsnrma)
@@ -209,10 +209,10 @@ meanSdPlot(human.vsnrma)
 ```
 
 
-Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both the pre-normalized data and the normalized data, density plots and box plots were generated.
+Different plots were reviewed in order to determine the degree of the systematic variation in the raw data. For both the pre-normalized data and the normalized data, density plots and boxplots were generated.
 
 <!-- #### 3.3.3.1 Boxplots -->
-The box plots visualize the variation of the gene expression for each chip. After the normalization no boxes were significantly elevated or more spread out than other arrays.
+The boxplots visualize the variation of the gene expression for each chip. After the normalization, no boxes were significantly elevated or more spread out than other arrays.
 ```{r boxplots, eval =FALSE, include=TRUE, fig.cap= "Figure 3: Normalization of raw data"}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
@@ -242,7 +242,7 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 
 <!-- #### 3.3.3.2 Density plots -->
-In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization the distribution of all curves in the plot showed a vicinity. 
+In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization, the distribution of all curves in the plot showed a vicinity. 
 ```{r density plots, eval=FALSE, include=TRUE, fig.cap="Figure 4: Density plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Density")
 
@@ -266,7 +266,7 @@ dev.copy2pdf(file="Histogram_NormalizedData_39897.pdf", width = 10, height = 7)
 
 
 <!-- #### 3.3.3.3 Scatter plots -->
-For the control of the normalization the scatter plots, that compare the log fold intensity change between an array and a reference array, were made.
+For the control of the normalization, scatter plots were produced which compare the log fold intensity change between an array and a reference array.
 
 ```{r scatter plot, eval=FALSE}
 expression.data = exprs(human.vsnrma)
@@ -289,7 +289,7 @@ for(i in 1:17){
 }
 ```
 
-As a consequence of our Quality Control we decided to keep all chips for further analysis, because no serious outliers after the normalization were found.
+As a consequence of our QC, we decided to keep all chips for further analysis because no serious outliers were found after the normalization.
 
 <!-- Data Clean-up -->
 
@@ -303,19 +303,17 @@ sum(apply(human.vsnrma.df,1,function(x){sum(is.na(x))}))
 ```
 
 ## 3.4 Principal component analysis
-Principal component analysis (PCA) is a method to reduce the dimensionality of a data set. It is an orthogonal linear transformation of the data to a new coordinate system, so that the greatest variance of the data is demonstrated by the first coordinate. The new coordinates are called principal components, which are linear combination of variables from the data. 
+Principal component analysis (PCA) is a statistical method to reduce the dimensionality of a data set. It is an orthogonal linear transformation of the data to a new coordinate system, so that the greatest variance of the data is demonstrated by the first coordinate. The new coordinates are called principal components, which are linear combination of variables from the data (Jolliffe, 2002). 
 
-
-Quelllee!!!!!!!!!!!!!!(kommt noch)
 
 ## 3.5 K-means clustering
-K-means is a clustering method for which one first must indicate the number of clusters (k). Later the ideal number can be detected by an elbow-plot or silhouette-plot. The algorithm starts by choosing random centroids of the k clusters. Each object is now assigned to the cluster for which the Euclidean distance between centroid and object is the smallest. In the next step the centroids get updated by calculating the mean of each cluster containing the new objects. Those steps are repeated till the cluster assignments of the objects stop changing (Bortz,2010).
+K-means is a clustering method for which one first must indicate the number of clusters (k). Later the number can be determined by an elbow-plot or silhouette-plot. The algorithm starts by choosing random centroids of k clusters. Each object is now assigned to the cluster for which the Euclidean distance between centroid and object is the smallest. In the next step, the centroids get updated by calculating the mean of each cluster containing the new objects. Those steps are repeated till the cluster assignments of the objects stop changing (Bortz and Schuster, 2010).
 
 ## 3.6 Limma analysis
-For anaylsis of differential gene expression we conducted limma analysis. Therefore, the 	“Limma” package was employed, which facilitates statistical testing of expression level 		changes of thousands of genes at once. For that, “Limma” uses linear models to calculate 	the test statistic between sample group expression levels (Ritchie *et al*., 2015).
+For anaylsis of differential gene expression we conducted limma analysis. Therefore, the 	limma package was employed, which facilitates statistical testing of expression level changes of thousands of genes at once. For that, limma uses linear models to calculate the test statistic between sample group expression levels (Ritchie *et al*., 2015).
 
 ## 3.7 Gene set enrichment analysis
-Gene set enrichment analysis (GSEA) is a method to identify groups of genes in a dataset that are overrepresented more than expected in any known set of genes. These gene sets can be groups of genes that share a common biological function, chromosomal location, or regulation. GSEA uses statistical approaches to find groups of genes that are significantly enriched or depleted. The goal of this method is to better understand the biological function of groups of genes in a data set (Subramanian *et al*., 2005).  
+Gene set enrichment analysis (GSEA) is a method to identify groups of genes in a dataset which are overrepresented more than expected in any known set of genes. These gene sets can be groups of genes that share a common biological function, chromosomal location, or regulation. GSEA uses statistical approaches to find groups of genes that are significantly enriched or depleted. The goal of this method is to better understand the biological function of groups of genes in a data set (Subramanian *et al*., 2005).  
 
 # 4. Results
 <!-- ## Annotation of dataset using TRAs -->
@@ -423,21 +421,12 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 write.csv(annotated.tra, file="annotated.tra.csv")
 ```
 
-## 4.1 Tissue distribution plot
-We wanted to investigate our hypothesis whether or not there are even differential expressed TRAs in our dataset by visualizing the distribution of the TRAs differential expressed in our chips according to their max tissue, using a barplot.
-
-```{r Tissue distribution image, include = TRUE,fig.cap="Frequency of TRAs differentially expressed between 1-cell stage and 8-cell stage", fig.height=5, fig.width=5}
-library(imager)
-tissue.barplot = load.image('tissue.distribution.arranged.barplot.jpeg') 
-plot(tissue.barplot, axes=F)
-```
 
 
-It seems like even though there is no tissue development in the observed stages certain TRAs are still differentially expressed.
 
 
-## 4.2 Principal component analysis
-In order to verify that the variance in our dataset results from the biological background more than from the technical process we performed a principal component analysis. Moreover, we thereby achieved a greater insight in possible interesting stages to examine. 
+## 4.1 Principal component analysis
+In order to verify that the variance in our dataset results from the biological background more than from the technical process, we performed a principal component analysis by plotting PC1 versus PC2. Moreover, we thereby achieved a greater insight into possible interesting stages for examination. 
 
 ```{r PCA}
 # conducting PCA
@@ -497,7 +486,7 @@ color2 = c("red","orange","yellow","green","blue","purple")
 
 legend(x = 100,y=48,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
 ```
-We grouped our replicates using k-means clustering on the first four principal components which explain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters.The clusters were composed as follows: Cluster 1 (1-cell, 2-cell and 4-cell stage), Cluster 2 (8-cell stage), Cluster 3 (morula stage) and Cluster 4 (blastocyst stage). Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
+We grouped our replicates using k-means clustering on the first four principal components which explain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters. The clusters were composed as follows: cluster 1 (1-cell, 2-cell and 4-cell stage), cluster 2 (8-cell stage), cluster 3 (morula stage) and cluster 4 (blastocyst stage). These clusters can also be visually observed in our PCA (see figure 3). Therefore, we did not observe any technical effects in our microarray data. Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
 
 
 ```{r run models with varying value of k}
@@ -640,9 +629,9 @@ d
 ```
 
 
-## 4.3 Limma analysis
+## 4.2 Limma analysis
 
-We performed limma analysis using the normalized expression data to discover the differentially expressed genes (DEGs) between every combination of stages. We filtered the resulting DEGs for a p-value of 0.01 and annotated the genes with ensembl Biomart and the TRA data. Based on our relevant clusters found by k-means clustering, we solely focused on the DEGs between stages 1-cell to 8-cell, 8-cell to morula and morula to blastocyst for further analysis. For the comparison of the 1-cell to 8-cell stage, we found 23,444 DEGs, for 8-cell stage to morula stage there were 6,392 DEGs and for morula stage to blastocyst we got 5,139 DEGs.
+We performed limma analysis using the normalized expression data to discover the DEGs between every combination of stages. We filtered the resulting DEGs for a p-value of 0.01 and annotated the genes with Ensembl and the TRA data. Based on our relevant clusters found by k-means clustering, we solely focused on the DEGs between stages 1-cell to 8-cell, 8-cell to morula and morula to blastocyst for further analysis. For the comparison of the 1-cell to 8-cell stage, we found 23,444 DEGs. For 8-cell stage to morula stage there were 6,392 DEGs and for morula stage to blastocyst we got 5,139 DEGs.
 
 ```{r limma Analysis}
 
@@ -819,10 +808,12 @@ annotated.limma.m.b$ensembl.transcript = rownames(annotated.limma.m.b)
 annotated.limma.m.b.tra = merge(annotated.limma.m.b, tra.data[,nr], by = 'ensembl.transcript')
 
 ```
+We wanted to investigate our hypothesis and determine whether there are differential expressed TRAs in our dataset. Thus, we displayed the distribution of TRAs differential expressed in our chips according to their max tissue (see figure 4).
+
 
 
 <!-- Tissue distribution plot -->
-```{r Tissue distribution plot, fig.cap="Tissue distribution plot", fig.height=3.2, fig.width=7, fig.align='center'}
+```{r Tissue distribution plot,include=TRUE, fig.cap="Tissue distribution plot", fig.height=3.2, fig.width=7, fig.align='center'}
 
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue = data.frame(table(tra.data$max.tissue))$Var1
@@ -841,21 +832,23 @@ tissue.distribution = as.data.frame(tissue.distribution)
 tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
 
 # Create a barplot to present the TRA distribution of our chips
-jpeg(file="tissue.distribution.arranged.barplot.jpeg")
+
 
 par(mar=c(5,9,4,1)+.1)
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA DEGs between 1-cell stage and 8-cell stage", xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA DEGs between 1-cell stage and 8-cell stage", cex.main= 0.9, xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
 
 #setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 #dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
-dev.off()
+
 ```
+
+It seems like even though there is no tissue development in the observed stages, certain TRAs are still differentially expressed. We also analyzed the original TRA dataset provided by Dr. Dinkelacker (2019) to substantiate the validity of this distribution. We noted a high level of testis genes in the original data.
 
 <!-- #### filter DE genes & volcanoplots -->
 
-In order to visualize our results based on limma and find out interesting TRA genes that play a significant role in embryogenesis, we decided to use a Venn diagram and Volcano plots to process our results.
+To visualize our results based on limma and to find out interesting TRA genes that play a significant role in embryogenesis, we decided to use a Venn diagram and volcano plots to process our results.
 
-```{r}
+```{r extracting unique ensembl transcripts}
 # so far, our limma table only contains significant DEGs. To demonstrate other genes that do not show differential expression we need to create a limma table with all genes. By doing so, we found that the ensembl table has some transcripts that repeat themselves, so we only select the unique transcripts from the ensembl data
 
 # find out repeating transcripts in ensembl.data
@@ -927,9 +920,9 @@ annotated.limma.table.vollst.8.m = ensembl.limma.annotation(limma.table.vollst.8
 annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m.b)
 ```
 
-### 4.3.1 Venn diagram
+### 4.2.1 Venn diagram
 
-To gain an overview of TRA genes that are important for all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes from 1-cell stage to 8-cell stage, from 8-cell stage to morula stage as well as from morula stage to blastocyst stage. We extracted genes that are continuously up/down-regulated along the three stage transitions we investigated, since they might be important for embryogenesis.
+To gain an overview of TRA genes that are important in all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes comparing the stages 1- to 8-cell, 8-cell to morula as well as morula to blastocyst (see figure 5). We extracted genes that are continuously up- and down-regulated along the three stage transitions, since they might be important for embryogenesis.
 
 ```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram up-regulated genes", fig.height=3, fig.width=4.5, fig.align='center'}
 
@@ -992,9 +985,9 @@ tra.m.b.down = annotated.limma.m.b.tra[which(annotated.limma.m.b.tra$logFC<0),]$
 list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 
 # Helper function to display Venn diagram.down
-display_venn.down <- function(x){
+display_venn.down = function(x){
   grid.newpage()
-  venn_object.down <- venn.diagram(x, main=("Down-regulated TRAS between different stages"), cex.main=2, font.main=1, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
+  venn_object.down = venn.diagram(x, main=("Down-regulated TRAS between different stages"), cex.main=2, font.main=1, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
   grid.draw(venn_object.down)
 }
 
@@ -1008,11 +1001,11 @@ intersect.tra.genes.down = Intersect(list_venn.down)
 Venn.genes.down = annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.down,]
 ```
 
-We found three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated in all three stage transitions and six TRA genes (OTX2, TENT5C, TPRXL, TUBB7P, THBS4, TCL1A) that are continuously down-regulated in all three stage transitions.
+We found five transcripts which encoded three TRA genes (DAB2, PERP, CHI3L2) that are continuously up-regulated in all three stage transitions and six TRA genes (OTX2, TENT5C, TPRXL, TUBB7P, THBS4, TCL1A) that are continuously down-regulated in all three stage transitions.
 
 
-### 4.3.2 Volcano plot
-After looking at TRA genes that are important for all stages, we then focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly DEGs with a p-value cutoff of 0.01 and a fold10change cutoff of 2. To extract the most biologically significant genes, we then identified the top 10 up/down-regulated TRA transcripts that are most significantly expressed and have the largest fold changes. These genes are labeled in the volcano plots.
+### 4.2.2 Volcano plot
+After looking at TRA genes that are important for all stages, we focused on each individual stage transition. In order to display the differential gene expression between each two stages, we created three volcano plots for three stage transitions and colored the significantly DEGs with a p-value cutoff of 0.01 and a log fold change (logFC) cutoff of 2. To extract the most biologically significant genes, we identified the top 10 up- and down-regulated TRA transcripts that are most significantly expressed and have the highest logFCs. These genes are labeled in the volcano plots (see figure 6).
 
 ```{r volcano plots 1.8, include=TRUE, fig.cap="Volcano plot comparing the 1-cell and 8-cell stage", fig.height=4, fig.width=9, fig.align='center'}
 
@@ -1155,12 +1148,12 @@ p3
 ```
 
 
-Interestingly, TRA genes that are related to gametes and gametogenesis (xxx and xxx) are found down-regulated between 1-cell stage and 8-cell stage. Between 8-m stage and m-b stage, genes that activate oxidative phosphorylation and help against oxidative stress, like xxx and xxx, are found up-regulated. At the same time, xxx and xxx are found highly up-regulated, which are related to preimplantation.
+The top 10 up-regulated TRA genes were displayed in table 2-4 in the supplementary material. The function of the  interesting TRA genes are investigated in discussion. 
 
 
 <!-- #Compare our top TRA genes that we just extracted with those TRA genes, which have the highest loading in PCs and explain for the variance between different stages. -->
 
-After extracting the top 20 TRA DEGs of three different stage transitions from the limma tables, they are compared with 20 genes that explain the most variance in PCA by conducting PCA separately with the six replicates from each stage transition.  Only genes with the highest loading from PC1 are chosen. We found that 46.67% of the TRA DEGs between stage 1-8 can be found in PCA top variance genes, while 33.33% of TRA DEGs between stage 8-m and 45.45% of TRA DEGs between m-b can be found in PCA top variance genes as well. Therefore, a big portion of the top TRA DEGs can also explain the variance between different stages and are relevant for the biological differences between them.
+After extracting the top 20 TRA DEGs of the three different stage transitions from the limma tables, we compared them with 20 genes which explain the most variance in PCA by conducting PCA separately with the six replicates from each stage transition. Only genes with the highest loading from PC1 are chosen. We found that 46.67% of the TRA DEGs between the 1- and 8-cell stage can be found in PCA top variance genes. 33.33% of TRA DEGs can be found in PCA top variance genes between 8-cell and morula stage and 45.45% between morula and blastocyst stage. Therefore, the top TRA DEGs can be considered explaining the variance between different stages and are relevant for the biological differences between them.
 
 
 <!-- # Use PCA to plot 3 replicates of 1-cell stage and 8-cell stage -->
@@ -1277,10 +1270,10 @@ intersect(top_genes_tra.m.b$gene.name,top_tra_pca1.m.b$Gene.name)
 ```
 
 
-### 4.3.3 Gene set enrichment analysis
-After extracting the top up-/down-regulated TRA DEGs and understanding their biological relevance in embryo as well as their presence in possible pathways, we decided to perform GSEA to find out if our DEGs were generally enriched in certain gene sets. Using the clusterProfiler package, we conducted GSEA for all three stage transitions and received the following results.
+### 4.2.3 Gene set enrichment analysis
+After extracting the top up- and down-regulated TRA DEGs, we decided to perform GSEA to find out if our DEGs were generally enriched in certain gene sets. Using the clusterProfiler package, we conducted GSEA for all three stage transitions and received the following results.
 
-In the dotplot of GSEA which visualizes the activated or suppressed top gene sets enriched in our DEGs from stage 1-8, a lot of ribosome related gene sets are highly and significantly activated, such as „cytosolic ribosome“ and „ribosome“ and „ribosome subunit“  as cellular component. Also in the results table, several transcription related gene sets are highly regulated, such as „basal transcription machinery binding“ and „general transcription initiation factor binding“ as molecular function. No interesting gene sets can be found in the dotplot of GSEA from stage 8-m. However, by looking at the GSEA result table, 27 activated mitochondrion are enriched in our differentially expressed gene set (DEGS), for example  „mitochondrial DNA replication“ and „positive regulation of mitochondrion organization“ as biological process. In the dotplot for stage m-b, several ion related gene sets are enriched in our DEGS with a gene ratio of nearly one, such as „anion channel activity“ and „chloride channel activity“ as molecular function and „chloride transport“ as biological process.
+In the dot plot of GSEA which visualizes the activated or suppressed top gene sets enriched in our DEGs from stages 1- to 8-cell, a lot of ribosome-related gene sets are highly and significantly activated, like "cytosolic ribosome“, "ribosome“ and "ribosome subunit“  as cellular component. Also in the results table, several transcription-related gene sets are highly activated, like "basal transcription machinery binding“ and "general transcription initiation factor binding“ as molecular function. No interesting gene sets can be found in the dot plot of GSEA from stages 8-cell to morula. However, by looking at the GSEA result table, 27 activated mitochondrial gene sets are enriched in our set of DEGs, like "mitochondrial DNA replication“ and "positive regulation of mitochondrion organization“ as biological process. In the dot plot for stages morula to blastocyst, several ion-related gene sets are enriched in our set of DEGs with a gene ratio of nearly one, like "anion channel activity“ and "chloride channel activity“ as molecular function and "chloride transport“ as biological process.
 
 ```{r GSEA for stage m-b,include=TRUE, fig.cap="Gene set enrichment analysis comparing morula and blastocyst stage", fig.height=4, fig.width=4}
 
@@ -1315,13 +1308,13 @@ dotplot(gse.m.b.DEG, showCategory=10, split=".sign",font.size=3) + facet_grid(.~
 ```
 
 
-## 4.4 Chemokines
+## 4.3 Chemokines
 According to our hypothesis, we also examined the expression of chemokines. The result of filtering of our annotated TRA matrix showed that there are 62 proteins with a chemokine motif. Due to this, we looked at whether some of the filtered proteins are DEGs in our four clusters. The result of this was that there are no proteins with a chemokine motif that are TRAs and DEGs. 
 
 Thus, we looked after proteins with a chemokine motif in all of our DEGs including non-TRA genes. We got the following results:
 
 + Between the stages 1-cell to 8-cell CXCL14 was up-regulated with a log fold change (logFC) of approximately 1 and the chemokine receptor CCR3 was down-regulated (logFC= -1.12). 
-+ Between the stages 8-cell to morula the expression of  CCL15 was up-regulated with a logFC of approximately 2.45 whereas in morula to blastocyst the expression was down-regulated with a logFC of -2.66
++ Between the stages 8-cell to morula the expression of  CCL15 was up-regulated with a logFC of approximately 2.45 whereas in morula to blastocyst the expression was down-regulated with a logFC of -2.66.
 
 ```{r chemokine analysis}
 # extract chemokines in our annotated tra table
