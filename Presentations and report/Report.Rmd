@@ -10,7 +10,7 @@ fontsize: 10pt
 header-includes:
     \usepackage{float}
     \floatplacement{figure}{H}
-    \usepackage{caption}
+    \usepackage[skip=0pt]{caption}
     \captionsetup[figure]{font=footnotesize}
 ---
 \thispagestyle{empty}
@@ -137,6 +137,7 @@ library(clusterProfiler)
 library(enrichplot)
 library(ggplot2)
 library(imager)
+library(magick)
 ```
 
 
@@ -163,7 +164,13 @@ for (i in 1:18){
 ```
 
 ```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=3.6, fig.width=3.2,fig.align="center"}
-image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[3],1,9))
+#image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[3],1,9))
+
+img<-image_read('chip_GSM456645.png') 
+
+image_trim(img)
+
+
 ```
  
 ### 3.3.2 RNA degradation plot
@@ -201,7 +208,7 @@ setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 
 The red line in the meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
 
-```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2.7,fig.width=4.5,fig.align='center'}
+```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2,fig.width=4.5,fig.align='center'}
 meanSdPlot(human.vsnrma)
 
 #setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//MeanSdPlot")
@@ -925,7 +932,7 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 
 To gain an overview of TRA genes that are important in all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes comparing the stages 1- to 8-cell, 8-cell to morula as well as morula to blastocyst (see figure 5). We extracted genes that are continuously up- and down-regulated along the three stage transitions, since they might be important for embryogenesis.
 
-```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram up-regulated genes", fig.height=3, fig.width=4.5, fig.align='center'}
+```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram of up-regulated genes", fig.height=3, fig.width=4.5, fig.align='center'}
 
 # creating demo data for Venn diagram
 
@@ -1374,7 +1381,7 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 #"CCL15" Down
 ```
 
-```{r chemokine heatmap,include=TRUE,fig.cap="Chemokine heatmap",fig.height=3, fig.width=5}
+```{r chemokine heatmap,include=TRUE,fig.cap="Differentiall expression of different chemokines",fig.height=3, fig.width=5}
 # extract the chemokine transcript
 chemokine.transkript = unique(c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine)))
 
