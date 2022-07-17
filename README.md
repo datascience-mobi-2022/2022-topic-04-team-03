@@ -3,9 +3,9 @@
 This is our project
 
 # 1.Abstract
-Research, especially in the field of early embryogenesis is important in many ways. It is not only required for better understanding of genetic defects of the embryos in an early stage but it is also important for the improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed TRAs that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch from anaerobic to aerobic energy metabolism in the early embryo.
-Furthermore, we found three differentially expressed chemokines that play a role in implantation and embryonic development.
-
+Research, especially in the field of early embryogenesis is important in many ways. It is not only required for a better understanding of genetic defects of the embryos in an early stage but also important for the improvement of assisted human conception. In this report we investigated gene expression data of the early stages of embryogenesis up to the formation of the blastocyst. As the formation of tissues only occurs after the stages displayed by our dataset, we expected to not observe any tissue specific development and therefore no differentially expressed tissue-restricted antigens (TRAs) during this period. However, we found numerous differentially expressed TRAs that display the developmental processes in early embryogenesis accurately. For instance, the inquired genes reflect the activation of transcription of the embryonic genome as well as the switch of energy metabolism in the early embryo.
+Furthermore, we found three differentially expressed chemokines that play a role in implantation and embryonic development. 
+These insights may contribute to a deeper understanding of embryo implantation and therefore successful conception.
 
 # 2. Used data & packages 
 
@@ -15,7 +15,7 @@ Furthermore, we found three differentially expressed chemokines that play a role
 
 List of all R and Bioconducter packages used in our project
 
-Tabele Header      |                      |                 |                            |
+                   |                      |                 |                            |
 -------------      | -------------        |-------------    | -------------              |
 ggplot2 3.3.6      | AnnotationDbi 1.58.0 | dplyr 1.0.9     | hgu133plus2hsenstcdf 25.0.0|
 affy 1.74.0        | vsn 3.64.2.          | tidyverse 1.3.1 | hgu133plus2hsenstprobe     |
