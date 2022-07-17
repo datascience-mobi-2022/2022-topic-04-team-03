@@ -30,4 +30,4 @@ enrichplot 1.16.1  |
 
 # 3. Folder structure
 
-- ** [data] (/data) :**
+- ** data ([data](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Data)):**
