@@ -15,30 +15,27 @@ header-includes:
 ---
 \thispagestyle{empty}
 \hrule
-\vspace{0.3cm}
+\vspace{1cm}
 \begin{center}
-	\vspace{1cm}
-  \large
-	\begin{tabular}[c]{l}
-	 \\
-
 Clara Certa, Yaxin Chen, Linda Kaupp, Alewtina Towara \\
-\\
-	 \\
+\end{center}
+\vspace{1cm}
+\begin{center}
 	Supervisor:
 	Dr. Maria Dinkelacker, Dr. Carl Herrmann \\
-	 \\
+\end{center}
+\vspace{1cm}
+\begin{center}
 	Tutor:
 	Ian Dirk Fichtner \\
-	 \\
-	 \\
+\end{center}
+\vspace{1cm}
+\begin{center}
 	Data analysis for students of Molecular Biotechnology \\
-	\\
-	Heidelberg University 
-	\vspace{0.3cm} \\
-	\end{tabular}
-	\end{center}
-
+\end{center}
+\begin{center}
+	Heidelberg University\\
+\end{center}
 ---
 
 \pagenumbering{gobble}
@@ -1585,6 +1582,33 @@ dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=4) + facet_grid(.~
 #gse.8.m.DEG@result
 ```
 
+```{r Tissue distribution plot of tra.data,include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align='center'}
+
+# Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
+tissue = data.frame(table(tra.data$max.tissue))$Var1
+
+tissue.number = c()
+
+for (i in 1:53) {
+  tissue.number[[i]] = nrow(tra.data %>% filter(grepl(tissue[i],tra.data[,10])))
+}
+
+tissue.distribution = cbind(as.vector(tissue),tissue.number)
+colnames(tissue.distribution) = c("max.tissue","tissue.number")
+tissue.distribution = as.data.frame(tissue.distribution)
+
+# Arranging the list according to the descending TRA number
+tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tissue.number)))
+
+# Create a barplot to present the TRA distribution of our chips
+
+
+par(mar=c(5,9,4,1)+.1)
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA genes in tra.data", cex.main= 0.9, xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1,xlim=c(0,25000))
+
+#setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
+#dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
+```
 \newpage
 # 7. References
 
