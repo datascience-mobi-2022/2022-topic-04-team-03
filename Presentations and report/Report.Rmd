@@ -191,12 +191,9 @@ dev.copy2pdf(file="RNAdegrad_plot_shifted.pdf", width = 12.5, height = 20)
 By performing the variance stabilization normalization (vsnrma) (Huber *et al*., 2002), the data is corrected for biases from non-biological sources, like labeling efficiency and scanner setup. We also measured the quality of the variance stabilization by plotting the row standard deviation versus row means. 
 ```{r normalization, echo=FALSE, message=FALSE, comment=FALSE, results="hide", highlight=TRUE}
 #Normalization
-
 human.vsnrma = vsnrma(data.human)
-setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 colnames(human.vsnrma) = substr(colnames(human.vsnrma), 1,9)
 expression.data = exprs(human.vsnrma)
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
 ```
 
 The red line in the meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
@@ -206,7 +203,7 @@ meanSdPlot(human.vsnrma)
 
 #setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//MeanSdPlot")
 #dev.copy2eps(file="meanSdPlot_human_vsnrma_normalized.eps")
-###The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
+# The line is not approximately horizontal, but like in project proposal said, so there shouldn't be a variance-mean dependence 
 ```
 
 
@@ -669,8 +666,6 @@ summary(results2)
 <!-- *creating fit tables between every two stages* -->
 
 ```{r fitFunction}
-setwd("~//documents//GitHub//2022-topic-04-team-03//Tables")
-
 fit.function = function(i){
   fit.table = contrasts.fit(fit, contrasts = cm[,i])
   fit.table = eBayes(fit.table)
@@ -814,7 +809,7 @@ We wanted to investigate our hypothesis and determine whether there are differen
 
 
 <!-- Tissue distribution plot -->
-```{r Tissue distribution plot,include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align="center"}
+```{r Tissue distribution plot, include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align="center"}
 
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue = data.frame(table(tra.data$max.tissue))$Var1
@@ -988,7 +983,7 @@ list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 # Helper function to display Venn diagram.down
 display_venn.down = function(x){
   grid.newpage()
-  venn_object.down = venn.diagram(x, main=("Down-regulated TRAS between different stages"), cex.main=2, font.main=1, col.main= "red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
+  venn_object.down = venn.diagram(x, main=("Down-regulated TRAS between different stages"), cex.main=2, font.main=1, col.main="red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
   grid.draw(venn_object.down)
 }
 
