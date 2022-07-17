@@ -8,6 +8,10 @@ output:
     df_print: paged
 fontsize: 10pt
 header-includes:
+    \usepackage{titlesec}
+    \titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+    \titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+    \titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
     \usepackage{float}
     \floatplacement{figure}{H}
     \usepackage[skip=0pt]{caption}
@@ -82,7 +86,7 @@ TRAs are genes which are expressed considerably higher in certain tissues compar
 ## 2.4 Aim of this project
 This project aims to investigate the expression of TRAs in early embryonic development. Tissue-specificity plays an important role in embryonic development as embryonic stem cells differentiate step by step to eventually form organs. This development could be monitored by analyzing gene expression data of different stages in embryogenesis. 
 In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes (DEG) between the first few stages of embryonic development and extract the differentially expressed TRAs and chemokines for further analysis of their function.
-\newpage
+
 
 # 3.Materials and methods
 ## 3.1 Datasets
@@ -201,7 +205,7 @@ expression.data = exprs(human.vsnrma)
 The red line in the meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
 
 
-```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2,fig.width=4.5,fig.align='center'}
+```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2.7,fig.width=4.5,fig.align='center'}
 
 meanSdPlot(human.vsnrma)
 
