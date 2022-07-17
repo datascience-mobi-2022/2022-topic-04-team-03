@@ -30,8 +30,8 @@ enrichplot 1.16.1  |
 
 # 3. Folder structure
 
-- [data](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Data): This folder contains .CEL files of the raw data and normalized data.
-- [plots](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Plots):  This folder contains the plots generated in our data analysis
+- [Data](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Data): This folder contains .CEL files of the raw data and normalized data.
+- [Plots](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Plots):  This folder contains the plots generated in our data analysis
 - [Quality-Control](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Quality-Control): This folder contains pictures of the chips and all plots generated during our QC.
-- [tables](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Tables): This folder contains 
+- [Tables](https://github.com/datascience-mobi-2022/2022-topic-04-team-03/tree/main/Tables): This folder contains 
 - 
