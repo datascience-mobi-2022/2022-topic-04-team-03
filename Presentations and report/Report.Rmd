@@ -178,7 +178,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 ```
 
 
-```{r RNA Degradation Plot shifted, eval =FALSE, include=TRUE, fig.cap="Figure 2: RNA degradation plot"}
+```{r RNA Degradation Plot shifted, eval =FALSE, fig.cap="Figure 2: RNA degradation plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//RNAdegrad")
 plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
 title(sub="human embryogenesis rawdata - shifted")
@@ -213,7 +213,7 @@ Different plots were reviewed in order to determine the degree of the systematic
 
 <!-- #### 3.3.3.1 Boxplots -->
 The boxplots visualize the variation of the gene expression for each chip. After the normalization, no boxes were significantly elevated or more spread out than other arrays.
-```{r boxplots, eval =FALSE, include=TRUE, fig.cap= "Figure 3: Normalization of raw data"}
+```{r boxplots, eval =FALSE, fig.cap= "Figure 3: Normalization of raw data"}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
           "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
@@ -243,7 +243,7 @@ dev.copy2eps(file="boxplot_normalizeddata_18290.eps")
 
 <!-- #### 3.3.3.2 Density plots -->
 In the density plots for each chip the density function is plotted versus log expression. After the vsnrma normalization, the distribution of all curves in the plot showed a vicinity. 
-```{r density plots, eval=FALSE, include=TRUE, fig.cap="Figure 4: Density plot"}
+```{r density plots, eval=FALSE, fig.cap="Figure 4: Density plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//Density")
 
 # Before Normalization:
@@ -453,7 +453,7 @@ abline(h=0.9)
 
 
 
-```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis", fig.height=3.5, fig.width=7, fig.align='center'}
+```{r Plot PC1 and PC2, include=TRUE, fig.cap="Principal component analysis showing PC1 versus PC2", fig.height=3.5, fig.width=7, fig.align='center'}
 
 color1 = c(rep("red",3),rep("orange",3),rep("yellow",3),rep("green",3),rep("blue",3),rep("purple",3))
 
@@ -813,7 +813,7 @@ We wanted to investigate our hypothesis and determine whether there are differen
 
 
 <!-- Tissue distribution plot -->
-```{r Tissue distribution plot,include=TRUE, fig.cap="Tissue distribution plot", fig.height=3.2, fig.width=7, fig.align='center'}
+```{r Tissue distribution plot,include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align='center'}
 
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue = data.frame(table(tra.data$max.tissue))$Var1
@@ -835,7 +835,7 @@ tissue.distribution.arranged = arrange(tissue.distribution, desc(as.numeric(tiss
 
 
 par(mar=c(5,9,4,1)+.1)
-barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA DEGs between 1-cell stage and 8-cell stage", cex.main= 0.9, xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1)
+barplot(height = as.numeric(tissue.distribution.arranged$tissue.number[1:10]),names.arg = tissue.distribution.arranged$max.tissue[1:10],cex.names=0.54,col=rainbow(10), main="Frequency of TRA DEGs between 1-cell stage and 8-cell stage", cex.main= 0.9, xlab="Frequency",las=2, horiz= TRUE, cex.lab=1, cex.axis= 1, xlim=c(0,2000))
 
 #setwd("~//documents//GitHub//2022-topic-04-team-03//Plots")
 #dev.copy2pdf(file="tissue.distribution.arranged.barplot.pdf" )
