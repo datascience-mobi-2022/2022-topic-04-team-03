@@ -6,6 +6,7 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
+fontsize: 10pt
 header-includes:
     \usepackage{float}
     \floatplacement{figure}{H}
@@ -585,7 +586,7 @@ ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
 ```
 
 
-```{r show cluster }
+```{r elbow plot cluster }
 # show clusters
 model = kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
 c = as.data.frame(model$cluster)
