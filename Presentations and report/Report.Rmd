@@ -160,12 +160,10 @@ for (i in 1:18){
    image(data.human[,i], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[i],1,9)) }
 ```
 
-```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645",fig.height=2.8, fig.width=3.2,fig.align="center"}
+```{r only chip GSM456645,  include=TRUE, fig.cap="Single chip image of chip GSM456645", fig.height=2.8, fig.width=3.2, fig.align="center"}
 par(mar = c(0.1,2, 2,  2))
 
 image(data.human[,3], col = rainbow (100, start = 0, end = 0.75)[100:1],main = substr(colnames(data.human)[3],1,9))
-
-
 ```
  
 ### 3.3.2 RNA degradation plot
@@ -181,7 +179,7 @@ dev.copy2pdf(file="RNAdegrad_plot.pdf", width = 12.5, height = 20)
 ```
 
 
-```{r RNA Degradation Plot shifted, eval =FALSE, fig.cap="Figure 2: RNA degradation plot"}
+```{r RNA Degradation Plot shifted, eval=FALSE, fig.cap="Figure 2: RNA degradation plot"}
 setwd("~//Documents//GitHub//2022-topic-04-team-03//Quality-Control//Plots//RNAdegrad")
 plotAffyRNAdeg(rnadeg.raw, col=rainbow(35), transform= "shift.only")
 title(sub="human embryogenesis rawdata - shifted")
@@ -201,7 +199,7 @@ expression.data = exprs(human.vsnrma)
 The red line in the meanSdplot is not an approximately horizontal as it should be. This could be caused by the standard deviation at high expression levels being higher than at low levels even if the relative deviation from mean is identical.
 
 
-```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2,fig.width=4.5,fig.align='center'}
+```{r meanSdPlot, include=TRUE, fig.cap="MeanSd plot", fig.height=2, fig.width=4.5, fig.align="center"}
 
 meanSdPlot(human.vsnrma)
 
@@ -215,7 +213,7 @@ Different plots were reviewed in order to determine the degree of the systematic
 
 <!-- #### 3.3.3.1 Boxplots -->
 The boxplots visualize the variation of the gene expression for each chip. After the normalization, no boxes were significantly elevated or more spread out than other arrays.
-```{r boxplots, eval =FALSE, fig.cap= "Figure 3: Normalization of raw data"}
+```{r boxplots, eval=FALSE, fig.cap= "Figure 3: Normalization of raw data"}
 names = c("1 cell stage, rep 1", "1 cell stage, rep 2", "1 cell stage, rep 3",
           "2 cell stage, rep 1", "2 cell stage, rep 2", "2 cell stage, rep 3",
           "4 cell stage, rep 1", "4 cell stage, rep 2", "4 cell stage, rep 3",
@@ -424,9 +422,6 @@ write.csv(annotated.tra, file="annotated.tra.csv")
 ```
 
 
-
-
-
 ## 4.1 Principal component analysis
 In order to verify that the variance in our dataset results from the biological background more than from the technical process, we performed a principal component analysis by plotting PC1 versus PC2. Moreover, we thereby achieved a greater insight into possible interesting stages for examination. 
 
@@ -488,8 +483,8 @@ color2 = c("red","orange","yellow","green","blue","purple")
 
 legend(x = 100,y=48,legend = c("1-cell stage", "2-cell stage","4-cell stage", "8-cell stage", "Morula stage","Blastocyst stage"), fill= color2,col = color2)
 ```
-We grouped our replicates using k-means clustering on the first four principal components which explain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters. The clusters were composed as follows: cluster 1 (1-cell, 2-cell and 4-cell stage), cluster 2 (8-cell stage), cluster 3 (morula stage) and cluster 4 (blastocyst stage). These clusters can also be visually observed in our PCA (see figure 3). Therefore, we did not observe any technical effects in our microarray data. Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
 
+We grouped our replicates using k-means clustering on the first four principal components which explain 90% of the variance. By performing a silhouette plot we indicated four as the number of clusters. The clusters were composed as follows: cluster 1 (1-cell, 2-cell and 4-cell stage), cluster 2 (8-cell stage), cluster 3 (morula stage) and cluster 4 (blastocyst stage). These clusters can also be visually observed in our PCA (see figure 3). Therefore, we did not observe any technical effects in our microarray data. Due to this result, we focused our project on investigating the difference in gene expression between 1-cell stage and 8-cell stage, 8-cell stage and morula and morula and blastocyst. 
 
 ```{r run models with varying value of k}
 # Use map_dbl to run many models with varying value of k (centers)
@@ -629,7 +624,6 @@ d
 
 # Silouette plot suggests 2 Clusters (Cluster 1: 1-cell stage, 2-cell stage and 4-cell stage, Cluster 2: 8-cell stage, morula and blastocyst)
 ```
-
 
 ## 4.2 Limma analysis
 
@@ -811,7 +805,6 @@ annotated.limma.m.b.tra = merge(annotated.limma.m.b, tra.data[,nr], by = "ensemb
 We wanted to investigate our hypothesis and determine whether there are differential expressed TRAs in our dataset. Thus, we displayed the distribution of TRAs differential expressed in our chips according to their max tissue (see figure 4).
 
 
-
 <!-- Tissue distribution plot -->
 ```{r Tissue distribution plot, include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align="center"}
 
@@ -925,7 +918,7 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 To gain an overview of TRA genes that are important in all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes comparing the stages 1- to 8-cell, 8-cell to morula as well as morula to blastocyst (see figure 5). We extracted genes that are continuously up- and down-regulated along the three stage transitions, since they might be important for embryogenesis.
 
 
-```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram of up-regulated genes", fig.height=3, fig.width=4.5, fig.align='center'}
+```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram of up-regulated TRA genes", fig.height=3, fig.width=4.5, fig.align="center"}
 
 # creating demo data for Venn diagram
 
@@ -972,7 +965,7 @@ Venn.genes.up = annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.u
 ```
 
 
-```{r Venn diagram down, fig.cap="Venn diagram down-regulated genes", fig.height=4, fig.width=4, fig.align="center"}
+```{r Venn diagram down, fig.cap="Venn diagram down-regulated TRA genes", fig.height=4, fig.width=4, fig.align="center"}
 
 #1.8.tra down-regulated
 tra.1.8.down = annotated.limma.1.8.tra[which(annotated.limma.1.8.tra$logFC<0),]$ensembl.transcript
@@ -1375,7 +1368,7 @@ unique(annotated.limma.m.b.chemokine$gene.name)
 ```
 
 
-```{r chemokine heatmap,include=TRUE,fig.cap="Differentiall expression of different chemokines",fig.height=3, fig.width=5}
+```{r chemokine heatmap,include=TRUE,fig.cap="Differential expression of different chemokines", fig.height=3, fig.width=5}
 
 # extract the chemokine transcript
 chemokine.transkript = unique(c(rownames(annotated.limma.1.8.chemokine),rownames(annotated.limma.8.m.chemokine),rownames(annotated.limma.m.b.chemokine)))
@@ -1443,7 +1436,7 @@ knitr::kable(top_genes_tra.m.b[1:10,f],format = "simple",caption="Up-regulated g
 
 ### 6.1.1 Expression plots of certain top 10 genes
 
-```{r Expression plot STMN1, include=TRUE, fig.cap="Expression plot of Stathmin 1", fig.height=3,fig.width=6}
+```{r Expression plot STMN1, include=TRUE, fig.cap="Expression plot of Stathmin 1", fig.height=3, fig.width=6}
 names1 = c("1 ", "2 ", "4 ", "8 ", "m ", "b")
 
 annotated.tra.mean = cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1462,7 +1455,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y = expression, group=as.character(
     ggtitle("Expression STMN1")
 ```
 
-```{r Expression plot SLC2A3,include= TRUE, fig.cap="Expression plot of Solute Carrier Family 2 Member 3", fig.height=3,fig.width=6}
+```{r Expression plot SLC2A3, include=TRUE, fig.cap="Expression plot of Solute Carrier Family 2 Member 3", fig.height=3, fig.width=6}
 names1 = c("1 ", "2 ", "4 ", "8 ", "m ", "b")
 
 annotated.tra.mean =  cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1481,7 +1474,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y  = expression, group=as.character
     ggtitle("Expression SLC2A3")
 ```
 
-```{r Expression plot TEAD4, include=TRUE, fig.cap="Expression plot of TEA Domain Transcription Factor 4", fig.height=3,fig.width=6}
+```{r Expression plot TEAD4, include=TRUE, fig.cap="Expression plot of TEA Domain Transcription Factor 4", fig.height=3, fig.width=6}
 names1 = c("1 ", "2 ", "4 ", "8 ", "m ", "b")
 
 annotated.tra.mean =  cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1500,7 +1493,7 @@ ggplot(annotated.tra.mean.1, aes(x = Stages, y  = expression, group=as.character
     ggtitle("Expression TEAD4")
 ```
 
-```{r Expression plot NQO1, include=TRUE, fig.cap="Expression plot of NAD(P)H Quinone Dehydrogenase 1", fig.height=3,fig.width=6}
+```{r Expression plot NQO1, include=TRUE, fig.cap="Expression plot of NAD(P)H Quinone Dehydrogenase 1", fig.height=3, fig.width=6}
 names1 = c("1 ", "2 ", "4 ", "8 ", "m ", "b")
 
 annotated.tra.mean =  cbind(rownames(annotated.tra),rowMeans(annotated.tra[,1:3]),rowMeans(annotated.tra[,4:6]),rowMeans(annotated.tra[,7:9]),rowMeans(annotated.tra[,10:12]),rowMeans(annotated.tra[,13:15]),rowMeans(annotated.tra[,16:18]),annotated.tra[,19:25])
@@ -1580,7 +1573,7 @@ dotplot(gse.8.m.DEG, showCategory=10, split=".sign",font.size=4) + facet_grid(.~
 #gse.8.m.DEG@result
 ```
 
-```{r Tissue distribution plot of tra.data,include=TRUE, fig.cap="TRA tissue distribution in our data", fig.height=3.2, fig.width=7, fig.align='center'}
+```{r Tissue distribution plot of tra.data, include=TRUE, fig.cap="TRA tissue distribution in original TRA data", fig.height=3.2, fig.width=7, fig.align="center"}
 
 # Generate a list containing all tissue names with number of tissue TRAs, which is detected in our chips
 tissue = data.frame(table(tra.data$max.tissue))$Var1
