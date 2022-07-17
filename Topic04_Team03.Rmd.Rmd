@@ -1574,7 +1574,7 @@ dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~
 #gse.1.8.DEG@result
 ```
 
-```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage"}
+```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage", fig.height=8}
 # create the input for the function gseGO() for stage 8-m
 # we want the log10 fold change 
 GO.8.m.genes = annotated.limma.8.m$logFC
