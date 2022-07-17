@@ -1392,6 +1392,7 @@ heatmap = pheatmap(as.matrix(chemokine.expression[,1:18]),main = "Expression of 
 ```
 
 # 5. Discussion
+We originally assumed that no TRAs can be found in our dataset, since our data only consists of stages from early embryogenesis, which means that the development of tissues has not taken place yet. However, we did find numerous differentially expressed TRAs, indicating that TRAs are not only expressed by their specific tissue, but also by undifferentiated embryonic cells.
 
 ## 5.1	General embryonic development 
 As might be expected, the TRAs that are significantly up-regulated over all three investigated stages have important functions in embryonic development. DAB2 for example is involved in the formation of the visceral endoderm (Morris *et al*., 2002) while PERP plays a critical role in stratified epithelial development (Ihrie *et al*., 2005).
@@ -1574,7 +1575,7 @@ dotplot(gse.1.8.DEG, showCategory=10, split=".sign",font.size=5) + facet_grid(.~
 #gse.1.8.DEG@result
 ```
 
-```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage", fig.height=8}
+```{r GSEA for stage 8-m, include=TRUE, fig.cap="Gene set enrichment analysis comparing 8-cell and morula stage", fig.height=5}
 # create the input for the function gseGO() for stage 8-m
 # we want the log10 fold change 
 GO.8.m.genes = annotated.limma.8.m$logFC
