@@ -14,7 +14,7 @@ These insights may contribute to a deeper understanding of embryo implantation a
 
 
 List of all R and Bioconducter packages used in our project
-
+  Packages         |                      |                 |                            |
 -------------      | -------------        |-------------    | -------------              |
 ggplot2 3.3.6      | AnnotationDbi 1.58.0 | dplyr 1.0.9     | hgu133plus2hsenstcdf 25.0.0|
 -------------      | -------------        |-------------    | -------------              |
