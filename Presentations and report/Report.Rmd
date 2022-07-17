@@ -52,7 +52,7 @@ knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message
 knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 ```
 
-```{r}
+```{r project path}
 projectPath = dirname(rstudioapi::getSourceEditorContext()$path)
 ```
 
@@ -585,7 +585,7 @@ ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
 ```
 
 
-```{r}
+```{r show cluster }
 # show clusters
 model = kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
 c = as.data.frame(model$cluster)
@@ -616,7 +616,7 @@ ggplot(sil_df, aes(x = k, y = sil_width)) +
 ```
 
 
-```{r}
+```{r k-mean model with k equals 2}
 # Generate a k-means model using the pam() function with a k = 2
 pam_k2 = pam(t(human.vsnrma.df2), k=2)
   
@@ -1234,7 +1234,7 @@ intersect(top_genes_tra.8.m$gene.name,top_tra_pca1.8.m$Gene.name)
 
 <!-- *Use PCA to plot 3 replicates of morula stage and blastocyst stage* -->
 
-```{r}
+```{r plotting with PCA}
 # Use PCA to plot 3 replicates of morula stage and blastocyst stage
 pca.m.b = prcomp(t(human.vsnrma.df2[,13:18]))
 
