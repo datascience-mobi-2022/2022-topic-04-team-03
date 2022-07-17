@@ -929,7 +929,8 @@ annotated.limma.table.vollst.m.b = ensembl.limma.annotation(limma.table.vollst.m
 To gain an overview of TRA genes that are important in all stages, we used a Venn diagram to plot the intersection of differentially expressed TRA genes comparing the stages 1- to 8-cell, 8-cell to morula as well as morula to blastocyst (see figure 5). We extracted genes that are continuously up- and down-regulated along the three stage transitions, since they might be important for embryogenesis.
 
 
-```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram of up-regulated genes", fig.height=3, fig.width=4.5, fig.align='center'}
+
+```{r Venn diagram up, include=TRUE, fig.cap="Venn diagram of up-regulated genes", fig.height=2.7, fig.width=3, fig.align='center'}
 
 # creating demo data for Venn diagram
 
@@ -947,10 +948,9 @@ list_venn.up = list(A = tra.1.8.up,B=tra.8.m.up,C=tra.m.b.up)
 # Helper function to display Venn diagram.up
 display_venn.up = function(x){
   grid.newpage()
-  venn_object = venn.diagram(x, main=("Up-regulated TRAS between different stages"), category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"), fill = c("#009E73", "#E69F00", "#56B4E9"), filename= NULL,cat.cex=0.6)
+  venn_object = venn.diagram(x, main=("Up-regulated TRAs between different stages"), main.fontface = "bold", main.cex = 1.5, category.names=c("1- and 8-cell stage"," 8- and morula stage","morula and blastocyst stage"), fill = c("#009E73","#E69F00", "#56B4E9"), filename= NULL, cat.cex=1, cat.fontface="bold",cat.just=list(c(-0.5,3) , c(1.4,3) , c(0.5,-6)),lwd=2,lty=1,cex=1.5)
   grid.draw(venn_object)
 }
-#,main.fontfamily= "Arial",main.fontface="bold" not working
 
 # Create Venn diagramm for up-regulated genes
 display_venn.up(list_venn.up)
@@ -976,6 +976,7 @@ Venn.genes.up = annotated.tra[rownames(annotated.tra) %in% intersect.tra.genes.u
 ```
 
 
+
 ```{r Venn diagram down, fig.cap="Venn diagram down-regulated genes", fig.height=4, fig.width=4, fig.align="center"}
 
 #1.8.tra down-regulated
@@ -992,12 +993,12 @@ list_venn.down = list(A = tra.1.8.down,B=tra.8.m.down,C=tra.m.b.down)
 # Helper function to display Venn diagram.down
 display_venn.down = function(x){
   grid.newpage()
-  venn_object.down = venn.diagram(x, main=("Down-regulated TRAS between different stages"), cex.main=2, font.main=1, col.main="red", category.names=c("1-cell and 8-cell stage"," 8-cell and morula stage","morula and blastocyst stage"),fill = c("#009E73", "#E69F00", "#56B4E9"), filename=NULL)
-  grid.draw(venn_object.down)
+  venn_object = venn.diagram(x, main=("Down-regulated TRAs between different stages"), main.fontface = "bold", main.cex = 1.5, category.names=c("1- and 8-cell stage"," 8- and morula stage","morula and blastocyst stage"), fill = c("#009E73","#E69F00", "#56B4E9"), filename= NULL, cat.cex=1.2, cat.fontface="bold",cat.just=list(c(0.5,1) , c(0.5,0.5) , c(0.5,0)),lwd=2,lty=1,cex=1.5)
+  grid.draw(venn_object)
 }
 
-# Create Venn diagramm with down-regulated genes
-display_venn.down(list_venn.down)
+# Create Venn diagramm for down-regulated genes
+display_venn.up(list_venn.down)
 
 intersect.tra.genes.down = Intersect(list_venn.down)
 # 9 genes are continuously down-regulated from 1-cell stage to blastocyst stage
