@@ -6,6 +6,7 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
+fontsize: 10pt
 header-includes:
     \usepackage{float}
     \floatplacement{figure}{H}
@@ -52,7 +53,7 @@ knitr::opts_chunk$set(include=FALSE, echo = FALSE, fig.align = 'centre', message
 knitr::opts_knit$set(root.dir = "~//Documents//GitHub//2022-topic-04-team-03")
 ```
 
-```{r}
+```{r project path}
 projectPath = dirname(rstudioapi::getSourceEditorContext()$path)
 ```
 
@@ -67,7 +68,7 @@ These insights may contribute to a deeper understanding of embryo implantation a
 # 2.Introduction
 ## 2.1 Early embryogenesis
 After the fertilization, the human embryo begins to cleave every 24 hours. The individual cells can be detected until the 16-cell stage. Till then every single cell is able to form a whole fetus as well as the fetal placenta. After the 16-cell stage, an event called compaction occurs. The individual cells, or blastomeres, become flat and thereby maximize the cell-cell contacts to one another. The result of compaction is the morula stage. The next step is the formation of the blastocyst which is the first differentiative step in early embryo development. The outer cells form an epithelial layer around the embryo called the trophectoderm. The trophectoderm is later needed for the implantation in the uterine endometrium. As soon as the epithelial layer is built those cells start the ingestion of fluid which leads to the formation of the blastocoel cavity. The blastocoel is additionally containing a small number of undefined cells which will later form the actual embryo. Those cells are referred to as the inner cell mass (Leese *et al*., 1993).
-Interestingly, the activation of the embryo genome is thought to only start around the 4-cell stage. Prior, the development is driven by maternal stores of RNA which were passed during oogenesis. This process is called the maternal to zygotic transition (MZT)(Schier, 2007).
+Interestingly, the activation of the embryo genome is thought to only start around the 4-cell stage. Prior, the development is driven by maternal stores of RNA which were passed during oogenesis. This process is called the maternal to zygotic transition (MZT)(Ko, 2016).
 The metabolic activity itself only starts rising at the late morula stage. The two reasons for that are the increased energy demand caused by protein biosynthesis as the number of dividing cells goes up and the ion pumping into the blastocoel cavity. 
 During this phase the energy metabolism of the embryo changes from using aerobic substrates such as pyruvate, lactate, and glutamine to using glucose (Leese *et al*., 1993).
 This switch results in a 2.7-fold rise of oxygen consumption in the trophectoderm where the oxidative phosphorylation takes place. As a consequence, the production of harmful reactive oxygen species (ROS) increases. The embryo therefore has to invent a system to prevent high amounts of ROS and at the same time prepare repair mechanisms for fixing the damage (Kaneko *et al*., 2013).
@@ -585,7 +586,7 @@ ggplot(elbow_df, aes(x = k, y =tot_withinss)) +
 ```
 
 
-```{r}
+```{r elbow plot cluster }
 # show clusters
 model = kmeans(x = t(human.vsnrma.df2), centers = 2,nstart=30)
 c = as.data.frame(model$cluster)
@@ -616,7 +617,7 @@ ggplot(sil_df, aes(x = k, y = sil_width)) +
 ```
 
 
-```{r}
+```{r k-mean model with k equals 2}
 # Generate a k-means model using the pam() function with a k = 2
 pam_k2 = pam(t(human.vsnrma.df2), k=2)
   
@@ -1234,7 +1235,7 @@ intersect(top_genes_tra.8.m$gene.name,top_tra_pca1.8.m$Gene.name)
 
 <!-- *Use PCA to plot 3 replicates of morula stage and blastocyst stage* -->
 
-```{r}
+```{r plotting with PCA}
 # Use PCA to plot 3 replicates of morula stage and blastocyst stage
 pca.m.b = prcomp(t(human.vsnrma.df2[,13:18]))
 
@@ -1601,6 +1602,8 @@ Ihrie, R.A., Marques, M.R., Nguyen, B.T., Horner, J.S., Papazoglu, C., Bronson, 
 Jolliffe, I.T. (2002). Principal Component Analysis, 2nd Edition (Springer New York, NY). 10.1007/b98835.
 
 Kaneko, K.J., and DePamphilis, M.L. (2013). TEAD4 establishes the energy homeostasis essential for blastocoel formation. Development 140, 3680-3690. 10.1242/dev.093799.
+
+Ko, M.S.H. (2016). Chapter Three - Zygotic Genome Activation Revisited: Looking Through the Expression and Function of Zscan4. In Current Topics in Developmental Biology, M.L. DePamphilis, ed. (Academic Press), pp. 103-124. 10.1016/bs.ctdb.2016.04.004.
 
 Koo, H.S., Yoon, M.-J., Hong, S.-H., Ahn, J., Cha, H., Lee, D., Ko, J.-E., Kwon, H., Choi, D.H., Lee, K.-A., et al. (2021). CXCL12 enhances pregnancy outcome via improvement of endometrial receptivity in mice. Scientific Reports 11, 7397. 10.1038/s41598-021-86956-y.
 
