@@ -85,7 +85,7 @@ TRAs are genes which are expressed considerably higher in certain tissues compar
 
 ## 2.4 Aim of this project
 This project aims to investigate the expression of TRAs in early embryonic development. Tissue-specificity plays an important role in embryonic development as embryonic stem cells differentiate step by step to eventually form organs. This development could be monitored by analyzing gene expression data of different stages in embryogenesis. 
-In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes (DEG) between the first few stages of embryonic development and extract the differentially expressed TRAs and chemokines for further analysis of their function.
+In this project, we are investigating the preimplantation stages of embryonic development up to the formation of the blastocyst. In the course of our work, we will determine the differentially expressed genes (DEG) between the first few stages of embryonic development and extract the (hihi) differentially expressed TRAs and chemokines for further analysis of their function.
 
 
 # 3.Materials and methods
